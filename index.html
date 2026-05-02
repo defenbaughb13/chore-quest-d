@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Chore Quest ⭐</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Chore Quest — Declan's copy. Change parentPin and chores in the CONFIG below. -->
+<script>
+// ============================================================
+// CONFIG — Base defaults. After first load, all edits happen
+// inside the app via the Parent Portal. Changing these after
+// you've started will NOT overwrite saved data.
+// ============================================================
+const CONFIG = {
+  parentPin: "0000",
+
+  shop: [
+    { id: "s1", emoji: "🎮", name: "15 min extra screen time", cost: 200 },
+    { id: "s2", emoji: "🍦", name: "Choose tonight's dessert",  cost: 250 },
+    { id: "s3", emoji: "🎬", name: "Pick movie night",           cost: 350 },
+    { id: "s4", emoji: "🌃", name: "Stay up 30 min late",        cost: 400 },
+    { id: "s5", emoji: "🧁", name: "Bake something together",    cost: 500 },
+    { id: "s6", emoji: "🎳", name: "Family bowling trip",        cost: 800 },
+    { id: "s7", emoji: "🛍️", name: "Buy something under $10",    cost: 600 },
+    { id: "s8", emoji: "🕹️", name: "Go to the arcade ($10 limit)", cost: 750 },
+    { id: "s9", emoji: "🎁", name: "Get a surprise present",     cost: 500 },
+    { id: "s10", emoji: "🚿", name: "Skip a shower",             cost: 300 },
+  ],
+
+  surprises: [
+    { text: "Do 10 jumping jacks!",                                         coins: 5 },
+    { text: "Draw a picture and show mom or dad!",                          coins: 5 },
+    { text: "Do something kind for someone today!",                         coins: 8 },
+    { text: "Wipe down a counter in the kitchen!",                          coins: 6 },
+    { text: "Pick up 10 things off the floor!",                             coins: 5 },
+    { text: "Say something nice to everyone in the house!",                 coins: 8 },
+    { text: "Set out your clothes for tomorrow!",                           coins: 6 },
+    { text: "Give someone a hug and tell them why you love them!",          coins: 8 },
+    { text: "Make a card or drawing for someone to cheer them up!",         coins: 7 },
+    { text: "Share a toy or game with your sibling without being asked!",   coins: 8 },
+    { text: "Help set up or clean up something without being told!",        coins: 7 },
+    { text: "Tell each person in the house one thing you like about them!", coins: 8 },
+  ],
+
+  consequences: [
+    { id: "q1", text: "Yelling at your sibling",                 coins: 15 },
+    { id: "q2", text: "Arguing with your parents",               coins: 15 },
+    { id: "q3", text: "Talking back to your parents",            coins: 15 },
+    { id: "q4", text: "Telling your parents no",                 coins: 15 },
+    { id: "q5", text: "Not listening to your parents",           coins: 15 },
+    { id: "q6", text: "Not doing something your parents asked",  coins: 15 },
+    { id: "q7", text: "Lying",                                   coins: 15 },
+  ],
+
+  kids: [
+    {
+      id: "declan",
+      name: "Declan",
+      avatar: "redpanda",
+      color: "#c2410c",
+      chores: [
+        { id: "k1",  emoji: "🛏️", name: "Make my bed",                            coins: 5,  days: "daily"    },
+        { id: "k2a", emoji: "🦷", name: "Brush teeth — morning",                  coins: 5,  days: "daily"    },
+        { id: "k2b", emoji: "🦷", name: "Brush teeth — night",                    coins: 5,  days: "daily"    },
+        { id: "k3",  emoji: "🧺", name: "Put dirty clothes in hamper",            coins: 5,  days: "daily"    },
+        { id: "k4",  emoji: "👕", name: "Get dressed without being asked",        coins: 8,  days: "daily"    },
+        { id: "k5",  emoji: "🍳", name: "Put breakfast dishes away",              coins: 5,  days: "daily"    },
+        { id: "k6",  emoji: "🍽️", name: "Put dinner dishes away",                 coins: 5,  days: "daily"    },
+        { id: "k7",  emoji: "🧹", name: "Tidy up my toys",                        coins: 10, days: "daily"    },
+        { id: "k8",  emoji: "📚", name: "Read for 15 minutes",                    coins: 10, days: "weekdays" },
+      ],
+    },
+  ],
+
+};E html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Chore Quest ⭐</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Chore Quest — Declan's copy. Change parentPin and chores in the CONFIG below. -->
+<script>
+// ============================================================
+// CONFIG — Base defaults. After first load, all edits happen
+// inside the app via the Parent Portal. Changing these after
+// you've started will NOT overwrite saved data.
+// ============================================================
+const CONFIG = {
+  parentPin: "0000",
+
+  shop: [
+    { id: "s1", emoji: "🎮", name: "15 min extra screen time", cost: 200 },
+    { id: "s2", emoji: "🍦", name: "Choose tonight's dessert",  cost: 250 },
+    { id: "s3", emoji: "🎬", name: "Pick movie night",           cost: 350 },
+    { id: "s4", emoji: "🌃", name: "Stay up 30 min late",        cost: 400 },
+    { id: "s5", emoji: "🧁", name: "Bake something together",    cost: 500 },
+    { id: "s6", emoji: "🎳", name: "Family bowling trip",        cost: 800 },
+    { id: "s7", emoji: "🛍️", name: "Buy something under $10",    cost: 600 },
+    { id: "s8", emoji: "🕹️", name: "Go to the arcade ($10 limit)", cost: 750 },
+    { id: "s9", emoji: "🎁", name: "Get a surprise present",     cost: 500 },
+    { id: "s10", emoji: "🚿", name: "Skip a shower",             cost: 300 },
+  ],
+
+  surprises: [
+    { text: "Do 10 jumping jacks!",                                         coins: 5 },
+    { text: "Draw a picture and show mom or dad!",                          coins: 5 },
+    { text: "Do something kind for someone today!",                         coins: 8 },
+    { text: "Wipe down a counter in the kitchen!",                          coins: 6 },
+    { text: "Pick up 10 things off the floor!",                             coins: 5 },
+    { text: "Say something nice to everyone in the house!",                 coins: 8 },
+    { text: "Set out your clothes for tomorrow!",                           coins: 6 },
+    { text: "Give someone a hug and tell them why you love them!",          coins: 8 },
+    { text: "Make a card or drawing for someone to cheer them up!",         coins: 7 },
+    { text: "Share a toy or game with your sibling without being asked!",   coins: 8 },
+    { text: "Help set up or clean up something without being told!",        coins: 7 },
+    { text: "Tell each person in the house one thing you like about them!", coins: 8 },
+  ],
+
+  consequences: [
+    { id: "q1", text: "Yelling at your sibling",                 coins: 15 },
+    { id: "q2", text: "Arguing with your parents",               coins: 15 },
+    { id: "q3", text: "Talking back to your parents",            coins: 15 },
+    { id: "q4", text: "Telling your parents no",                 coins: 15 },
+    { id: "q5", text: "Not listening to your parents",           coins: 15 },
+    { id: "q6", text: "Not doing something your parents asked",  coins: 15 },
+    { id: "q7", text: "Lying",                                   coins: 15 },
+  ],
+
+  kids: [
+    {
+      id: "declan2",
+      name: "Cooper",
+      avatar: "dragon",
+      color: "#0d9488",
+      chores: [
+        { id: "c1",  emoji: "🛏️", name: "Make my bed",                            coins: 5,  days: "daily"    },
+        { id: "c2a", emoji: "🦷", name: "Brush teeth — morning",                  coins: 5,  days: "daily"    },
+        { id: "c2b", emoji: "🦷", name: "Brush teeth — night",                    coins: 5,  days: "daily"    },
+        { id: "c3",  emoji: "🧺", name: "Put dirty clothes in hamper",            coins: 5,  days: "daily"    },
+        { id: "c8",  emoji: "👕", name: "Get dressed without being asked",        coins: 8,  days: "daily"    },
+        { id: "c9",  emoji: "🎒", name: "Get backpack ready without being asked", coins: 8,  days: "weekdays" },
+        { id: "c10", emoji: "🍳", name: "Put breakfast dishes in dishwasher",     coins: 5,  days: "daily"    },
+        { id: "c11", emoji: "🍽️", name: "Put dinner dishes in dishwasher",        coins: 5,  days: "daily"    },
+        { id: "c4",  emoji: "🍽️", name: "Help set the dinner table",              coins: 8,  days: "daily"    },
+        { id: "c5",  emoji: "🧹", name: "Tidy up my toys",                        coins: 10, days: "daily"    },
+        { id: "c6",  emoji: "📚", name: "Read for 15 minutes",                    coins: 10, days: "weekdays" },
+        { id: "c7",  emoji: "🐾", name: "Feed the pet",                           coins: 8,  days: "daily"    },
+      ],
+    },
+    {
+      id: "haley",
+      name: "Haley",
+      avatar: "🦄",
+      color: "#db2777",
+      chores: [
+        { id: "h1",  emoji: "🛏️", name: "Make my bed",                            coins: 5,  days: "daily"    },
+        { id: "h2a", emoji: "🦷", name: "Brush teeth — morning",                  coins: 5,  days: "daily"    },
+        { id: "h2b", emoji: "🦷", name: "Brush teeth — night",                    coins: 5,  days: "daily"    },
+        { id: "h3",  emoji: "👗", name: "Put clothes away neatly",                coins: 5,  days: "daily"    },
+        { id: "h8",  emoji: "👗", name: "Get dressed without being asked",        coins: 8,  days: "daily"    },
+        { id: "h9",  emoji: "🎒", name: "Get backpack ready without being asked", coins: 8,  days: "weekdays" },
+        { id: "h10", emoji: "🍳", name: "Put breakfast dishes in dishwasher",     coins: 5,  days: "daily"    },
+        { id: "h11", emoji: "🍽️", name: "Put dinner dishes in dishwasher",        coins: 5,  days: "daily"    },
+        { id: "h4",  emoji: "🍽️", name: "Help clear the dinner table",            coins: 8,  days: "daily"    },
+        { id: "h5",  emoji: "🧸", name: "Tidy up my room",                        coins: 10, days: "daily"    },
+        { id: "h6",  emoji: "📚", name: "Read for 15 minutes",                    coins: 10, days: "weekdays" },
+        { id: "h7",  emoji: "🌿", name: "Water the plants",                       coins: 7,  days: "weekends" },
+      ],
+    },
+  ],
+};
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --accent:#7c3aed;--accent-mid:#8b5cf6;--accent-light:#ede9fe;
+  --gold:#f59e0b;--gold-light:#fef3c7;
+  --green:#22c55e;--green-light:#f0fdf4;
+  --red:#ef4444;--orange:#f97316;
+  --surface:#ffffff;--surface2:#f8f7ff;
+  --border:#e9d5ff;--text:#1e1b4b;--text-muted:#7c7a9a;
+  --radius:18px;--radius-sm:12px;
+}
+html,body{height:100%;background:var(--surface2);color:var(--text);font-family:'Nunito',sans-serif;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height:100dvh}
+
+/* PICKER */
+#profile-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;padding:2rem 1.5rem;gap:1.5rem}
+.picker-title{font-family:'Fredoka One',cursive;font-size:30px;color:var(--text);text-align:center}
+.picker-sub{font-size:15px;font-weight:600;color:var(--text-muted);text-align:center;margin-top:-1rem}
+.picker-cards{display:flex;flex-direction:column;gap:16px;width:100%}
+.picker-card{background:var(--surface);border:3px solid var(--border);border-radius:24px;padding:1.2rem;display:flex;align-items:center;gap:1rem;cursor:pointer;transition:transform .12s;user-select:none}
+.picker-card:active{transform:scale(.97)}
+.picker-avatar-wrap{width:72px;height:72px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.picker-emoji{font-size:52px;text-align:center}
+.picker-info{flex:1}
+.picker-name{font-family:'Fredoka One',cursive;font-size:26px;line-height:1}
+.picker-coins{font-size:14px;font-weight:700;color:var(--text-muted);margin-top:3px}
+.picker-arrow{font-size:28px;color:var(--text-muted)}
+
+/* APP */
+#app{display:none;flex-direction:column;min-height:100dvh;padding-bottom:90px}
+#app.visible{display:flex}
+
+/* HEADER */
+.header{padding:1.2rem 1.2rem 1.8rem;border-radius:0 0 28px 28px;color:white;position:relative;text-align:center;background:linear-gradient(140deg,var(--accent) 0%,var(--accent-mid) 100%);box-shadow:0 4px 24px rgba(0,0,0,.15);transition:background .4s}
+.header-back,.settings-btn{position:absolute;top:14px;background:rgba(255,255,255,.2);border:none;border-radius:50%;width:38px;height:38px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white}
+.header-back{left:14px}
+.settings-btn{right:14px}
+.badge-wrap{position:relative;display:inline-flex}
+.notif-badge{position:absolute;top:-4px;right:-4px;background:var(--orange);color:white;font-size:10px;font-weight:800;font-family:'Fredoka One',cursive;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:2px solid white}
+.header-avatar-wrap{width:64px;height:64px;margin:0 auto 4px;display:flex;align-items:center;justify-content:center}
+.header-emoji{font-size:44px;line-height:1}
+.header-name{font-family:'Fredoka One',cursive;font-size:24px;letter-spacing:.5px}
+.coin-breakdown{display:inline-flex;gap:10px;margin-top:10px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);border-radius:14px;padding:8px 16px}
+.cb-row{font-family:'Fredoka One',cursive;font-size:14px;color:white;white-space:nowrap}
+
+/* STREAK */
+.streak-row{display:flex;align-items:center;justify-content:center;gap:6px;margin:1rem 1.2rem 0;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;flex-wrap:wrap}
+.streak-dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--text-muted);transition:background .3s,border-color .3s}
+.streak-dot.lit{background:var(--accent);border-color:var(--accent);color:white}
+.streak-lbl{font-size:13px;font-weight:700;color:var(--text-muted);margin-left:4px;white-space:nowrap}
+
+/* TABS */
+.tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--surface);border-top:1.5px solid var(--border);display:flex;z-index:100}
+.tab-btn{flex:1;background:none;border:none;padding:8px 0 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;color:var(--text-muted);transition:color .15s}
+.tab-btn.active{color:var(--accent)}
+.tab-icon{font-size:20px}
+
+/* SECTIONS */
+.section{display:none;padding:0 1.2rem}
+.section.active{display:block}
+.sec-label{font-family:'Fredoka One',cursive;font-size:17px;color:var(--accent);margin:1.2rem 0 .6rem}
+
+/* CHORE CARDS */
+.chore-list{display:flex;flex-direction:column;gap:10px}
+.chore-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:13px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:transform .1s,border-color .2s,background .2s,opacity .2s;user-select:none}
+.chore-card:active{transform:scale(.97)}
+.chore-card.done{background:var(--green-light);border-color:#86efac;opacity:.8}
+.chore-card.pending{background:#fff7ed;border-color:#fed7aa;opacity:.9}
+.chore-emoji{font-size:34px;width:46px;text-align:center;flex-shrink:0}
+.chore-info{flex:1;min-width:0}
+.chore-name{font-size:15px;font-weight:700;color:var(--text);line-height:1.25}
+.chore-card.done .chore-name{text-decoration:line-through;color:var(--text-muted)}
+.chore-coins{font-size:13px;color:var(--accent);font-weight:700;margin-top:2px}
+.chore-status{font-size:12px;font-weight:700;color:var(--orange);margin-top:2px}
+.chore-check{width:46px;height:46px;border-radius:50%;border:2.5px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;transition:all .15s}
+.chore-card.done .chore-check{background:var(--green);border-color:var(--green)}
+.chore-card.pending .chore-check{background:var(--orange);border-color:var(--orange)}
+
+.progress-wrap{margin:.8rem 0 0;background:var(--border);border-radius:50px;height:10px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:50px;transition:width .4s ease}
+.progress-lbl{font-size:12px;font-weight:700;color:var(--text-muted);margin-top:4px;text-align:right}
+.empty-msg{text-align:center;font-size:15px;color:var(--text-muted);font-weight:600;padding:2rem 0}
+
+/* SURPRISE */
+.surprise-box{background:var(--gold-light);border:2px dashed var(--gold);border-radius:var(--radius);padding:1.2rem;text-align:center;margin-top:1.2rem}
+.surprise-title{font-family:'Fredoka One',cursive;font-size:18px;color:#92400e;margin-bottom:6px}
+.surprise-text{font-size:15px;font-weight:700;color:#78350f;min-height:42px;margin-bottom:10px}
+.surprise-coins{font-size:13px;color:#b45309;font-weight:700;margin-bottom:10px}
+.btn-gold{background:var(--gold);color:white;border:none;border-radius:50px;padding:11px 28px;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;transition:transform .1s;display:inline-block}
+.btn-gold:active{transform:scale(.96)}
+.btn-gold:disabled{background:#d1d5db;cursor:default}
+
+/* SHOP */
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.shop-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:14px 10px;text-align:center;cursor:pointer;transition:transform .1s,border-color .15s;user-select:none}
+.shop-card:active{transform:scale(.96)}
+.shop-card.affordable{border-color:var(--accent)}
+.shop-card.cant-afford{opacity:.5;cursor:default}
+.shop-emoji{font-size:32px;margin-bottom:5px}
+.shop-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.2}
+.shop-cost{font-size:14px;color:var(--accent);font-weight:800}
+.shop-card.cant-afford .shop-cost{color:var(--text-muted)}
+
+/* HISTORY */
+.history-list{display:flex;flex-direction:column;gap:8px}
+.history-item{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.hi-left{font-weight:700;color:var(--text)}
+.hi-right{font-weight:800;color:var(--accent);white-space:nowrap;margin-left:8px}
+.hi-date{font-size:11px;color:var(--text-muted);font-weight:600;margin-top:1px}
+.hi-neg{color:var(--red)}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(30,27,74,.6);z-index:200;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:24px 24px 0 0;padding:1.5rem 1.4rem 2rem;width:100%;max-width:430px;max-height:88dvh;overflow-y:auto}
+.modal-title{font-family:'Fredoka One',cursive;font-size:20px;color:var(--accent);margin-bottom:1rem;text-align:center}
+
+/* PIN */
+.pin-row{display:flex;gap:8px;margin-bottom:1rem}
+.pin-input{flex:1;font-size:28px;font-family:'Fredoka One',cursive;text-align:center;border:2px solid var(--border);border-radius:var(--radius-sm);padding:10px;color:var(--text);background:var(--surface);letter-spacing:8px;outline:none}
+.pin-input:focus{border-color:var(--accent)}
+.pin-error{font-size:13px;color:var(--red);font-weight:700;text-align:center;margin-top:6px}
+
+/* BUTTONS */
+.btn-purple{background:var(--accent);color:white;border:none;border-radius:50px;padding:12px 28px;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;width:100%;margin-top:8px;transition:opacity .15s}
+.btn-purple:hover{opacity:.88}
+.btn-danger{background:var(--red);color:white;border:none;border-radius:50px;padding:12px 28px;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;width:100%;margin-top:10px}
+.btn-success{background:var(--green);color:white;border:none;border-radius:50px;padding:12px 28px;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;width:100%;margin-top:8px}
+.btn-close{background:var(--surface2);color:var(--text-muted);border:1.5px solid var(--border);border-radius:50px;padding:10px 28px;font-family:'Fredoka One',cursive;font-size:15px;cursor:pointer;width:100%;margin-top:8px}
+.btn-sm{background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-family:'Fredoka One',cursive;font-size:14px;cursor:pointer;white-space:nowrap}
+.btn-sm-danger{background:var(--red);color:white;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-family:'Fredoka One',cursive;font-size:14px;cursor:pointer}
+.btn-sm-success{background:var(--green);color:white;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-family:'Fredoka One',cursive;font-size:14px;cursor:pointer}
+
+/* PARENT PANEL INTERNALS */
+.parent-section{display:none}
+.parent-section.unlocked{display:block}
+.kid-tabs{display:flex;gap:8px;margin-bottom:14px}
+.kid-tab{flex:1;padding:8px;border-radius:var(--radius-sm);border:2px solid var(--border);background:var(--surface2);font-family:'Fredoka One',cursive;font-size:15px;cursor:pointer;text-align:center;color:var(--text-muted);transition:all .15s}
+.kid-tab.active{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
+.parent-nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.parent-nav-btn{flex:1;min-width:80px;padding:9px 8px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--surface2);font-family:'Fredoka One',cursive;font-size:13px;cursor:pointer;text-align:center;color:var(--text-muted);transition:all .15s;position:relative}
+.parent-nav-btn.active{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
+.parent-nav-badge{position:absolute;top:-6px;right:-6px;background:var(--orange);color:white;font-size:10px;font-weight:800;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:2px solid white}
+.parent-stat{background:var(--surface2);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:10px;font-size:14px;font-weight:700;color:var(--text);display:flex;justify-content:space-between}
+.parent-stat span{color:var(--accent);font-size:16px}
+.add-coins-row{display:flex;gap:8px;margin-bottom:10px}
+.add-coins-row input{flex:1;font-size:16px;font-family:'Nunito',sans-serif;border:2px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;color:var(--text);background:var(--surface);outline:none}
+.add-coins-row input:focus{border-color:var(--accent)}
+
+/* APPROVAL CARDS */
+.approval-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.approval-card.chore-type{border-left:4px solid var(--orange)}
+.approval-card.shop-type{border-left:4px solid var(--accent)}
+.approval-meta{font-size:12px;color:var(--text-muted);font-weight:600;margin-bottom:4px}
+.approval-label{font-size:15px;font-weight:800;color:var(--text);margin-bottom:10px}
+.approval-actions{display:flex;gap:8px}
+
+/* EDITOR */
+.editor-item{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.editor-item-info{flex:1;min-width:0}
+.editor-item-name{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.editor-item-sub{font-size:12px;color:var(--text-muted);font-weight:600;margin-top:1px}
+.editor-actions{display:flex;gap:6px;flex-shrink:0}
+.add-form{background:var(--surface2);border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px}
+.add-form input,.add-form select{width:100%;font-size:14px;font-family:'Nunito',sans-serif;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);background:var(--surface);outline:none;margin-bottom:8px}
+.add-form input:focus,.add-form select:focus{border-color:var(--accent)}
+.add-form-row{display:flex;gap:8px}
+.add-form-row input{margin-bottom:0}
+.form-label{font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:4px}
+
+/* TOAST */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--green);color:white;font-family:'Fredoka One',cursive;font-size:16px;padding:11px 24px;border-radius:50px;z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.bad{background:var(--red)}
+.toast.info{background:var(--accent)}
+.toast.warn{background:var(--orange)}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;top:-10px;border-radius:2px;animation:fall linear forwards;pointer-events:none;z-index:9999}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* DRAGON SVG */
+.dragon-svg{width:100%;height:100%}
+</style>
+</head>
+<body>
+
+<!-- PROFILE PICKER -->
+<div id="profile-screen">
+  <div class="picker-title">⭐ Chore Quest ⭐</div>
+  <div class="picker-sub">Who's doing chores today?</div>
+  <div class="picker-cards" id="picker-cards"></div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <div class="header" id="main-header">
+    <button class="header-back" onclick="goBack()">👈</button>
+    <div class="badge-wrap" style="position:absolute;top:14px;right:14px">
+      <button class="settings-btn" style="position:static" onclick="openParent()">⚙️</button>
+      <div class="notif-badge" id="header-badge" style="display:none">0</div>
+    </div>
+    <div class="header-avatar-wrap" id="header-avatar-wrap"></div>
+    <div class="header-name" id="header-name"></div>
+    <div class="coin-breakdown">
+      <div class="cb-row cb-earned">🟢 <span id="cb-earned">0</span> earned</div>
+      <div class="cb-row cb-deducted">🔴 <span id="cb-deducted">0</span> deducted</div>
+      <div class="cb-row cb-available">💰 <span id="cb-available">0</span> available</div>
+    </div>
+  </div>
+
+  <div class="streak-row" id="streak-row"></div>
+
+  <div id="tab-chores"  class="section active"></div>
+  <div id="tab-shop"    class="section"></div>
+  <div id="tab-history" class="section"></div>
+  <div id="tab-oops"    class="section"></div>
+
+  <nav class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('chores',this)"><span class="tab-icon">📋</span>Chores</button>
+    <button class="tab-btn" onclick="switchTab('shop',this)"><span class="tab-icon">🛒</span>Shop</button>
+    <button class="tab-btn" onclick="switchTab('history',this)"><span class="tab-icon">📜</span>History</button>
+    <button class="tab-btn" id="oops-tab-btn" onclick="switchTab('oops',this)"><span class="tab-icon">🙊</span>Oops!</button>
+  </nav>
+</div>
+
+<!-- PARENT MODAL -->
+<div class="modal-overlay" id="parent-overlay">
+  <div class="modal">
+    <div class="modal-title">🔒 Parent Portal</div>
+    <div id="pin-area">
+      <div class="pin-row">
+        <input class="pin-input" type="password" inputmode="numeric" maxlength="4" id="pin-field" placeholder="••••" autocomplete="off">
+      </div>
+      <button class="btn-purple" onclick="checkPin()">Unlock</button>
+      <div class="pin-error" id="pin-error"></div>
+    </div>
+    <div class="parent-section" id="parent-unlocked">
+      <div class="kid-tabs" id="parent-kid-tabs"></div>
+      <div class="parent-nav" id="parent-nav"></div>
+      <div id="parent-content"></div>
+      <button class="btn-close" onclick="closeParent()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ==================== DRAGON SVG ====================
+function dragonSVG(size){
+  return `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" class="dragon-svg">
+    <defs>
+      <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#9333ea"/>
+        <stop offset="100%" stop-color="#4c1d95"/>
+      </linearGradient>
+      <linearGradient id="bellyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#c4b5fd"/>
+        <stop offset="100%" stop-color="#8b5cf6"/>
+      </linearGradient>
+      <linearGradient id="headGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#a855f7"/>
+        <stop offset="100%" stop-color="#8b5cf6"/>
+      </linearGradient>
+    </defs>
+    <!-- TAIL -->
+    <path d="M148 108 Q168 115 180 100 Q190 88 186 76 Q182 68 176 72 Q180 82 174 92 Q164 103 150 107Z" fill="#5b21b6"/>
+    <polygon points="178,80 182,70 186,80" fill="#7c3aed"/>
+    <polygon points="170,94 177,82 180,95" fill="#7c3aed"/>
+    <polygon points="158,104 167,93 170,105" fill="#7c3aed"/>
+    <!-- BODY -->
+    <ellipse cx="112" cy="118" rx="42" ry="34" fill="url(#bodyGrad)"/>
+    <!-- BELLY -->
+    <ellipse cx="112" cy="126" rx="25" ry="22" fill="url(#bellyGrad)" opacity="0.55"/>
+    <path d="M94 110 Q112 105 130 110" stroke="#c4b5fd" stroke-width="1" fill="none" opacity="0.5"/>
+    <path d="M91 120 Q112 114 133 120" stroke="#c4b5fd" stroke-width="1" fill="none" opacity="0.5"/>
+    <path d="M92 130 Q112 124 132 130" stroke="#c4b5fd" stroke-width="1" fill="none" opacity="0.5"/>
+    <path d="M96 140 Q112 135 128 140" stroke="#c4b5fd" stroke-width="1" fill="none" opacity="0.4"/>
+    <!-- BACK SPINES -->
+    <polygon points="86,88 90,72 94,88" fill="#4c1d95"/>
+    <polygon points="96,83 101,64 106,83" fill="#4c1d95"/>
+    <polygon points="108,80 113,60 118,80" fill="#4c1d95"/>
+    <polygon points="120,82 125,65 130,82" fill="#4c1d95"/>
+    <polygon points="87,88 90,74 92,88" fill="#7c3aed" opacity="0.5"/>
+    <polygon points="97,83 101,66 104,83" fill="#7c3aed" opacity="0.5"/>
+    <!-- NECK -->
+    <path d="M84,88 Q76,98 75,112 Q76,124 84,128 Q92,132 98,122 Q102,110 100,96 Q96,86 84,88Z" fill="url(#bodyGrad)"/>
+    <path d="M78,100 Q88,96 98,100" stroke="#c4b5fd" stroke-width="0.8" fill="none" opacity="0.4"/>
+    <path d="M76,112 Q87,108 98,112" stroke="#c4b5fd" stroke-width="0.8" fill="none" opacity="0.4"/>
+    <!-- HEAD -->
+    <path d="M44,62 Q46,42 62,34 Q78,26 96,34 Q110,40 114,58 Q118,74 106,88 Q94,100 76,100 Q56,99 48,84 Q40,70 44,62Z" fill="url(#headGrad)"/>
+    <!-- HORNS -->
+    <path d="M60,38 Q54,22 57,10 Q62,22 64,36Z" fill="#3b0764"/>
+    <path d="M60,38 Q55,24 58,13 Q62,24 63,36Z" fill="#5b21b6" opacity="0.5"/>
+    <path d="M88,34 Q88,17 93,7 Q95,20 94,32Z" fill="#3b0764"/>
+    <path d="M88,34 Q89,19 93,9 Q94,21 93,32Z" fill="#5b21b6" opacity="0.5"/>
+    <!-- BROW RIDGES -->
+    <path d="M50,62 Q62,54 72,60" stroke="#3b0764" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M86,56 Q97,50 106,58" stroke="#3b0764" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <!-- EYES -->
+    <ellipse cx="64" cy="66" rx="10" ry="9" fill="#1a0033"/>
+    <ellipse cx="98" cy="62" rx="10" ry="9" fill="#1a0033"/>
+    <ellipse cx="64" cy="66" rx="7" ry="6.5" fill="#f59e0b"/>
+    <ellipse cx="98" cy="62" rx="7" ry="6.5" fill="#f59e0b"/>
+    <ellipse cx="64" cy="66" rx="2.5" ry="6" fill="#0f0020"/>
+    <ellipse cx="98" cy="62" rx="2.5" ry="6" fill="#0f0020"/>
+    <circle cx="61" cy="63" r="2" fill="white" opacity="0.7"/>
+    <circle cx="95" cy="59" r="2" fill="white" opacity="0.7"/>
+    <!-- SNOUT -->
+    <path d="M48,74 Q52,84 60,88 Q76,93 90,88 Q98,84 100,76 Q100,68 92,64 Q80,60 66,62 Q52,64 48,74Z" fill="#7c3aed"/>
+    <path d="M56,78 Q76,73 96,78" stroke="#c4b5fd" stroke-width="0.8" fill="none" opacity="0.4"/>
+    <!-- NOSTRILS with fire glow -->
+    <ellipse cx="60" cy="84" rx="3.5" ry="2.5" fill="#3b0764" transform="rotate(-10 60 84)"/>
+    <ellipse cx="78" cy="85" rx="3.5" ry="2.5" fill="#3b0764"/>
+    <ellipse cx="60" cy="84" rx="2" ry="1.5" fill="#f97316" opacity="0.7"/>
+    <ellipse cx="78" cy="85" rx="2" ry="1.5" fill="#f97316" opacity="0.7"/>
+    <!-- JAW -->
+    <path d="M51,82 Q58,96 76,100 Q90,102 100,90 Q104,82 102,76 Q90,86 74,87 Q60,87 51,82Z" fill="#5b21b6"/>
+    <!-- TEETH -->
+    <polygon points="60,86 57,100 64,86" fill="white"/>
+    <polygon points="72,89 70,103 77,89" fill="white"/>
+    <polygon points="84,87 83,100 89,87" fill="white"/>
+    <polygon points="62,88 59,98 65,88" fill="#e5e7eb"/>
+    <polygon points="78,90 76,100 82,90" fill="#e5e7eb"/>
+    <!-- FORKED TONGUE -->
+    <path d="M68,97 Q74,108 76,118" stroke="#dc2626" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M76,118 Q73,124 70,130" stroke="#dc2626" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M76,118 Q79,124 82,130" stroke="#dc2626" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- FRONT LEFT LEG -->
+    <path d="M90,144 Q82,152 78,168 Q76,178 82,182 Q88,186 92,174 Q94,162 100,150Z" fill="url(#bodyGrad)"/>
+    <path d="M80,179 Q72,188 70,196" stroke="#3b0764" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M86,182 Q80,191 79,199" stroke="#3b0764" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M92,180 Q89,189 90,197" stroke="#3b0764" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- FRONT RIGHT LEG -->
+    <path d="M134,140 Q142,148 146,164 Q149,174 143,180 Q137,186 132,174 Q129,162 124,150Z" fill="url(#bodyGrad)"/>
+    <path d="M145,177 Q152,186 154,194" stroke="#3b0764" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M138,181 Q143,190 144,198" stroke="#3b0764" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M131,180 Q133,189 132,197" stroke="#3b0764" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- FIRE BREATH -->
+    <path d="M42,80 Q24,84 12,76 Q4,70 4,60 Q4,52 12,48 Q20,56 18,64 Q18,72 28,76 Q36,78 42,80Z" fill="#f97316" opacity="0.9"/>
+    <path d="M28,76 Q14,70 8,58 Q4,50 10,44 Q16,50 14,58 Q14,66 24,72Z" fill="#fbbf24" opacity="0.85"/>
+    <path d="M18,66 Q10,58 8,48 Q6,42 12,38 Q16,44 14,52 Q14,60 20,64Z" fill="#fef08a" opacity="0.8"/>
+    <path d="M12,50 Q6,44 6,36 Q6,30 12,28 Q16,34 14,42 Q13,46 14,50Z" fill="white" opacity="0.7"/>
+    <!-- SPARKLES -->
+    <path d="M148,76 L150,71 L152,76 L157,78 L152,80 L150,85 L148,80 L143,78Z" fill="#e9d5ff" opacity="0.8"/>
+    <path d="M104,75 L106,70 L108,75 L113,77 L108,79 L106,84 L104,79 L99,77Z" fill="#e9d5ff" opacity="0.6"/>
+  </svg>`;
+}
+
+
+// ==================== RED PANDA SVG ====================
+function redPandaSVG(size){
+  const c={body:"#c2410c",dark:"#7c2d12",mid:"#ea580c",cream:"#fef3c7",white:"#ffffff",black:"#1c0a00",stripe:"#92400e",inner:"#fda4af"};
+  const f=k=>`fill="${c[k]}"`;
+  return `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+    <ellipse cx="158" cy="118" rx="18" ry="7" ${f("mid")} transform="rotate(-20 158 118)"/>
+    <ellipse cx="165" cy="111" rx="15" ry="6" ${f("stripe")} transform="rotate(-25 165 111)"/>
+    <ellipse cx="171" cy="104" rx="12" ry="5" ${f("mid")} transform="rotate(-30 171 104)"/>
+    <ellipse cx="176" cy="98"  rx="9"  ry="5" ${f("stripe")} transform="rotate(-35 176 98)"/>
+    <ellipse cx="179" cy="92"  rx="7"  ry="4" ${f("mid")} transform="rotate(-40 179 92)"/>
+    <ellipse cx="181" cy="87"  rx="5"  ry="4" ${f("cream")} transform="rotate(-45 181 87)"/>
+    <ellipse cx="105" cy="130" rx="46" ry="36" ${f("body")}/>
+    <ellipse cx="105" cy="138" rx="26" ry="24" ${f("dark")} opacity=".5"/>
+    <ellipse cx="105" cy="142" rx="17" ry="17" ${f("cream")} opacity=".7"/>
+    <ellipse cx="72"  cy="158" rx="12" ry="7" ${f("dark")} transform="rotate(20 72 158)"/>
+    <ellipse cx="138" cy="158" rx="12" ry="7" ${f("dark")} transform="rotate(-20 138 158)"/>
+    <ellipse cx="67"  cy="164" rx="9"  ry="5" ${f("black")}/>
+    <ellipse cx="143" cy="164" rx="9"  ry="5" ${f("black")}/>
+    <path d="M88 150 Q82 162 80 174 Q84 180 90 177 Q95 168 96 156Z" ${f("body")}/>
+    <path d="M122 150 Q128 162 130 174 Q126 180 120 177 Q115 168 114 156Z" ${f("body")}/>
+    <ellipse cx="82"  cy="175" rx="8" ry="5" ${f("black")}/>
+    <ellipse cx="128" cy="175" rx="8" ry="5" ${f("black")}/>
+    <ellipse cx="105" cy="100" rx="20" ry="15" ${f("body")}/>
+    <ellipse cx="105" cy="72"  rx="34" ry="32" ${f("body")}/>
+    <polygon points="80,54 70,30 95,48" ${f("body")}/>
+    <polygon points="81,53 73,35 92,49" ${f("cream")}/>
+    <polygon points="82,52 76,40 90,50" ${f("inner")}/>
+    <polygon points="130,54 140,30 115,48" ${f("body")}/>
+    <polygon points="129,53 137,35 118,49" ${f("cream")}/>
+    <polygon points="128,52 134,40 120,50" ${f("inner")}/>
+    <ellipse cx="90"  cy="70" rx="14" ry="13" ${f("dark")}/>
+    <ellipse cx="120" cy="70" rx="14" ry="13" ${f("dark")}/>
+    <ellipse cx="90"  cy="70" rx="10" ry="9"  ${f("cream")}/>
+    <ellipse cx="120" cy="70" rx="10" ry="9"  ${f("cream")}/>
+    <ellipse cx="90"  cy="70" rx="7" ry="7" ${f("black")}/>
+    <ellipse cx="120" cy="70" rx="7" ry="7" ${f("black")}/>
+    <ellipse cx="90"  cy="70" rx="4.5" ry="5" ${f("black")}/>
+    <ellipse cx="120" cy="70" rx="4.5" ry="5" ${f("black")}/>
+    <circle  cx="87"  cy="67" r="2"  ${f("white")} opacity=".9"/>
+    <circle  cx="117" cy="67" r="2"  ${f("white")} opacity=".9"/>
+    <ellipse cx="105" cy="83" rx="6" ry="4" ${f("black")}/>
+    <circle  cx="103" cy="82" r="1.5" ${f("white")} opacity=".5"/>
+    <ellipse cx="78"  cy="82" rx="11" ry="8" ${f("cream")} opacity=".9"/>
+    <ellipse cx="132" cy="82" rx="11" ry="8" ${f("cream")} opacity=".9"/>
+    <ellipse cx="78"  cy="84" rx="6"  ry="4" ${f("inner")} opacity=".45"/>
+    <ellipse cx="132" cy="84" rx="6"  ry="4" ${f("inner")} opacity=".45"/>
+    <path d="M98 89 Q105 96 112 89" stroke="#7c2d12" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <line x1="78" y1="81" x2="54" y2="76" stroke="#fef3c7" stroke-width="1" opacity=".8"/>
+    <line x1="78" y1="84" x2="53" y2="84" stroke="#fef3c7" stroke-width="1" opacity=".8"/>
+    <line x1="78" y1="87" x2="56" y2="91" stroke="#fef3c7" stroke-width="1" opacity=".8"/>
+    <line x1="132" y1="81" x2="156" y2="76" stroke="#fef3c7" stroke-width="1" opacity=".8"/>
+    <line x1="132" y1="84" x2="157" y2="84" stroke="#fef3c7" stroke-width="1" opacity=".8"/>
+    <line x1="132" y1="87" x2="154" y2="91" stroke="#fef3c7" stroke-width="1" opacity=".8"/>
+    <path d="M88,46 Q105,38 122,46 Q114,56 105,58 Q96,56 88,46Z" ${f("dark")} opacity=".45"/>
+  </svg>`;
+}
+
+
+// ==================== STORAGE ====================
+const GLOBAL_KEY = 'chorequest_global_v1';
+const kidKey = id => `chorequest_${id}_v1`;
+
+function loadGlobal(){
+  try{ return JSON.parse(localStorage.getItem(GLOBAL_KEY)||'null') || { shop: null, surprises: null }; }
+  catch(e){ return { shop: null, surprises: null }; }
+}
+function saveGlobal(g){ localStorage.setItem(GLOBAL_KEY, JSON.stringify(g)); }
+
+function loadKidConfig(kid){
+  try{
+    const raw = localStorage.getItem('chorequest_cfg_'+kid.id);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return null;
+}
+function saveKidConfig(kidId, cfg){ localStorage.setItem('chorequest_cfg_'+kidId, JSON.stringify(cfg)); }
+
+function loadKidState(kidId){
+  try{
+    const raw = localStorage.getItem(kidKey(kidId));
+    if(raw){
+      const p = JSON.parse(raw);
+      const done = {};
+      if(p.done) for(const [d,a] of Object.entries(p.done)) done[d]=new Set(a);
+      return {...p, done};
+    }
+  }catch(e){}
+  return { coins:0, coinsEarned:0, streak:0, lastActiveDate:null, done:{}, surprise:{}, history:[], pendingChores:[], pendingShop:[] };
+}
+function saveKidState(kidId, s){
+  const out = {...s, done: Object.fromEntries(Object.entries(s.done).map(([d,set])=>[d,[...set]]))};
+  localStorage.setItem(kidKey(kidId), JSON.stringify(out));
+}
+
+// ==================== RUNTIME STATE ====================
+let globalCfg = loadGlobal();
+
+// Effective shop/surprises: from localStorage override or CONFIG defaults
+function getShop(){ return globalCfg.shop || JSON.parse(JSON.stringify(CONFIG.shop)); }
+function getSurprises(){ return globalCfg.surprises || JSON.parse(JSON.stringify(CONFIG.surprises)); }
+function getConsequences(){ return globalCfg.consequences || JSON.parse(JSON.stringify(CONFIG.consequences)); }
+
+// Effective kids array (merge saved chore configs)
+function getKids(){
+  return CONFIG.kids.map(kid => {
+    const saved = loadKidConfig(kid);
+    return saved ? {...kid, ...saved} : {...kid};
+  });
+}
+
+const states = {};
+let kids = getKids();
+for(const k of kids) states[k.id] = loadKidState(k.id);
+
+let activeKid = null;
+let parentKidView = null;
+let parentTab = 'approvals';
+
+function state(){ return states[activeKid.id]; }
+function kid(){ return activeKid; }
+function activeKidFull(){ return kids.find(k=>k.id===activeKid.id); }
+
+// ==================== DATES ====================
+function today(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function dayName(){ return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date().getDay()]; }
+function isWeekend(){ const d=new Date().getDay(); return d===0||d===6; }
+function formatDate(s){ if(!s)return''; const[y,m,da]=s.split('-'); return`${m}/${da}/${y}`; }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+// ==================== PENDING COUNT ====================
+function totalPending(){
+  let n=0;
+  for(const k of kids){
+    const s=states[k.id];
+    n+=(s.pendingChores||[]).length+(s.pendingShop||[]).length;
+  }
+  return n;
+}
+function updateBadge(){
+  const n=totalPending();
+  const b=document.getElementById('header-badge');
+  if(b){ b.style.display=n?'flex':'none'; b.textContent=n; }
+}
+
+// ==================== PROFILE PICKER ====================
+function renderPicker(){
+  kids = getKids();
+  const c=document.getElementById('picker-cards');
+  c.innerHTML=kids.map(kid=>{
+    const s=states[kid.id];
+    const pending=(s.pendingChores||[]).length+(s.pendingShop||[]).length;
+    const avatarHTML = kid.avatar==='dragon'
+      ? `<div style="width:64px;height:64px">${dragonSVG(64)}</div>`
+      : kid.avatar==='redpanda'
+      ? `<div style="width:64px;height:64px">${redPandaSVG(64)}</div>`
+      : `<div class="picker-emoji">${kid.avatar}</div>`;
+    return `<div class="picker-card" onclick="selectKid('${kid.id}')" style="border-color:${kid.color}33">
+      <div class="picker-avatar-wrap">${avatarHTML}</div>
+      <div class="picker-info">
+        <div class="picker-name" style="color:${kid.color}">${kid.name}</div>
+        <div class="picker-coins">🪙 ${s.coins} coins · ${s.streak||0}-day streak${pending?` · ⏳ ${pending} pending`:''}</div>
+      </div>
+      <div class="picker-arrow">›</div>
+    </div>`;
+  }).join('');
+}
+
+function selectKid(kidId){
+  activeKid = kids.find(k=>k.id===kidId);
+  document.documentElement.style.setProperty('--accent', activeKid.color);
+  document.documentElement.style.setProperty('--accent-mid', activeKid.color+'cc');
+  document.documentElement.style.setProperty('--accent-light', activeKid.color+'18');
+  document.documentElement.style.setProperty('--border', activeKid.color+'44');
+
+  const wrap = document.getElementById('header-avatar-wrap');
+  wrap.innerHTML = activeKid.avatar==='dragon'
+    ? dragonSVG(56)
+    : activeKid.avatar==='redpanda'
+    ? redPandaSVG(56)
+    : `<div class="header-emoji">${activeKid.avatar}</div>`;
+  document.getElementById('header-name').textContent = activeKid.name+"'s Quest";
+
+  checkStreak();
+  document.getElementById('profile-screen').style.display='none';
+  document.getElementById('app').classList.add('visible');
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-chores').classList.add('active');
+  document.querySelector('.tab-btn').classList.add('active');
+  renderAll();
+}
+
+function goBack(){
+  activeKid=null;
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('profile-screen').style.display='';
+  renderPicker();
+}
+
+// ==================== STREAK ====================
+function checkStreak(){
+  const s=state(); const t=today();
+  if(s.lastActiveDate===t)return;
+  const d=new Date(); d.setDate(d.getDate()-1);
+  const yest=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  if(s.lastActiveDate===yest) s.streak=(s.streak||0)+1;
+  else if(s.lastActiveDate!==t) s.streak=1;
+  s.lastActiveDate=t;
+  saveKidState(activeKid.id,s);
+}
+
+function renderStreak(){
+  const row=document.getElementById('streak-row');
+  const streak=Math.min(state().streak||0,7);
+  let html='';
+  for(let i=0;i<7;i++) html+=`<div class="streak-dot ${i<streak?'lit':''}">${i<streak?'⭐':i+1}</div>`;
+  html+=`<span class="streak-lbl">${state().streak||0}-day streak!</span>`;
+  row.innerHTML=html;
+}
+
+// ==================== CHORES ====================
+function choreVisible(chore){
+  const d=chore.days;
+  if(!d||d==='daily')return true;
+  if(d==='weekends')return isWeekend();
+  if(d==='weekdays')return!isWeekend();
+  if(Array.isArray(d))return d.includes(dayName());
+  return true;
+}
+
+function todayDone(){ return state().done[today()]||new Set(); }
+
+function renderChores(){
+  const container=document.getElementById('tab-chores');
+  const kd=activeKidFull();
+  const visible=(kd.chores||[]).filter(choreVisible);
+  const done=todayDone();
+  const pending=state().pendingChores||[];
+  const pendingIds=new Set(pending.map(p=>p.choreId));
+  const doneCount=[...done].filter(id=>(kd.chores||[]).find(c=>c.id===id)).length;
+  const total=visible.length;
+  const pct=total?Math.round((doneCount/total)*100):0;
+
+  let html=`<div class="sec-label">📋 Today's chores</div>
+    <div class="progress-wrap"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="progress-lbl">${doneCount} of ${total} done</div>
+    <div class="chore-list" style="margin-top:.8rem">`;
+
+  if(!visible.length){
+    html+=`<div class="empty-msg">No chores today — enjoy your day! 🎉</div>`;
+  } else {
+    for(const c of visible){
+      const isDone=done.has(c.id);
+      const isPending=pendingIds.has(c.id);
+      let cls=''; let checkIcon='⭕'; let statusLine='';
+      if(isDone){ cls='done'; checkIcon='✅'; }
+      else if(isPending){ cls='pending'; checkIcon='⏳'; statusLine=`<div class="chore-status">⏳ Waiting for parent approval</div>`; }
+      html+=`<div class="chore-card ${cls}" onclick="toggleChore('${c.id}')">
+        <div class="chore-emoji">${c.emoji}</div>
+        <div class="chore-info">
+          <div class="chore-name">${c.name}</div>
+          <div class="chore-coins">🪙 +${c.coins} coins</div>
+          ${statusLine}
+        </div>
+        <div class="chore-check">${checkIcon}</div>
+      </div>`;
+    }
+  }
+  html+=`</div>`;
+
+  // Surprise
+  const t=today();
+  if(!state().surprise[t]){
+    const surps=getSurprises();
+    state().surprise[t]={idx:Math.floor(Math.random()*surps.length),claimed:false};
+    saveKidState(activeKid.id,state());
+  }
+  const sd=state().surprise[t];
+  const surps=getSurprises();
+  const surprise=surps[sd.idx]||surps[0];
+  const claimed=sd.claimed;
+
+  html+=`<div class="surprise-box">
+    <div class="surprise-title">🎲 Bonus Challenge!</div>
+    <div class="surprise-text">${claimed?'Amazing! Come back tomorrow for a new challenge! 🌟':surprise.text}</div>
+    ${!claimed?`<div class="surprise-coins">🪙 Worth +${surprise.coins} coins!</div>`:''}
+    <button class="btn-gold" ${claimed?'disabled':''} onclick="claimSurprise()">
+      ${claimed?'✅ Claimed!':"🎉 I did it! Collect coins"}
+    </button>
+  </div>`;
+
+  container.innerHTML=html;
+}
+
+function toggleChore(id){
+  const t=today();
+  const s=state();
+  if(!s.done[t]) s.done[t]=new Set();
+  const kd=activeKidFull();
+  const chore=(kd.chores||[]).find(c=>c.id===id);
+  if(!chore)return;
+
+  const pending=s.pendingChores||[];
+  const pendingIdx=pending.findIndex(p=>p.choreId===id);
+
+  if(s.done[t].has(id)){
+    // Undo completed chore
+    s.done[t].delete(id);
+    s.coins=Math.max(0,s.coins-chore.coins);
+    addHistory(`Unchecked: ${chore.name}`,-chore.coins);
+    showToast('Chore unchecked','bad');
+    saveKidState(activeKid.id,s);
+    renderAll();
+    return;
+  }
+
+  if(pendingIdx>=0){
+    // Cancel pending
+    pending.splice(pendingIdx,1);
+    s.pendingChores=pending;
+    showToast('Approval request cancelled','bad');
+    saveKidState(activeKid.id,s);
+    updateBadge();
+    renderAll();
+    return;
+  }
+
+  // Submit for approval
+  s.pendingChores=[...(s.pendingChores||[]),{id:uid(),choreId:id,choreName:chore.name,coins:chore.coins,date:t}];
+  showToast('Sent to parent for approval! ⏳','warn');
+  saveKidState(activeKid.id,s);
+  updateBadge();
+  renderAll();
+}
+
+function claimSurprise(){
+  const t=today(); const s=state();
+  const sd=s.surprise[t];
+  if(!sd||sd.claimed)return;
+  const surps=getSurprises();
+  const surprise=surps[sd.idx]||surps[0];
+  s.coins+=surprise.coins;
+  s.coinsEarned=(s.coinsEarned||0)+surprise.coins;
+  sd.claimed=true;
+  addHistory('🎲 Bonus challenge',surprise.coins);
+  showToast(`Bonus! +${surprise.coins} coins! 🌟`);
+  confetti();
+  saveKidState(activeKid.id,s);
+  renderAll();
+}
+
+// ==================== SHOP ====================
+function renderShop(){
+  const container=document.getElementById('tab-shop');
+  const shop=getShop();
+  let html=`<div class="sec-label">🛒 Coin shop</div>
+    <p style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:12px">
+      Pick a reward — a parent will need to approve it!
+    </p>
+    <div class="shop-grid">`;
+  for(const item of shop){
+    const can=state().coins>=item.cost;
+    html+=`<div class="shop-card ${can?'affordable':'cant-afford'}" onclick="buyItem('${item.id}')">
+      <div class="shop-emoji">${item.emoji}</div>
+      <div class="shop-name">${item.name}</div>
+      <div class="shop-cost">🪙 ${item.cost}</div>
+    </div>`;
+  }
+  html+=`</div>`;
+  container.innerHTML=html;
+}
+
+function buyItem(id){
+  const shop=getShop();
+  const item=shop.find(i=>i.id===id);
+  if(!item)return;
+  if(state().coins<item.cost){ showToast('Not enough coins yet! 😅','bad'); return; }
+  const s=state();
+  s.pendingShop=[...(s.pendingShop||[]),{id:uid(),itemId:id,itemName:item.name,itemEmoji:item.emoji,cost:item.cost,date:today()}];
+  showToast(`${item.emoji} Sent to parent for approval! ⏳`,'warn');
+  saveKidState(activeKid.id,s);
+  updateBadge();
+  renderAll();
+}
+
+// ==================== HISTORY ====================
+function addHistory(label,delta){
+  const s=state();
+  s.history=s.history||[];
+  s.history.unshift({date:today(),label,delta});
+  if(s.history.length>100) s.history=s.history.slice(0,100);
+}
+
+function renderHistory(){
+  const container=document.getElementById('tab-history');
+  const h=state().history||[];
+  let html=`<div class="sec-label">📜 Coin history</div>`;
+  if(!h.length){ html+=`<div class="empty-msg" style="padding-top:2rem">No history yet — start doing chores! 💪</div>`; }
+  else{
+    html+=`<div class="history-list">`;
+    for(const item of h){
+      const plus=item.delta>=0;
+      html+=`<div class="history-item">
+        <div class="hi-left">${item.label}<div class="hi-date">${formatDate(item.date)}</div></div>
+        <div class="hi-right ${!plus?'hi-neg':''}">${plus?'+':''}${item.delta} 🪙</div>
+      </div>`;
+    }
+    html+=`</div>`;
+  }
+  container.innerHTML=html;
+}
+
+// ==================== TABS ====================
+function switchTab(name,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ==================== PARENT PORTAL ====================
+function openParent(){
+  parentKidView = activeKid ? activeKid.id : kids[0].id;
+  parentTab='approvals';
+  document.getElementById('parent-overlay').classList.add('open');
+  document.getElementById('pin-field').value='';
+  document.getElementById('pin-error').textContent='';
+  document.getElementById('parent-unlocked').classList.remove('unlocked');
+  document.getElementById('pin-area').style.display='';
+  setTimeout(()=>document.getElementById('pin-field').focus(),100);
+}
+
+function closeParent(){
+  document.getElementById('parent-overlay').classList.remove('open');
+  kids=getKids();
+  if(activeKid){ activeKid=kids.find(k=>k.id===activeKid.id)||activeKid; renderAll(); }
+  renderPicker();
+}
+
+function checkPin(){
+  const val=document.getElementById('pin-field').value.trim();
+  if(val===String(CONFIG.parentPin)){
+    document.getElementById('pin-area').style.display='none';
+    document.getElementById('parent-unlocked').classList.add('unlocked');
+    renderParentPortal();
+  } else {
+    document.getElementById('pin-error').textContent='Wrong PIN, try again.';
+    document.getElementById('pin-field').value='';
+  }
+}
+
+function renderParentPortal(){
+  // Kid tabs
+  document.getElementById('parent-kid-tabs').innerHTML=kids.map(k=>{
+    const s=states[k.id];
+    const n=(s.pendingChores||[]).length+(s.pendingShop||[]).length;
+    return `<div class="kid-tab ${k.id===parentKidView?'active':''}" onclick="switchParentKid('${k.id}')">
+      ${k.avatar==='dragon'?'🐉':k.avatar==='redpanda'?'🦊':k.avatar} ${k.name}${n?` <span style="color:var(--orange);font-size:12px">(${n})</span>`:''}
+    </div>`;
+  }).join('');
+
+  // Nav tabs
+  const s=states[parentKidView];
+  const pendingCount=(s.pendingChores||[]).length+(s.pendingShop||[]).length;
+  document.getElementById('parent-nav').innerHTML=[
+    {id:'approvals',label:'✅ Approvals',badge:pendingCount},
+    {id:'stats',label:'📊 Stats',badge:0},
+    {id:'chores',label:'📋 Chores',badge:0},
+    {id:'shop',label:'🛒 Shop',badge:0},
+    {id:'consequences',label:'🙊 Oops',badge:0},
+  ].map(t=>`<button class="parent-nav-btn ${parentTab===t.id?'active':''}" onclick="switchParentTab('${t.id}')">
+    ${t.label}${t.badge?`<div class="parent-nav-badge">${t.badge}</div>`:''}
+  </button>`).join('');
+
+  // Content
+  const content=document.getElementById('parent-content');
+  if(parentTab==='approvals') content.innerHTML=renderApprovalsTab();
+  else if(parentTab==='stats') content.innerHTML=renderStatsTab();
+  else if(parentTab==='chores') content.innerHTML=renderChoresEditorTab();
+  else if(parentTab==='shop') content.innerHTML=renderShopEditorTab();
+  else if(parentTab==='consequences') content.innerHTML=renderConsequencesTab();
+}
+
+function switchParentKid(id){ parentKidView=id; renderParentPortal(); }
+function switchParentTab(t){ parentTab=t; renderParentPortal(); }
+
+// ---- APPROVALS ----
+function renderApprovalsTab(){
+  const s=states[parentKidView];
+  const kd=kids.find(k=>k.id===parentKidView);
+  const pc=s.pendingChores||[];
+  const ps=s.pendingShop||[];
+  if(!pc.length&&!ps.length){
+    return`<div class="empty-msg" style="padding:1.5rem 0">🎉 No pending approvals!</div>`;
+  }
+  let html='';
+  for(const p of pc){
+    html+=`<div class="approval-card chore-type">
+      <div class="approval-meta">📋 Chore · ${formatDate(p.date)}</div>
+      <div class="approval-label">${p.choreName} · 🪙 +${p.coins}</div>
+      <div class="approval-actions">
+        <button class="btn-sm-success" onclick="approveChore('${parentKidView}','${p.id}')">✅ Approve</button>
+        <button class="btn-sm-danger" onclick="denyChore('${parentKidView}','${p.id}')">✗ Deny</button>
+      </div>
+    </div>`;
+  }
+  for(const p of ps){
+    html+=`<div class="approval-card shop-type">
+      <div class="approval-meta">🛒 Shop · ${formatDate(p.date)}</div>
+      <div class="approval-label">${p.itemEmoji} ${p.itemName} · 🪙 -${p.cost}</div>
+      <div class="approval-actions">
+        <button class="btn-sm-success" onclick="approveShop('${parentKidView}','${p.id}')">✅ Approve</button>
+        <button class="btn-sm-danger" onclick="denyShop('${parentKidView}','${p.id}')">✗ Deny</button>
+      </div>
+    </div>`;
+  }
+  return html;
+}
+
+function approveChore(kidId,pendingId){
+  const s=states[kidId];
+  const idx=(s.pendingChores||[]).findIndex(p=>p.id===pendingId);
+  if(idx<0)return;
+  const p=s.pendingChores[idx];
+  s.pendingChores.splice(idx,1);
+  if(!s.done[p.date]) s.done[p.date]=new Set();
+  s.done[p.date].add(p.choreId);
+  s.coins+=p.coins;
+  s.coinsEarned=(s.coinsEarned||0)+p.coins;
+  s.history=s.history||[];
+  s.history.unshift({date:p.date,label:`✅ ${p.choreName}`,delta:p.coins});
+  saveKidState(kidId,s);
+  updateBadge();
+  showToast('Chore approved! Coins awarded 🎉');
+  renderParentPortal();
+  if(activeKid&&activeKid.id===kidId) renderAll();
+}
+
+function denyChore(kidId,pendingId){
+  const s=states[kidId];
+  const idx=(s.pendingChores||[]).findIndex(p=>p.id===pendingId);
+  if(idx<0)return;
+  s.pendingChores.splice(idx,1);
+  saveKidState(kidId,s);
+  updateBadge();
+  showToast('Chore denied','bad');
+  renderParentPortal();
+  if(activeKid&&activeKid.id===kidId) renderAll();
+}
+
+function approveShop(kidId,pendingId){
+  const s=states[kidId];
+  const idx=(s.pendingShop||[]).findIndex(p=>p.id===pendingId);
+  if(idx<0)return;
+  const p=s.pendingShop[idx];
+  if(s.coins<p.cost){ showToast('Not enough coins!','bad'); return; }
+  s.pendingShop.splice(idx,1);
+  s.coins=Math.max(0,s.coins-p.cost);
+  s.coinsDeducted=(s.coinsDeducted||0)+p.cost;
+  s.history=s.history||[];
+  s.history.unshift({date:p.date,label:`🛒 ${p.itemName}`,delta:-p.cost});
+  saveKidState(kidId,s);
+  updateBadge();
+  showToast(`${p.itemEmoji} Purchase approved!`);
+  renderParentPortal();
+  if(activeKid&&activeKid.id===kidId) renderAll();
+}
+
+function denyShop(kidId,pendingId){
+  const s=states[kidId];
+  const idx=(s.pendingShop||[]).findIndex(p=>p.id===pendingId);
+  if(idx<0)return;
+  s.pendingShop.splice(idx,1);
+  saveKidState(kidId,s);
+  updateBadge();
+  showToast('Purchase denied','bad');
+  renderParentPortal();
+  if(activeKid&&activeKid.id===kidId) renderAll();
+}
+
+// ---- STATS ----
+function renderStatsTab(){
+  const s=states[parentKidView];
+  const kd=kids.find(k=>k.id===parentKidView);
+  const todayDoneCount=[...(s.done[today()]||new Set())].filter(id=>(kd.chores||[]).find(c=>c.id===id)).length;
+  return `
+    <div class="parent-stat">Total coins earned <span>${s.coinsEarned||0}</span></div>
+    <div class="parent-stat">Current balance <span>${s.coins}</span></div>
+    <div class="parent-stat">Day streak <span>${s.streak||0}</span></div>
+    <div class="parent-stat">Chores done today <span>${todayDoneCount}</span></div>
+    <p style="font-size:13px;font-weight:700;color:var(--text-muted);margin:12px 0 6px">Add or remove coins manually:</p>
+    <div class="add-coins-row">
+      <input type="number" id="adjust-amount" placeholder="e.g. 10 or -5" min="-999" max="999">
+      <button class="btn-sm" onclick="adjustCoins()">Apply</button>
+    </div>
+    <button class="btn-danger" onclick="resetKid()" style="margin-top:8px">⚠️ Reset ${kd.name}'s data</button>
+  `;
+}
+
+function adjustCoins(){
+  const amt=parseInt(document.getElementById('adjust-amount').value,10);
+  if(isNaN(amt)){ showToast('Enter a number first','bad'); return; }
+  const s=states[parentKidView];
+  s.coins=Math.max(0,s.coins+amt);
+  if(amt>0) s.coinsEarned=(s.coinsEarned||0)+amt;
+  s.history=s.history||[];
+  s.history.unshift({date:today(),label:'Parent adjustment',delta:amt});
+  saveKidState(parentKidView,s);
+  if(activeKid&&activeKid.id===parentKidView) renderAll();
+  renderParentPortal();
+  showToast(`Coins adjusted by ${amt>=0?'+':''}${amt}`,'info');
+}
+
+function resetKid(){
+  const kd=kids.find(k=>k.id===parentKidView);
+  if(!confirm(`Reset ALL of ${kd.name}'s coins, history, and streak?`))return;
+  localStorage.removeItem(kidKey(parentKidView));
+  states[parentKidView]=loadKidState(parentKidView);
+  if(activeKid&&activeKid.id===parentKidView) renderAll();
+  renderParentPortal();
+  showToast(`${kd.name}'s data reset`,'bad');
+}
+
+// ---- CHORES EDITOR ----
+function renderChoresEditorTab(){
+  const kd=kids.find(k=>k.id===parentKidView);
+  const chores=kd.chores||[];
+  let html=`<div class="add-form">
+    <div class="form-label">Add a new chore</div>
+    <input id="new-chore-emoji" placeholder="Emoji (e.g. 🧹)" maxlength="4" style="width:80px;display:inline-block;margin-right:8px">
+    <input id="new-chore-name" placeholder="Chore name" style="width:calc(100% - 96px);display:inline-block;margin-bottom:8px">
+    <div class="add-form-row">
+      <input id="new-chore-coins" type="number" placeholder="Coins" min="1" max="999">
+      <select id="new-chore-days">
+        <option value="daily">Every day</option>
+        <option value="weekdays">Weekdays only</option>
+        <option value="weekends">Weekends only</option>
+      </select>
+      <button class="btn-sm" onclick="addChore()">Add</button>
+    </div>
+  </div>`;
+
+  if(!chores.length){ html+=`<div class="empty-msg">No chores yet — add one above!</div>`; }
+  else{
+    for(const c of chores){
+      const daysLabel={daily:'Daily',weekdays:'Weekdays',weekends:'Weekends'}[c.days||'daily']||c.days;
+      html+=`<div class="editor-item">
+        <div style="font-size:24px;margin-right:4px">${c.emoji}</div>
+        <div class="editor-item-info">
+          <div class="editor-item-name">${c.name}</div>
+          <div class="editor-item-sub">🪙 ${c.coins} · ${daysLabel}</div>
+        </div>
+        <div class="editor-actions">
+          <button class="btn-sm" onclick="editChorePrompt('${parentKidView}','${c.id}')">Edit</button>
+          <button class="btn-sm-danger" onclick="deleteChore('${parentKidView}','${c.id}')">✗</button>
+        </div>
+      </div>`;
+    }
+  }
+  return html;
+}
+
+function addChore(){
+  const emoji=document.getElementById('new-chore-emoji').value.trim()||'⭐';
+  const name=document.getElementById('new-chore-name').value.trim();
+  const coins=parseInt(document.getElementById('new-chore-coins').value,10);
+  const days=document.getElementById('new-chore-days').value;
+  if(!name){ showToast('Enter a chore name','bad'); return; }
+  if(!coins||coins<1){ showToast('Enter coin amount','bad'); return; }
+  const kd=kids.find(k=>k.id===parentKidView);
+  const newChore={id:uid(),emoji,name,coins,days};
+  const updated={...kd,chores:[...(kd.chores||[]),newChore]};
+  saveKidConfig(parentKidView,{chores:updated.chores});
+  kids=getKids();
+  showToast('Chore added!');
+  renderParentPortal();
+}
+
+function editChorePrompt(kidId,choreId){
+  const kd=kids.find(k=>k.id===kidId);
+  const chore=(kd.chores||[]).find(c=>c.id===choreId);
+  if(!chore)return;
+  const newCoins=prompt(`Edit coins for "${chore.name}":`, chore.coins);
+  if(newCoins===null)return;
+  const parsed=parseInt(newCoins,10);
+  if(isNaN(parsed)||parsed<1){ showToast('Invalid amount','bad'); return; }
+  const newName=prompt('Edit chore name:', chore.name);
+  if(newName===null)return;
+  const updated=kd.chores.map(c=>c.id===choreId?{...c,name:newName.trim()||c.name,coins:parsed}:c);
+  saveKidConfig(kidId,{chores:updated});
+  kids=getKids();
+  showToast('Chore updated!');
+  renderParentPortal();
+}
+
+function deleteChore(kidId,choreId){
+  if(!confirm('Delete this chore?'))return;
+  const kd=kids.find(k=>k.id===kidId);
+  const updated=(kd.chores||[]).filter(c=>c.id!==choreId);
+  saveKidConfig(kidId,{chores:updated});
+  kids=getKids();
+  showToast('Chore deleted','bad');
+  renderParentPortal();
+}
+
+// ---- SHOP EDITOR ----
+function renderShopEditorTab(){
+  const shop=getShop();
+  let html=`<div class="add-form">
+    <div class="form-label">Add a new reward</div>
+    <input id="new-shop-emoji" placeholder="Emoji" maxlength="4" style="width:80px;display:inline-block;margin-right:8px">
+    <input id="new-shop-name" placeholder="Reward name" style="width:calc(100% - 96px);display:inline-block;margin-bottom:8px">
+    <div class="add-form-row">
+      <input id="new-shop-cost" type="number" placeholder="Coin cost" min="1" max="9999">
+      <button class="btn-sm" onclick="addShopItem()">Add</button>
+    </div>
+  </div>`;
+
+  for(const item of shop){
+    html+=`<div class="editor-item">
+      <div style="font-size:24px;margin-right:4px">${item.emoji}</div>
+      <div class="editor-item-info">
+        <div class="editor-item-name">${item.name}</div>
+        <div class="editor-item-sub">🪙 ${item.cost} coins</div>
+      </div>
+      <div class="editor-actions">
+        <button class="btn-sm" onclick="editShopItem('${item.id}')">Edit</button>
+        <button class="btn-sm-danger" onclick="deleteShopItem('${item.id}')">✗</button>
+      </div>
+    </div>`;
+  }
+  return html;
+}
+
+function addShopItem(){
+  const emoji=document.getElementById('new-shop-emoji').value.trim()||'🎁';
+  const name=document.getElementById('new-shop-name').value.trim();
+  const cost=parseInt(document.getElementById('new-shop-cost').value,10);
+  if(!name){ showToast('Enter a reward name','bad'); return; }
+  if(!cost||cost<1){ showToast('Enter coin cost','bad'); return; }
+  const shop=getShop();
+  shop.push({id:uid(),emoji,name,cost});
+  globalCfg.shop=shop;
+  saveGlobal(globalCfg);
+  showToast('Reward added!');
+  renderParentPortal();
+}
+
+function editShopItem(itemId){
+  const shop=getShop();
+  const item=shop.find(i=>i.id===itemId);
+  if(!item)return;
+  const newCost=prompt(`Edit coin cost for "${item.name}":`, item.cost);
+  if(newCost===null)return;
+  const parsed=parseInt(newCost,10);
+  if(isNaN(parsed)||parsed<1){ showToast('Invalid amount','bad'); return; }
+  const newName=prompt('Edit reward name:', item.name);
+  if(newName===null)return;
+  const updated=shop.map(i=>i.id===itemId?{...i,name:newName.trim()||i.name,cost:parsed}:i);
+  globalCfg.shop=updated;
+  saveGlobal(globalCfg);
+  showToast('Reward updated!');
+  renderParentPortal();
+}
+
+function deleteShopItem(itemId){
+  if(!confirm('Delete this reward?'))return;
+  const shop=getShop().filter(i=>i.id!==itemId);
+  globalCfg.shop=shop;
+  saveGlobal(globalCfg);
+  showToast('Reward deleted','bad');
+  renderParentPortal();
+}
+
+// ==================== OOPS TAB ====================
+function renderOops(){
+  const container=document.getElementById('tab-oops');
+  const s=state();
+  const oops=(s.oopsLog||[]);
+  let html=`<div class="sec-label">🙊 Oops!</div>`;
+  if(!oops.length){
+    html+=`<div class="empty-msg" style="padding-top:1.5rem">No oops yet — keep it up! 🌟</div>`;
+  } else {
+    html+=`<div class="history-list">`;
+    for(const item of oops){
+      html+=`<div class="history-item" style="border-left:4px solid var(--red);border-radius:0 var(--radius-sm) var(--radius-sm) 0">
+        <div class="hi-left">${item.reason}<div class="hi-date">${formatDate(item.date)}</div></div>
+        <div class="hi-right hi-neg">-${item.coins} 🪙</div>
+      </div>`;
+    }
+    html+=`</div>`;
+  }
+  container.innerHTML=html;
+}
+
+// ---- CONSEQUENCES EDITOR ----
+function renderConsequencesTab(){
+  const cons=getConsequences();
+  const kd=kids.find(k=>k.id===parentKidView);
+  let html=`
+    <div class="add-form" style="border-color:#fca5a5;background:#fff1f2">
+      <div class="form-label" style="color:#b91c1c">⚡ Custom deduction for ${kd.name}</div>
+      <input id="custom-con-text" placeholder="Reason (e.g. Broke a rule)" style="margin-bottom:8px">
+      <div class="add-form-row">
+        <input id="custom-con-coins" type="number" placeholder="Coins to deduct" min="1" max="999">
+        <button class="btn-sm-danger" onclick="applyCustomDeduction()">Deduct</button>
+      </div>
+    </div>
+    <div class="form-label" style="margin-bottom:8px;margin-top:4px">Preset consequences</div>`;
+  for(const c of cons){
+    html+=`<div class="editor-item">
+      <div style="font-size:20px;margin-right:6px">🙊</div>
+      <div class="editor-item-info">
+        <div class="editor-item-name">${c.text}</div>
+        <div class="editor-item-sub">-${c.coins} coins</div>
+      </div>
+      <div class="editor-actions">
+        <button class="btn-sm-danger" onclick="applyConsequence('${c.id}')">Apply</button>
+        <button class="btn-sm-danger" onclick="deleteConsequence('${c.id}')">✗</button>
+      </div>
+    </div>`;
+  }
+  html+=`
+    <div class="add-form" style="margin-top:14px">
+      <div class="form-label">Add a new preset consequence</div>
+      <input id="new-con-text" placeholder="What happened?" style="margin-bottom:8px">
+      <div class="add-form-row">
+        <input id="new-con-coins" type="number" placeholder="Coins" min="1" max="999">
+        <button class="btn-sm" onclick="addConsequence()">Save preset</button>
+      </div>
+    </div>`;
+  return html;
+}
+
+function applyCustomDeduction(){
+  const text=document.getElementById('custom-con-text').value.trim();
+  const coins=parseInt(document.getElementById('custom-con-coins').value,10);
+  if(!text){ showToast('Enter a reason','bad'); return; }
+  if(!coins||coins<1){ showToast('Enter coin amount','bad'); return; }
+  const s=states[parentKidView];
+  const kd=kids.find(k=>k.id===parentKidView);
+  s.coins=Math.max(0,s.coins-coins);
+  s.coinsDeducted=(s.coinsDeducted||0)+coins;
+  s.oopsLog=s.oopsLog||[];
+  s.oopsLog.unshift({date:today(),reason:text,coins});
+  if(s.oopsLog.length>50) s.oopsLog=s.oopsLog.slice(0,50);
+  s.history=s.history||[];
+  s.history.unshift({date:today(),label:`🙊 ${text}`,delta:-coins});
+  saveKidState(parentKidView,s);
+  if(activeKid&&activeKid.id===parentKidView) renderAll();
+  showToast(`-${coins} coins deducted from ${kd.name}`,'bad');
+  renderParentPortal();
+}
+
+function applyConsequence(conId){
+  const cons=getConsequences();
+  const con=cons.find(c=>c.id===conId);
+  if(!con)return;
+  const s=states[parentKidView];
+  const kd=kids.find(k=>k.id===parentKidView);
+  s.coins=Math.max(0,s.coins-con.coins);
+  s.coinsDeducted=(s.coinsDeducted||0)+con.coins;
+  s.oopsLog=s.oopsLog||[];
+  s.oopsLog.unshift({date:today(),reason:con.text,coins:con.coins});
+  if(s.oopsLog.length>50) s.oopsLog=s.oopsLog.slice(0,50);
+  s.history=s.history||[];
+  s.history.unshift({date:today(),label:`🙊 ${con.text}`,delta:-con.coins});
+  saveKidState(parentKidView,s);
+  if(activeKid&&activeKid.id===parentKidView) renderAll();
+  showToast(`-${con.coins} coins applied to ${kd.name}`,'bad');
+  renderParentPortal();
+}
+
+function addConsequence(){
+  const text=document.getElementById('new-con-text').value.trim();
+  const coins=parseInt(document.getElementById('new-con-coins').value,10);
+  if(!text){ showToast('Enter a reason','bad'); return; }
+  if(!coins||coins<1){ showToast('Enter coin amount','bad'); return; }
+  const cons=getConsequences();
+  cons.push({id:uid(),text,coins});
+  globalCfg.consequences=cons;
+  saveGlobal(globalCfg);
+  showToast('Consequence added!');
+  renderParentPortal();
+}
+
+function deleteConsequence(conId){
+  if(!confirm('Delete this consequence?'))return;
+  const cons=getConsequences().filter(c=>c.id!==conId);
+  globalCfg.consequences=cons;
+  saveGlobal(globalCfg);
+  showToast('Deleted','bad');
+  renderParentPortal();
+}
+
+// ==================== UI HELPERS ====================
+function updateCoinDisplay(){
+  const s=state();
+  const earned=s.coinsEarned||0;
+  const deducted=s.coinsDeducted||0;
+  const available=Math.max(0,s.coins);
+  const ce=document.getElementById('cb-earned');
+  const cd=document.getElementById('cb-deducted');
+  const ca=document.getElementById('cb-available');
+  if(ce) ce.textContent=earned;
+  if(cd) cd.textContent=deducted;
+  if(ca) ca.textContent=available;
+}
+
+function showToast(msg,type){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show'+(type?' '+type:'');
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.className='toast',2500);
+}
+
+function confetti(){
+  const colors=[activeKid.color,'#f59e0b','#22c55e','#ec4899','#3b82f6'];
+  for(let i=0;i<22;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.cssText=`left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${1.2+Math.random()*1.4}s;animation-delay:${Math.random()*.4}s`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),2800);
+  }
+}
+
+function renderAll(){
+  updateCoinDisplay();
+  renderStreak();
+  renderChores();
+  renderShop();
+  renderHistory();
+  renderOops();
+  updateBadge();
+}
+
+// ==================== EVENTS ====================
+document.getElementById('parent-overlay').addEventListener('click',function(e){ if(e.target===this)closeParent(); });
+document.getElementById('pin-field').addEventListener('keydown',function(e){ if(e.key==='Enter')checkPin(); });
+
+// ==================== INIT ====================
+renderPicker();
+</script>
+</body>
+</html>
