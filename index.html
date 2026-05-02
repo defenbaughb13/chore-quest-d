@@ -3,16 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Chore Quest ⭐</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-
+<title>Chore Quest ⭐ — Declan</title>
 <!-- Chore Quest — Declan's copy. Change parentPin and chores in the CONFIG below. -->
+<!-- Firebase -->
+<script src="https://cdn.jsdelivr.net/npm/firebase@9.22.2/firebase-app-compat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/firebase@9.22.2/firebase-database-compat.min.js"></script>
+
 <script>
-// ============================================================
-// CONFIG — Base defaults. After first load, all edits happen
-// inside the app via the Parent Portal. Changing these after
-// you've started will NOT overwrite saved data.
-// ============================================================
 const CONFIG = {
   parentPin: "0000",
 
@@ -62,118 +59,22 @@ const CONFIG = {
       color: "#c2410c",
       chores: [
         { id: "k1",  emoji: "🛏️", name: "Make my bed",                            coins: 5,  days: "daily"    },
-        { id: "k2a", emoji: "🦷", name: "Brush teeth — morning",                  coins: 5,  days: "daily"    },
-        { id: "k2b", emoji: "🦷", name: "Brush teeth — night",                    coins: 5,  days: "daily"    },
-        { id: "k3",  emoji: "🧺", name: "Put dirty clothes in hamper",            coins: 5,  days: "daily"    },
+        { id: "k2a", emoji: "🦷", name: "Brush teeth — morning",                  coins: 5,  days: "daily",   required: true },
+        { id: "k2b", emoji: "🦷", name: "Brush teeth — night",                    coins: 5,  days: "daily",   required: true },
+        { id: "k3",  emoji: "🧺", name: "Put dirty clothes in hamper",            coins: 5,  days: "daily",   required: true },
         { id: "k4",  emoji: "👕", name: "Get dressed without being asked",        coins: 8,  days: "daily"    },
         { id: "k5",  emoji: "🍳", name: "Put breakfast dishes away",              coins: 5,  days: "daily"    },
         { id: "k6",  emoji: "🍽️", name: "Put dinner dishes away",                 coins: 5,  days: "daily"    },
         { id: "k7",  emoji: "🧹", name: "Tidy up my toys",                        coins: 10, days: "daily"    },
         { id: "k8",  emoji: "📚", name: "Read for 15 minutes",                    coins: 10, days: "weekdays" },
+        { id: "k9",  emoji: "🚿", name: "Take a shower & hang up wet towel",      coins: 0,  days: "daily",   bedtimeBonus: 15 },
       ],
     },
   ],
 
-};E html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Chore Quest ⭐</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-<!-- Chore Quest — Declan's copy. Change parentPin and chores in the CONFIG below. -->
-<script>
-// ============================================================
-// CONFIG — Base defaults. After first load, all edits happen
-// inside the app via the Parent Portal. Changing these after
-// you've started will NOT overwrite saved data.
-// ============================================================
-const CONFIG = {
-  parentPin: "0000",
-
-  shop: [
-    { id: "s1", emoji: "🎮", name: "15 min extra screen time", cost: 200 },
-    { id: "s2", emoji: "🍦", name: "Choose tonight's dessert",  cost: 250 },
-    { id: "s3", emoji: "🎬", name: "Pick movie night",           cost: 350 },
-    { id: "s4", emoji: "🌃", name: "Stay up 30 min late",        cost: 400 },
-    { id: "s5", emoji: "🧁", name: "Bake something together",    cost: 500 },
-    { id: "s6", emoji: "🎳", name: "Family bowling trip",        cost: 800 },
-    { id: "s7", emoji: "🛍️", name: "Buy something under $10",    cost: 600 },
-    { id: "s8", emoji: "🕹️", name: "Go to the arcade ($10 limit)", cost: 750 },
-    { id: "s9", emoji: "🎁", name: "Get a surprise present",     cost: 500 },
-    { id: "s10", emoji: "🚿", name: "Skip a shower",             cost: 300 },
-  ],
-
-  surprises: [
-    { text: "Do 10 jumping jacks!",                                         coins: 5 },
-    { text: "Draw a picture and show mom or dad!",                          coins: 5 },
-    { text: "Do something kind for someone today!",                         coins: 8 },
-    { text: "Wipe down a counter in the kitchen!",                          coins: 6 },
-    { text: "Pick up 10 things off the floor!",                             coins: 5 },
-    { text: "Say something nice to everyone in the house!",                 coins: 8 },
-    { text: "Set out your clothes for tomorrow!",                           coins: 6 },
-    { text: "Give someone a hug and tell them why you love them!",          coins: 8 },
-    { text: "Make a card or drawing for someone to cheer them up!",         coins: 7 },
-    { text: "Share a toy or game with your sibling without being asked!",   coins: 8 },
-    { text: "Help set up or clean up something without being told!",        coins: 7 },
-    { text: "Tell each person in the house one thing you like about them!", coins: 8 },
-  ],
-
-  consequences: [
-    { id: "q1", text: "Yelling at your sibling",                 coins: 15 },
-    { id: "q2", text: "Arguing with your parents",               coins: 15 },
-    { id: "q3", text: "Talking back to your parents",            coins: 15 },
-    { id: "q4", text: "Telling your parents no",                 coins: 15 },
-    { id: "q5", text: "Not listening to your parents",           coins: 15 },
-    { id: "q6", text: "Not doing something your parents asked",  coins: 15 },
-    { id: "q7", text: "Lying",                                   coins: 15 },
-  ],
-
-  kids: [
-    {
-      id: "declan2",
-      name: "Cooper",
-      avatar: "dragon",
-      color: "#0d9488",
-      chores: [
-        { id: "c1",  emoji: "🛏️", name: "Make my bed",                            coins: 5,  days: "daily"    },
-        { id: "c2a", emoji: "🦷", name: "Brush teeth — morning",                  coins: 5,  days: "daily"    },
-        { id: "c2b", emoji: "🦷", name: "Brush teeth — night",                    coins: 5,  days: "daily"    },
-        { id: "c3",  emoji: "🧺", name: "Put dirty clothes in hamper",            coins: 5,  days: "daily"    },
-        { id: "c8",  emoji: "👕", name: "Get dressed without being asked",        coins: 8,  days: "daily"    },
-        { id: "c9",  emoji: "🎒", name: "Get backpack ready without being asked", coins: 8,  days: "weekdays" },
-        { id: "c10", emoji: "🍳", name: "Put breakfast dishes in dishwasher",     coins: 5,  days: "daily"    },
-        { id: "c11", emoji: "🍽️", name: "Put dinner dishes in dishwasher",        coins: 5,  days: "daily"    },
-        { id: "c4",  emoji: "🍽️", name: "Help set the dinner table",              coins: 8,  days: "daily"    },
-        { id: "c5",  emoji: "🧹", name: "Tidy up my toys",                        coins: 10, days: "daily"    },
-        { id: "c6",  emoji: "📚", name: "Read for 15 minutes",                    coins: 10, days: "weekdays" },
-        { id: "c7",  emoji: "🐾", name: "Feed the pet",                           coins: 8,  days: "daily"    },
-      ],
-    },
-    {
-      id: "haley",
-      name: "Haley",
-      avatar: "🦄",
-      color: "#db2777",
-      chores: [
-        { id: "h1",  emoji: "🛏️", name: "Make my bed",                            coins: 5,  days: "daily"    },
-        { id: "h2a", emoji: "🦷", name: "Brush teeth — morning",                  coins: 5,  days: "daily"    },
-        { id: "h2b", emoji: "🦷", name: "Brush teeth — night",                    coins: 5,  days: "daily"    },
-        { id: "h3",  emoji: "👗", name: "Put clothes away neatly",                coins: 5,  days: "daily"    },
-        { id: "h8",  emoji: "👗", name: "Get dressed without being asked",        coins: 8,  days: "daily"    },
-        { id: "h9",  emoji: "🎒", name: "Get backpack ready without being asked", coins: 8,  days: "weekdays" },
-        { id: "h10", emoji: "🍳", name: "Put breakfast dishes in dishwasher",     coins: 5,  days: "daily"    },
-        { id: "h11", emoji: "🍽️", name: "Put dinner dishes in dishwasher",        coins: 5,  days: "daily"    },
-        { id: "h4",  emoji: "🍽️", name: "Help clear the dinner table",            coins: 8,  days: "daily"    },
-        { id: "h5",  emoji: "🧸", name: "Tidy up my room",                        coins: 10, days: "daily"    },
-        { id: "h6",  emoji: "📚", name: "Read for 15 minutes",                    coins: 10, days: "weekdays" },
-        { id: "h7",  emoji: "🌿", name: "Water the plants",                       coins: 7,  days: "weekends" },
-      ],
-    },
-  ],
 };
 </script>
+
 
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -208,7 +109,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 #app.visible{display:flex}
 
 /* HEADER */
-.header{padding:1.2rem 1.2rem 1.8rem;border-radius:0 0 28px 28px;color:white;position:relative;text-align:center;background:linear-gradient(140deg,var(--accent) 0%,var(--accent-mid) 100%);box-shadow:0 4px 24px rgba(0,0,0,.15);transition:background .4s}
+.header{padding:1.2rem 1.2rem 1.8rem;border-radius:0 0 28px 28px;color:white;position:relative;text-align:center;background:linear-gradient(140deg,var(--accent) 0%,var(--accent) 100%);box-shadow:0 4px 24px rgba(0,0,0,.1);transition:background .4s}
 .header-back,.settings-btn{position:absolute;top:14px;background:rgba(255,255,255,.2);border:none;border-radius:50%;width:38px;height:38px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white}
 .header-back{left:14px}
 .settings-btn{right:14px}
@@ -217,13 +118,13 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .header-avatar-wrap{width:64px;height:64px;margin:0 auto 4px;display:flex;align-items:center;justify-content:center}
 .header-emoji{font-size:44px;line-height:1}
 .header-name{font-family:'Fredoka One',cursive;font-size:24px;letter-spacing:.5px}
-.coin-breakdown{display:inline-flex;gap:10px;margin-top:10px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);border-radius:14px;padding:8px 16px}
-.cb-row{font-family:'Fredoka One',cursive;font-size:14px;color:white;white-space:nowrap}
+.coin-breakdown{display:inline-flex;gap:10px;margin-top:10px;background:rgba(0,0,0,.08);border:1.5px solid rgba(0,0,0,.12);border-radius:14px;padding:8px 16px}
+.cb-row{font-family:'Fredoka One',cursive;font-size:14px;color:inherit;white-space:nowrap}
 
 /* STREAK */
 .streak-row{display:flex;align-items:center;justify-content:center;gap:6px;margin:1rem 1.2rem 0;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;flex-wrap:wrap}
 .streak-dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--text-muted);transition:background .3s,border-color .3s}
-.streak-dot.lit{background:var(--accent);border-color:var(--accent);color:white}
+.streak-dot.lit{background:var(--accent);border-color:var(--accent);color:var(--header-text,white)}
 .streak-lbl{font-size:13px;font-weight:700;color:var(--text-muted);margin-left:4px;white-space:nowrap}
 
 /* TABS */
@@ -233,7 +134,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .tab-icon{font-size:20px}
 
 /* SECTIONS */
-.section{display:none;padding:0 1.2rem}
+.section{display:none;padding:0 1.2rem 1.5rem}
 .section.active{display:block}
 .sec-label{font-family:'Fredoka One',cursive;font-size:17px;color:var(--accent);margin:1.2rem 0 .6rem}
 
@@ -243,6 +144,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .chore-card:active{transform:scale(.97)}
 .chore-card.done{background:var(--green-light);border-color:#86efac;opacity:.8}
 .chore-card.pending{background:#fff7ed;border-color:#fed7aa;opacity:.9}
+.chore-card.blocked{opacity:.45;cursor:default}
 .chore-emoji{font-size:34px;width:46px;text-align:center;flex-shrink:0}
 .chore-info{flex:1;min-width:0}
 .chore-name{font-size:15px;font-weight:700;color:var(--text);line-height:1.25}
@@ -361,6 +263,13 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 </style>
 </head>
 <body>
+<!-- Sync indicator -->
+<div id="sync-indicator" style="display:none;position:fixed;top:0;left:0;right:0;background:rgba(0,0,0,0.6);color:white;font-family:'Fredoka One',cursive;font-size:15px;padding:10px;text-align:center;z-index:9999;align-items:center;justify-content:center;gap:8px">
+  <div style="width:18px;height:18px;border:3px solid white;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite"></div>
+  Loading your data...
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
 
 <!-- PROFILE PICKER -->
 <div id="profile-screen">
@@ -427,33 +336,15 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 // ==================== DRAGON SVG ====================
 function dragonSVG(size){
   return `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" class="dragon-svg">
-    <defs>
-      <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#9333ea"/>
-        <stop offset="100%" stop-color="#4c1d95"/>
-      </linearGradient>
-      <linearGradient id="bellyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#c4b5fd"/>
-        <stop offset="100%" stop-color="#8b5cf6"/>
-      </linearGradient>
-      <linearGradient id="headGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#a855f7"/>
-        <stop offset="100%" stop-color="#8b5cf6"/>
-      </linearGradient>
-    </defs>
     <!-- TAIL -->
     <path d="M148 108 Q168 115 180 100 Q190 88 186 76 Q182 68 176 72 Q180 82 174 92 Q164 103 150 107Z" fill="#5b21b6"/>
     <polygon points="178,80 182,70 186,80" fill="#7c3aed"/>
     <polygon points="170,94 177,82 180,95" fill="#7c3aed"/>
     <polygon points="158,104 167,93 170,105" fill="#7c3aed"/>
     <!-- BODY -->
-    <ellipse cx="112" cy="118" rx="42" ry="34" fill="url(#bodyGrad)"/>
-    <!-- BELLY -->
-    <ellipse cx="112" cy="126" rx="25" ry="22" fill="url(#bellyGrad)" opacity="0.55"/>
-    <path d="M94 110 Q112 105 130 110" stroke="#c4b5fd" stroke-width="1" fill="none" opacity="0.5"/>
-    <path d="M91 120 Q112 114 133 120" stroke="#c4b5fd" stroke-width="1" fill="none" opacity="0.5"/>
-    <path d="M92 130 Q112 124 132 130" stroke="#c4b5fd" stroke-width="1" fill="none" opacity="0.5"/>
-    <path d="M96 140 Q112 135 128 140" stroke="#c4b5fd" stroke-width="1" fill="none" opacity="0.4"/>
+    <ellipse cx="112" cy="118" rx="42" ry="34" fill="#9333ea"/>
+    <ellipse cx="112" cy="126" rx="25" ry="22" fill="#c4b5fd" opacity="0.55"/>
+    <ellipse cx="112" cy="142" rx="17" ry="17" fill="#c4b5fd" opacity="0.35"/>
     <!-- BACK SPINES -->
     <polygon points="86,88 90,72 94,88" fill="#4c1d95"/>
     <polygon points="96,83 101,64 106,83" fill="#4c1d95"/>
@@ -462,16 +353,16 @@ function dragonSVG(size){
     <polygon points="87,88 90,74 92,88" fill="#7c3aed" opacity="0.5"/>
     <polygon points="97,83 101,66 104,83" fill="#7c3aed" opacity="0.5"/>
     <!-- NECK -->
-    <path d="M84,88 Q76,98 75,112 Q76,124 84,128 Q92,132 98,122 Q102,110 100,96 Q96,86 84,88Z" fill="url(#bodyGrad)"/>
+    <path d="M84,88 Q76,98 75,112 Q76,124 84,128 Q92,132 98,122 Q102,110 100,96 Q96,86 84,88Z" fill="#9333ea"/>
     <path d="M78,100 Q88,96 98,100" stroke="#c4b5fd" stroke-width="0.8" fill="none" opacity="0.4"/>
     <path d="M76,112 Q87,108 98,112" stroke="#c4b5fd" stroke-width="0.8" fill="none" opacity="0.4"/>
     <!-- HEAD -->
-    <path d="M44,62 Q46,42 62,34 Q78,26 96,34 Q110,40 114,58 Q118,74 106,88 Q94,100 76,100 Q56,99 48,84 Q40,70 44,62Z" fill="url(#headGrad)"/>
+    <path d="M44,62 Q46,42 62,34 Q78,26 96,34 Q110,40 114,58 Q118,74 106,88 Q94,100 76,100 Q56,99 48,84 Q40,70 44,62Z" fill="#a855f7"/>
     <!-- HORNS -->
     <path d="M60,38 Q54,22 57,10 Q62,22 64,36Z" fill="#3b0764"/>
-    <path d="M60,38 Q55,24 58,13 Q62,24 63,36Z" fill="#5b21b6" opacity="0.5"/>
+    <path d="M60,38 Q55,24 58,13 Q62,24 63,36Z" fill="#6d28d9" opacity="0.5"/>
     <path d="M88,34 Q88,17 93,7 Q95,20 94,32Z" fill="#3b0764"/>
-    <path d="M88,34 Q89,19 93,9 Q94,21 93,32Z" fill="#5b21b6" opacity="0.5"/>
+    <path d="M88,34 Q89,19 93,9 Q94,21 93,32Z" fill="#6d28d9" opacity="0.5"/>
     <!-- BROW RIDGES -->
     <path d="M50,62 Q62,54 72,60" stroke="#3b0764" stroke-width="3.5" fill="none" stroke-linecap="round"/>
     <path d="M86,56 Q97,50 106,58" stroke="#3b0764" stroke-width="3.5" fill="none" stroke-linecap="round"/>
@@ -482,12 +373,12 @@ function dragonSVG(size){
     <ellipse cx="98" cy="62" rx="7" ry="6.5" fill="#f59e0b"/>
     <ellipse cx="64" cy="66" rx="2.5" ry="6" fill="#0f0020"/>
     <ellipse cx="98" cy="62" rx="2.5" ry="6" fill="#0f0020"/>
-    <circle cx="61" cy="63" r="2" fill="white" opacity="0.7"/>
-    <circle cx="95" cy="59" r="2" fill="white" opacity="0.7"/>
+    <circle cx="61" cy="63" r="2" fill="white" opacity="0.9"/>
+    <circle cx="95" cy="59" r="2" fill="white" opacity="0.9"/>
     <!-- SNOUT -->
     <path d="M48,74 Q52,84 60,88 Q76,93 90,88 Q98,84 100,76 Q100,68 92,64 Q80,60 66,62 Q52,64 48,74Z" fill="#7c3aed"/>
     <path d="M56,78 Q76,73 96,78" stroke="#c4b5fd" stroke-width="0.8" fill="none" opacity="0.4"/>
-    <!-- NOSTRILS with fire glow -->
+    <!-- NOSTRILS -->
     <ellipse cx="60" cy="84" rx="3.5" ry="2.5" fill="#3b0764" transform="rotate(-10 60 84)"/>
     <ellipse cx="78" cy="85" rx="3.5" ry="2.5" fill="#3b0764"/>
     <ellipse cx="60" cy="84" rx="2" ry="1.5" fill="#f97316" opacity="0.7"/>
@@ -498,19 +389,17 @@ function dragonSVG(size){
     <polygon points="60,86 57,100 64,86" fill="white"/>
     <polygon points="72,89 70,103 77,89" fill="white"/>
     <polygon points="84,87 83,100 89,87" fill="white"/>
-    <polygon points="62,88 59,98 65,88" fill="#e5e7eb"/>
-    <polygon points="78,90 76,100 82,90" fill="#e5e7eb"/>
-    <!-- FORKED TONGUE -->
+    <!-- TONGUE -->
     <path d="M68,97 Q74,108 76,118" stroke="#dc2626" stroke-width="2.5" fill="none" stroke-linecap="round"/>
     <path d="M76,118 Q73,124 70,130" stroke="#dc2626" stroke-width="2.5" fill="none" stroke-linecap="round"/>
     <path d="M76,118 Q79,124 82,130" stroke="#dc2626" stroke-width="2.5" fill="none" stroke-linecap="round"/>
     <!-- FRONT LEFT LEG -->
-    <path d="M90,144 Q82,152 78,168 Q76,178 82,182 Q88,186 92,174 Q94,162 100,150Z" fill="url(#bodyGrad)"/>
+    <path d="M90,144 Q82,152 78,168 Q76,178 82,182 Q88,186 92,174 Q94,162 100,150Z" fill="#9333ea"/>
     <path d="M80,179 Q72,188 70,196" stroke="#3b0764" stroke-width="3" fill="none" stroke-linecap="round"/>
     <path d="M86,182 Q80,191 79,199" stroke="#3b0764" stroke-width="3" fill="none" stroke-linecap="round"/>
     <path d="M92,180 Q89,189 90,197" stroke="#3b0764" stroke-width="3" fill="none" stroke-linecap="round"/>
     <!-- FRONT RIGHT LEG -->
-    <path d="M134,140 Q142,148 146,164 Q149,174 143,180 Q137,186 132,174 Q129,162 124,150Z" fill="url(#bodyGrad)"/>
+    <path d="M134,140 Q142,148 146,164 Q149,174 143,180 Q137,186 132,174 Q129,162 124,150Z" fill="#9333ea"/>
     <path d="M145,177 Q152,186 154,194" stroke="#3b0764" stroke-width="3" fill="none" stroke-linecap="round"/>
     <path d="M138,181 Q143,190 144,198" stroke="#3b0764" stroke-width="3" fill="none" stroke-linecap="round"/>
     <path d="M131,180 Q133,189 132,197" stroke="#3b0764" stroke-width="3" fill="none" stroke-linecap="round"/>
@@ -525,6 +414,322 @@ function dragonSVG(size){
   </svg>`;
 }
 
+// ==================== FIREBASE SYNC ====================
+const DB_PREFIX = 'chorequest';
+
+function kidStateRef(kidId){ return window.db.ref(`${DB_PREFIX}/states/${kidId}`); }
+function globalRef(){ return window.db.ref(`${DB_PREFIX}/global`); }
+
+// Serialize state (convert Sets to arrays)
+function serializeState(s){
+  const done={};
+  for(const [d,val] of Object.entries(s.done||{})){
+    done[d] = val instanceof Set ? [...val] : (Array.isArray(val) ? val : Object.values(val));
+  }
+  return {
+    coins: s.coins||0,
+    coinsEarned: s.coinsEarned||0,
+    coinsDeducted: s.coinsDeducted||0,
+    streak: s.streak||0,
+    lastActiveDate: s.lastActiveDate||null,
+    done,
+    surprise: s.surprise||{},
+    history: toArray(s.history),
+    pendingChores: toArray(s.pendingChores),
+    pendingShop: toArray(s.pendingShop),
+    oopsLog: toArray(s.oopsLog),
+    baseBedtime: s.baseBedtime||'19:45',
+    bedtimeAdjustments: s.bedtimeAdjustments||{},
+  };
+}
+
+// Deserialize state (convert arrays back to Sets)
+function toArray(val){
+  if(!val) return [];
+  if(Array.isArray(val)) return val;
+  if(typeof val === 'object') return Object.values(val);
+  return [];
+}
+
+const EMPTY_STATE = () => ({ coins:0, coinsEarned:0, coinsDeducted:0, streak:0, lastActiveDate:null, done:{}, surprise:{}, history:[], pendingChores:[], pendingShop:[], oopsLog:[], baseBedtime:'19:45', bedtimeAdjustments:{} });
+
+function deserializeState(raw){
+  try {
+    if(!raw) return EMPTY_STATE();
+    const done={};
+    if(raw.done && typeof raw.done === 'object') {
+      for(const [d,a] of Object.entries(raw.done)) done[d]=new Set(toArray(a));
+    }
+    const surprise={};
+    if(raw.surprise && typeof raw.surprise === 'object') {
+      for(const [d,v] of Object.entries(raw.surprise)) surprise[d]=v;
+    }
+    return {
+      coins: raw.coins||0,
+      coinsEarned: raw.coinsEarned||0,
+      coinsDeducted: raw.coinsDeducted||0,
+      streak: raw.streak||0,
+      lastActiveDate: raw.lastActiveDate||null,
+      done,
+      surprise,
+      history: toArray(raw.history),
+      pendingChores: toArray(raw.pendingChores),
+      pendingShop: toArray(raw.pendingShop),
+      oopsLog: toArray(raw.oopsLog),
+      baseBedtime: raw.baseBedtime||'19:45',
+      bedtimeAdjustments: raw.bedtimeAdjustments||{},
+    };
+  } catch(e) {
+    console.warn('deserializeState error:', e);
+    return EMPTY_STATE();
+  }
+}
+
+// Save kid state to Firebase
+function saveKidState(kidId, s){
+  kidStateRef(kidId).set(serializeState(s)).catch(e=>console.error('Save error',e));
+}
+
+// Save global config to Firebase
+function saveGlobal(g){
+  globalRef().set(g).catch(e=>console.error('Save global error',e));
+}
+
+// Loading indicator
+function showSyncing(show){
+  const el=document.getElementById('sync-indicator');
+  if(el) el.style.display=show?'flex':'none';
+}
+
+// Initial load from Firebase — returns a promise
+function loadAllFromFirebase(){
+  return new Promise((resolve)=>{
+    showSyncing(true);
+    let loaded=0;
+    let resolved=false;
+    const total=CONFIG.kids.length+1;
+
+    function tryResolve(){
+      loaded++;
+      if(loaded>=total&&!resolved){
+        resolved=true;
+        showSyncing(false);
+        resolve();
+      }
+    }
+
+    // Timeout fallback — resolve after 6s no matter what
+    setTimeout(()=>{
+      if(!resolved){
+        resolved=true;
+        showSyncing(false);
+        // Fill in any missing states with empty defaults
+        for(const kid of CONFIG.kids){
+          if(!states[kid.id]) states[kid.id]=EMPTY_STATE();
+        }
+        resolve();
+      }
+    }, 3000);
+
+    // Load global config using once()
+    globalRef().once('value').then(snap=>{
+      const val=snap.val();
+      if(val){
+        if(val.shop) globalCfg.shop=val.shop;
+        if(val.consequences) globalCfg.consequences=val.consequences;
+        if(val.surprises) globalCfg.surprises=val.surprises;
+        if(val.kidConfigs) globalCfg.kidConfigs=val.kidConfigs;
+      }
+      tryResolve();
+    }).catch(e=>{ console.warn('Global load error',e); tryResolve(); });
+
+    // Load each kid state using once() — separate from the on() subscribers
+    for(const kid of CONFIG.kids){
+      kidStateRef(kid.id).once('value').then(snap=>{
+        states[kid.id]=deserializeState(snap.val());
+        tryResolve();
+      }).catch(e=>{
+        console.warn('Kid state load error',e);
+        states[kid.id]=EMPTY_STATE();
+        tryResolve();
+      });
+    }
+  });
+}
+
+// Subscribe to real-time updates for a kid
+function subscribeToKid(kidId){
+  kidStateRef(kidId).on('value', snap=>{
+    try {
+      if(!initialLoadComplete) return; // ignore events during initial load
+      const val = snap.val();
+      if(val === null) return; // ignore empty nodes
+      const newState=deserializeState(val);
+      states[kidId]=newState;
+      updateBadge();
+      if(!activeKid) renderPicker();
+      if(activeKid&&activeKid.id===kidId) setTimeout(renderAll, 80);
+    } catch(e){ console.warn('subscribeToKid error:', e); }
+  });
+}
+
+// Subscribe to global config changes
+function subscribeToGlobal(){
+  globalRef().on('value', snap=>{
+    try {
+      if(!initialLoadComplete) return;
+      const val=snap.val();
+      if(val){
+        if(val.shop) globalCfg.shop=val.shop;
+        if(val.consequences) globalCfg.consequences=val.consequences;
+        if(val.surprises) globalCfg.surprises=val.surprises;
+        if(val.kidConfigs) globalCfg.kidConfigs=val.kidConfigs;
+        kids=getKids();
+        if(activeKid) activeKid=kids.find(k=>k.id===activeKid.id)||activeKid;
+      }
+    } catch(e){ console.warn('subscribeToGlobal error:', e); }
+  });
+}
+
+
+// ==================== RUNTIME STATE ====================
+let globalCfg = { shop: null, consequences: null, surprises: null, kidConfigs: null };
+
+// Effective shop/surprises: from localStorage override or CONFIG defaults
+function getShop(){ return globalCfg.shop || JSON.parse(JSON.stringify(CONFIG.shop)); }
+function getSurprises(){ return globalCfg.surprises || JSON.parse(JSON.stringify(CONFIG.surprises)); }
+function getConsequences(){ return globalCfg.consequences || JSON.parse(JSON.stringify(CONFIG.consequences)); }
+
+// Effective kids array (merge saved chore configs)
+function saveKidConfig(kidId, cfg){
+  if(!globalCfg.kidConfigs) globalCfg.kidConfigs={};
+  globalCfg.kidConfigs[kidId]=cfg;
+  saveGlobal(globalCfg);
+}
+
+function loadKidConfig(kid){
+  if(globalCfg.kidConfigs&&globalCfg.kidConfigs[kid.id]) return globalCfg.kidConfigs[kid.id];
+  return null;
+}
+
+function getKids(){
+  return CONFIG.kids.map(kid => {
+    const saved = loadKidConfig(kid);
+    return saved ? {...kid, ...saved} : {...kid};
+  });
+}
+
+const states = {};
+let kids = getKids();
+// Initialize empty states — will be populated from Firebase
+for(const k of kids) states[k.id] = deserializeState(null);
+
+let activeKid = null;
+let parentKidView = null;
+let parentTab = 'approvals';
+let initialLoadComplete = false;
+
+function state(){
+  if(!activeKid) return EMPTY_STATE();
+  const s = states[activeKid.id];
+  if(!s) return EMPTY_STATE();
+  try {
+    // Ensure done values are always Sets (Firebase may return plain arrays/objects)
+    if(s.done){
+      for(const [d, val] of Object.entries(s.done)){
+        if(!(val instanceof Set)){
+          s.done[d] = new Set(Array.isArray(val) ? val : (val && typeof val==='object' ? Object.values(val) : []));
+        }
+      }
+    }
+    if(!s.baseBedtime) s.baseBedtime='19:45';
+    if(!s.bedtimeAdjustments) s.bedtimeAdjustments={};
+    if(!s.pendingChores) s.pendingChores=[];
+    if(!s.pendingShop) s.pendingShop=[];
+    if(!s.oopsLog) s.oopsLog=[];
+    if(!s.history) s.history=[];
+  } catch(e){ console.warn('state() repair error:', e); }
+  return s;
+}
+function kid(){ return activeKid; }
+function activeKidFull(){ return kids.find(k=>k.id===activeKid.id); }
+
+// ==================== DATES ====================
+function today(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function dayName(){ return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date().getDay()]; }
+function isWeekend(){ const d=new Date().getDay(); return d===0||d===6; }
+function formatDate(s){ if(!s)return''; const[y,m,da]=s.split('-'); return`${m}/${da}/${y}`; }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+// ==================== PENDING COUNT ====================
+function totalPending(){
+  let n=0;
+  for(const k of kids){
+    const s=states[k.id];
+    n+=(s.pendingChores||[]).length+(s.pendingShop||[]).length;
+  }
+  return n;
+}
+function updateBadge(){
+  const n=totalPending();
+  const b=document.getElementById('header-badge');
+  if(b){ b.style.display=n?'flex':'none'; b.textContent=n; }
+}
+
+
+// ==================== BEDTIME HELPERS ====================
+function getTonightAdjustment(kidId){
+  const s=states[kidId];
+  if(!s) return 0;
+  const adj=s.bedtimeAdjustments||{};
+  return adj[today()]||0;
+}
+
+function addBedtimeAdjustment(kidId, minutes, reason){
+  const s=states[kidId];
+  if(!s) return;
+  if(!s.bedtimeAdjustments) s.bedtimeAdjustments={};
+  s.bedtimeAdjustments[today()]=(s.bedtimeAdjustments[today()]||0)+minutes;
+  s.history=s.history||[];
+  const sign=minutes>0?'+':'';
+  s.history.unshift({date:today(),label:`🌙 ${reason} (${sign}${minutes} min bedtime)`,delta:0});
+  saveKidState(kidId,s);
+}
+
+function formatBedtime(kidId){
+  const s=states[kidId];
+  if(!s) return '—';
+  const base=s.baseBedtime||'19:45';
+  const adj=getTonightAdjustment(kidId);
+  const [h,m]=base.split(':').map(Number);
+  const totalMins=h*60+m+adj;
+  const finalH=Math.floor(((totalMins%1440)+1440)%1440/60);
+  const finalM=((totalMins%60)+60)%60;
+  const period=finalH>=12?'PM':'AM';
+  const displayH=finalH>12?finalH-12:finalH===0?12:finalH;
+  return `${displayH}:${String(finalM).padStart(2,'0')} ${period}`;
+}
+
+function bedtimeDisplay(kidId){
+  const adj=getTonightAdjustment(kidId);
+  const time=formatBedtime(kidId);
+  if(adj===0) return `🌙 ${time}`;
+  const sign=adj>0?'+':'';
+  return `🌙 ${time} <span style="font-size:11px;font-weight:800;color:${adj>0?'#22c55e':'#ef4444'}">(${sign}${adj} min tonight)</span>`;
+}
+
+// Reset bedtime adjustments that are from previous days
+function cleanOldBedtimeAdjustments(kidId){
+  const s=states[kidId];
+  if(!s||!s.bedtimeAdjustments) return;
+  const t=today();
+  const cleaned={};
+  if(s.bedtimeAdjustments[t]) cleaned[t]=s.bedtimeAdjustments[t];
+  s.bedtimeAdjustments=cleaned;
+}
 
 // ==================== RED PANDA SVG ====================
 function redPandaSVG(size){
@@ -583,96 +788,6 @@ function redPandaSVG(size){
   </svg>`;
 }
 
-
-// ==================== STORAGE ====================
-const GLOBAL_KEY = 'chorequest_global_v1';
-const kidKey = id => `chorequest_${id}_v1`;
-
-function loadGlobal(){
-  try{ return JSON.parse(localStorage.getItem(GLOBAL_KEY)||'null') || { shop: null, surprises: null }; }
-  catch(e){ return { shop: null, surprises: null }; }
-}
-function saveGlobal(g){ localStorage.setItem(GLOBAL_KEY, JSON.stringify(g)); }
-
-function loadKidConfig(kid){
-  try{
-    const raw = localStorage.getItem('chorequest_cfg_'+kid.id);
-    if(raw) return JSON.parse(raw);
-  }catch(e){}
-  return null;
-}
-function saveKidConfig(kidId, cfg){ localStorage.setItem('chorequest_cfg_'+kidId, JSON.stringify(cfg)); }
-
-function loadKidState(kidId){
-  try{
-    const raw = localStorage.getItem(kidKey(kidId));
-    if(raw){
-      const p = JSON.parse(raw);
-      const done = {};
-      if(p.done) for(const [d,a] of Object.entries(p.done)) done[d]=new Set(a);
-      return {...p, done};
-    }
-  }catch(e){}
-  return { coins:0, coinsEarned:0, streak:0, lastActiveDate:null, done:{}, surprise:{}, history:[], pendingChores:[], pendingShop:[] };
-}
-function saveKidState(kidId, s){
-  const out = {...s, done: Object.fromEntries(Object.entries(s.done).map(([d,set])=>[d,[...set]]))};
-  localStorage.setItem(kidKey(kidId), JSON.stringify(out));
-}
-
-// ==================== RUNTIME STATE ====================
-let globalCfg = loadGlobal();
-
-// Effective shop/surprises: from localStorage override or CONFIG defaults
-function getShop(){ return globalCfg.shop || JSON.parse(JSON.stringify(CONFIG.shop)); }
-function getSurprises(){ return globalCfg.surprises || JSON.parse(JSON.stringify(CONFIG.surprises)); }
-function getConsequences(){ return globalCfg.consequences || JSON.parse(JSON.stringify(CONFIG.consequences)); }
-
-// Effective kids array (merge saved chore configs)
-function getKids(){
-  return CONFIG.kids.map(kid => {
-    const saved = loadKidConfig(kid);
-    return saved ? {...kid, ...saved} : {...kid};
-  });
-}
-
-const states = {};
-let kids = getKids();
-for(const k of kids) states[k.id] = loadKidState(k.id);
-
-let activeKid = null;
-let parentKidView = null;
-let parentTab = 'approvals';
-
-function state(){ return states[activeKid.id]; }
-function kid(){ return activeKid; }
-function activeKidFull(){ return kids.find(k=>k.id===activeKid.id); }
-
-// ==================== DATES ====================
-function today(){
-  const d=new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-function dayName(){ return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date().getDay()]; }
-function isWeekend(){ const d=new Date().getDay(); return d===0||d===6; }
-function formatDate(s){ if(!s)return''; const[y,m,da]=s.split('-'); return`${m}/${da}/${y}`; }
-function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
-
-// ==================== PENDING COUNT ====================
-function totalPending(){
-  let n=0;
-  for(const k of kids){
-    const s=states[k.id];
-    n+=(s.pendingChores||[]).length+(s.pendingShop||[]).length;
-  }
-  return n;
-}
-function updateBadge(){
-  const n=totalPending();
-  const b=document.getElementById('header-badge');
-  if(b){ b.style.display=n?'flex':'none'; b.textContent=n; }
-}
-
 // ==================== PROFILE PICKER ====================
 function renderPicker(){
   kids = getKids();
@@ -683,31 +798,48 @@ function renderPicker(){
     const avatarHTML = kid.avatar==='dragon'
       ? `<div style="width:64px;height:64px">${dragonSVG(64)}</div>`
       : kid.avatar==='redpanda'
-      ? `<div style="width:64px;height:64px">${redPandaSVG(64)}</div>`
+      ? `<div style="width:64px;height:64px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:4px">${redPandaSVG(56)}</div>`
       : `<div class="picker-emoji">${kid.avatar}</div>`;
     return `<div class="picker-card" onclick="selectKid('${kid.id}')" style="border-color:${kid.color}33">
       <div class="picker-avatar-wrap">${avatarHTML}</div>
       <div class="picker-info">
         <div class="picker-name" style="color:${kid.color}">${kid.name}</div>
         <div class="picker-coins">🪙 ${s.coins} coins · ${s.streak||0}-day streak${pending?` · ⏳ ${pending} pending`:''}</div>
+        <div class="picker-coins" style="margin-top:2px">${bedtimeDisplay(kid.id)}</div>
       </div>
       <div class="picker-arrow">›</div>
     </div>`;
   }).join('');
 }
 
+function isLightColor(hex){
+  const r=parseInt(hex.slice(1,3),16);
+  const g=parseInt(hex.slice(3,5),16);
+  const b=parseInt(hex.slice(5,7),16);
+  return (r*299+g*587+b*114)/1000 > 155;
+}
+
 function selectKid(kidId){
   activeKid = kids.find(k=>k.id===kidId);
   document.documentElement.style.setProperty('--accent', activeKid.color);
   document.documentElement.style.setProperty('--accent-mid', activeKid.color+'cc');
-  document.documentElement.style.setProperty('--accent-light', activeKid.color+'18');
-  document.documentElement.style.setProperty('--border', activeKid.color+'44');
+  document.documentElement.style.setProperty('--accent-light', activeKid.color+'28');
+  document.documentElement.style.setProperty('--border', activeKid.color+'66');
+  // Use dark text for light background colors
+  const isLight = isLightColor(activeKid.color);
+  document.documentElement.style.setProperty('--header-text', isLight ? '#134e4a' : '#ffffff');
+  document.getElementById('main-header').style.color = isLight ? '#134e4a' : '#ffffff';
+  // Also update back button and settings button colors
+  document.querySelectorAll('.header-back,.settings-btn').forEach(el=>{
+    el.style.background = isLight ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.2)';
+    el.style.color = isLight ? '#134e4a' : 'white';
+  });
 
   const wrap = document.getElementById('header-avatar-wrap');
   wrap.innerHTML = activeKid.avatar==='dragon'
     ? dragonSVG(56)
     : activeKid.avatar==='redpanda'
-    ? redPandaSVG(56)
+    ? `<div style="background:white;border-radius:50%;width:56px;height:56px;display:flex;align-items:center;justify-content:center;padding:4px">${redPandaSVG(48)}</div>`
     : `<div class="header-emoji">${activeKid.avatar}</div>`;
   document.getElementById('header-name').textContent = activeKid.name+"'s Quest";
 
@@ -759,12 +891,19 @@ function choreVisible(chore){
   return true;
 }
 
-function todayDone(){ return state().done[today()]||new Set(); }
+function todayDone(){
+  const d = state().done[today()];
+  if(!d) return new Set();
+  if(d instanceof Set) return d;
+  return new Set(Array.isArray(d) ? d : Object.values(d));
+}
 
 function renderChores(){
   const container=document.getElementById('tab-chores');
   const kd=activeKidFull();
-  const visible=(kd.chores||[]).filter(choreVisible);
+  const allChores=(kd.chores||[]).filter(choreVisible);
+  // Required chores always appear first
+  const visible=[...allChores.filter(c=>c.required), ...allChores.filter(c=>!c.required)];
   const done=todayDone();
   const pending=state().pendingChores||[];
   const pendingIds=new Set(pending.map(p=>p.choreId));
@@ -772,7 +911,13 @@ function renderChores(){
   const total=visible.length;
   const pct=total?Math.round((doneCount/total)*100):0;
 
-  let html=`<div class="sec-label">📋 Today's chores</div>
+  const adj=getTonightAdjustment(activeKid.id);
+  const btColor=adj>0?'#f0fdf4':adj<0?'#fff1f2':'#f0f9ff';
+  const btBorder=adj>0?'#86efac':adj<0?'#fca5a5':'#bae6fd';
+  let html=`<div style="background:${btColor};border:1.5px solid ${btBorder};border-radius:12px;padding:10px 14px;margin-bottom:8px;font-family:'Fredoka One',cursive;font-size:15px;color:#1e1b4b">
+    ${bedtimeDisplay(activeKid.id)} tonight
+  </div>
+  <div class="sec-label">📋 Today's chores</div>
     <div class="progress-wrap"><div class="progress-fill" style="width:${pct}%"></div></div>
     <div class="progress-lbl">${doneCount} of ${total} done</div>
     <div class="chore-list" style="margin-top:.8rem">`;
@@ -780,20 +925,36 @@ function renderChores(){
   if(!visible.length){
     html+=`<div class="empty-msg">No chores today — enjoy your day! 🎉</div>`;
   } else {
+    const requiredChores=(kd.chores||[]).filter(c=>c.required&&choreVisible(c));
+    const allRequiredDone=true; // no longer blocks other chores
     for(const c of visible){
       const isDone=done.has(c.id);
       const isPending=pendingIds.has(c.id);
-      let cls=''; let checkIcon='⭕'; let statusLine='';
-      if(isDone){ cls='done'; checkIcon='✅'; }
-      else if(isPending){ cls='pending'; checkIcon='⏳'; statusLine=`<div class="chore-status">⏳ Waiting for parent approval</div>`; }
-      html+=`<div class="chore-card ${cls}" onclick="toggleChore('${c.id}')">
+      const isRequired=!!c.required;
+      const blocked=false;
+      let cls=''; let checkIcon=''; let statusLine='';
+      let checkStyle='';
+      if(isDone){ cls='done'; checkIcon='✅'; checkStyle=''; }
+      else if(isPending){ cls='pending'; checkIcon='⏳'; statusLine=`<div class="chore-status">⏳ Waiting for parent approval</div>`; checkStyle='background:#f97316;border-color:#f97316;color:white;'; }
+      else if(isRequired){
+        checkIcon='';
+        checkStyle='border-color:#ef4444;background:white;';
+        // render as a custom circle
+      } else {
+        checkIcon='';
+        checkStyle='border-color:#eab308;background:white;';
+      }
+      const nameLabel=isRequired?`${c.name} <span style="font-size:11px;color:#ef4444;font-weight:800">(Required)</span>`:c.name;
+      html+=`<div class="chore-card ${cls}${blocked?' blocked':''}" onclick="toggleChore('${c.id}')">
         <div class="chore-emoji">${c.emoji}</div>
         <div class="chore-info">
-          <div class="chore-name">${c.name}</div>
-          <div class="chore-coins">🪙 +${c.coins} coins</div>
+          <div class="chore-name">${nameLabel}</div>
+          <div class="chore-coins">${c.bedtimeBonus?`🌙 +${c.bedtimeBonus} min bedtime`:`🪙 +${c.coins} coins`}</div>
           ${statusLine}
         </div>
-        <div class="chore-check">${checkIcon}</div>
+        <div class="chore-check" style="border:3px solid ${isDone?'#22c55e':isPending?'#f97316':isRequired?'#ef4444':'#eab308'};background:${isDone?'#22c55e':isPending?'#f97316':'white'};border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          ${isDone?'<span style="font-size:22px">✅</span>':isPending?'<span style="font-size:18px;color:white">⏳</span>':'<div style="width:18px;height:18px;border-radius:50%;border:3px solid '+( isRequired?'#ef4444':'#eab308')+';background:white"></div>'}
+        </div>
       </div>`;
     }
   }
@@ -801,17 +962,19 @@ function renderChores(){
 
   // Surprise
   const t=today();
-  if(!state().surprise[t]){
+  const currentState=state();
+  if(!currentState.surprise) currentState.surprise={};
+  if(!currentState.surprise[t]){
     const surps=getSurprises();
-    state().surprise[t]={idx:Math.floor(Math.random()*surps.length),claimed:false};
-    saveKidState(activeKid.id,state());
+    currentState.surprise[t]={idx:Math.floor(Math.random()*surps.length),claimed:false};
+    saveKidState(activeKid.id,currentState);
   }
-  const sd=state().surprise[t];
+  const sd=currentState.surprise[t]||{idx:0,claimed:false};
   const surps=getSurprises();
-  const surprise=surps[sd.idx]||surps[0];
-  const claimed=sd.claimed;
+  const surprise=surps[sd.idx]||surps[0]||{text:'Do something kind today!',coins:5};
+  const claimed=sd.claimed||false;
 
-  html+=`<div class="surprise-box">
+  html+=`<div class="surprise-box" style="margin-bottom:1.5rem">
     <div class="surprise-title">🎲 Bonus Challenge!</div>
     <div class="surprise-text">${claimed?'Amazing! Come back tomorrow for a new challenge! 🌟':surprise.text}</div>
     ${!claimed?`<div class="surprise-coins">🪙 Worth +${surprise.coins} coins!</div>`:''}
@@ -857,7 +1020,7 @@ function toggleChore(id){
   }
 
   // Submit for approval
-  s.pendingChores=[...(s.pendingChores||[]),{id:uid(),choreId:id,choreName:chore.name,coins:chore.coins,date:t}];
+  s.pendingChores=[...(s.pendingChores||[]),{id:uid(),choreId:id,choreName:chore.name,coins:chore.coins,bedtimeBonus:chore.bedtimeBonus||0,date:t}];
   showToast('Sent to parent for approval! ⏳','warn');
   saveKidState(activeKid.id,s);
   updateBadge();
@@ -865,14 +1028,16 @@ function toggleChore(id){
 }
 
 function claimSurprise(){
-  const t=today(); const s=state();
+  const t=today();
+  const s=state();
+  if(!s.surprise) s.surprise={};
   const sd=s.surprise[t];
   if(!sd||sd.claimed)return;
   const surps=getSurprises();
-  const surprise=surps[sd.idx]||surps[0];
+  const surprise=surps[sd.idx]||surps[0]||{coins:5};
   s.coins+=surprise.coins;
   s.coinsEarned=(s.coinsEarned||0)+surprise.coins;
-  sd.claimed=true;
+  s.surprise[t]={...sd,claimed:true};
   addHistory('🎲 Bonus challenge',surprise.coins);
   showToast(`Bonus! +${surprise.coins} coins! 🌟`);
   confetti();
@@ -1028,7 +1193,7 @@ function renderApprovalsTab(){
   for(const p of pc){
     html+=`<div class="approval-card chore-type">
       <div class="approval-meta">📋 Chore · ${formatDate(p.date)}</div>
-      <div class="approval-label">${p.choreName} · 🪙 +${p.coins}</div>
+      <div class="approval-label">${p.choreName} · ${p.bedtimeBonus?`🌙 +${p.bedtimeBonus} min bedtime`:`🪙 +${p.coins}`}</div>
       <div class="approval-actions">
         <button class="btn-sm-success" onclick="approveChore('${parentKidView}','${p.id}')">✅ Approve</button>
         <button class="btn-sm-danger" onclick="denyChore('${parentKidView}','${p.id}')">✗ Deny</button>
@@ -1056,8 +1221,12 @@ function approveChore(kidId,pendingId){
   s.pendingChores.splice(idx,1);
   if(!s.done[p.date]) s.done[p.date]=new Set();
   s.done[p.date].add(p.choreId);
-  s.coins+=p.coins;
-  s.coinsEarned=(s.coinsEarned||0)+p.coins;
+  if(p.bedtimeBonus){
+    addBedtimeAdjustment(kidId, p.bedtimeBonus, p.choreName);
+  } else {
+    s.coins+=p.coins;
+    s.coinsEarned=(s.coinsEarned||0)+p.coins;
+  }
   s.history=s.history||[];
   s.history.unshift({date:p.date,label:`✅ ${p.choreName}`,delta:p.coins});
   saveKidState(kidId,s);
@@ -1125,7 +1294,61 @@ function renderStatsTab(){
       <button class="btn-sm" onclick="adjustCoins()">Apply</button>
     </div>
     <button class="btn-danger" onclick="resetKid()" style="margin-top:8px">⚠️ Reset ${kd.name}'s data</button>
+    <hr style="border:none;border-top:1.5px solid var(--border);margin:16px 0">
+    <p style="font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:8px">🌙 Bedtime settings for ${kd.name}</p>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <label style="font-size:13px;font-weight:700;color:var(--text-muted)">Base bedtime:</label>
+      <input type="time" id="base-bedtime-input" value="${s.baseBedtime||'19:45'}"
+        style="font-size:16px;border:2px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text);background:var(--surface);outline:none;flex:1">
+      <button class="btn-sm" onclick="saveBaseBedtime()">Save</button>
+    </div>
+    <div class="parent-stat">Tonight's adjustment <span id="ps-bedtime-adj" style="color:${getTonightAdjustment(parentKidView)>=0?'#22c55e':'#ef4444'}">${getTonightAdjustment(parentKidView)>=0?'+':''}${getTonightAdjustment(parentKidView)} min</span></div>
+    <div class="parent-stat">Tonight's bedtime <span>${formatBedtime(parentKidView)}</span></div>
+    <div style="display:flex;gap:8px;margin-bottom:8px">
+      <input type="number" id="manual-bedtime-adj" placeholder="e.g. -10 or +5" style="flex:1;font-size:14px;border:2px solid var(--border);border-radius:8px;padding:8px 10px;outline:none">
+      <button class="btn-sm" onclick="applyManualBedtimeAdj()">Apply</button>
+    </div>
+    <button class="btn-close" onclick="resetTonightBedtime()" style="margin-top:0">Reset tonight's adjustments</button>
+    <hr style="border:none;border-top:1.5px solid var(--border);margin:16px 0">
+    <p style="font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:8px">💾 Backup &amp; Restore customizations</p>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px">Export saves your custom chores, shop items &amp; consequences. Import restores them after an app update.</p>
+    <button class="btn-purple" onclick="exportConfig()" style="margin-top:0">📤 Export my customizations</button>
+    <label class="btn-purple" style="margin-top:8px;display:block;text-align:center;cursor:pointer">
+      📥 Import customizations
+      <input type="file" accept=".json" onchange="importConfig(event)" style="display:none">
+    </label>
   `;
+}
+
+function saveBaseBedtime(){
+  const val=document.getElementById('base-bedtime-input').value;
+  if(!val)return;
+  const s=states[parentKidView];
+  s.baseBedtime=val;
+  saveKidState(parentKidView,s);
+  if(activeKid&&activeKid.id===parentKidView) renderAll();
+  showToast('Base bedtime saved!','info');
+  renderParentPortal();
+}
+
+function applyManualBedtimeAdj(){
+  const val=parseInt(document.getElementById('manual-bedtime-adj').value,10);
+  if(isNaN(val)){showToast('Enter a number','bad');return;}
+  const kd=kids.find(k=>k.id===parentKidView);
+  addBedtimeAdjustment(parentKidView, val, 'Parent adjustment');
+  if(activeKid&&activeKid.id===parentKidView) renderAll();
+  showToast(`Bedtime adjusted by ${val>0?'+':''}${val} min`,'info');
+  renderParentPortal();
+}
+
+function resetTonightBedtime(){
+  const s=states[parentKidView];
+  if(!s.bedtimeAdjustments) s.bedtimeAdjustments={};
+  s.bedtimeAdjustments[today()]=0;
+  saveKidState(parentKidView,s);
+  if(activeKid&&activeKid.id===parentKidView) renderAll();
+  showToast("Tonight's bedtime reset","info");
+  renderParentPortal();
 }
 
 function adjustCoins(){
@@ -1145,8 +1368,8 @@ function adjustCoins(){
 function resetKid(){
   const kd=kids.find(k=>k.id===parentKidView);
   if(!confirm(`Reset ALL of ${kd.name}'s coins, history, and streak?`))return;
-  localStorage.removeItem(kidKey(parentKidView));
-  states[parentKidView]=loadKidState(parentKidView);
+  states[parentKidView]=deserializeState(null);
+  saveKidState(parentKidView, states[parentKidView]);
   if(activeKid&&activeKid.id===parentKidView) renderAll();
   renderParentPortal();
   showToast(`${kd.name}'s data reset`,'bad');
@@ -1161,13 +1384,19 @@ function renderChoresEditorTab(){
     <input id="new-chore-emoji" placeholder="Emoji (e.g. 🧹)" maxlength="4" style="width:80px;display:inline-block;margin-right:8px">
     <input id="new-chore-name" placeholder="Chore name" style="width:calc(100% - 96px);display:inline-block;margin-bottom:8px">
     <div class="add-form-row">
-      <input id="new-chore-coins" type="number" placeholder="Coins" min="1" max="999">
+      <input id="new-chore-coins" type="number" placeholder="Coins" min="0" max="999">
       <select id="new-chore-days">
         <option value="daily">Every day</option>
         <option value="weekdays">Weekdays only</option>
         <option value="weekends">Weekends only</option>
       </select>
-      <button class="btn-sm" onclick="addChore()">Add</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--text-muted);cursor:pointer">
+        <input type="checkbox" id="new-chore-required" style="width:18px;height:18px;cursor:pointer">
+        🔴 Mark as Required
+      </label>
+      <button class="btn-sm" onclick="addChore()" style="margin-left:auto">Add</button>
     </div>
   </div>`;
 
@@ -1179,7 +1408,7 @@ function renderChoresEditorTab(){
         <div style="font-size:24px;margin-right:4px">${c.emoji}</div>
         <div class="editor-item-info">
           <div class="editor-item-name">${c.name}</div>
-          <div class="editor-item-sub">🪙 ${c.coins} · ${daysLabel}</div>
+          <div class="editor-item-sub">🪙 ${c.coins} · ${daysLabel}${c.required?' · 🔴 Required':''}</div>
         </div>
         <div class="editor-actions">
           <button class="btn-sm" onclick="editChorePrompt('${parentKidView}','${c.id}')">Edit</button>
@@ -1194,12 +1423,12 @@ function renderChoresEditorTab(){
 function addChore(){
   const emoji=document.getElementById('new-chore-emoji').value.trim()||'⭐';
   const name=document.getElementById('new-chore-name').value.trim();
-  const coins=parseInt(document.getElementById('new-chore-coins').value,10);
+  const coins=parseInt(document.getElementById('new-chore-coins').value,10)||0;
   const days=document.getElementById('new-chore-days').value;
+  const required=document.getElementById('new-chore-required').checked;
   if(!name){ showToast('Enter a chore name','bad'); return; }
-  if(!coins||coins<1){ showToast('Enter coin amount','bad'); return; }
   const kd=kids.find(k=>k.id===parentKidView);
-  const newChore={id:uid(),emoji,name,coins,days};
+  const newChore={id:uid(),emoji,name,coins,days,required};
   const updated={...kd,chores:[...(kd.chores||[]),newChore]};
   saveKidConfig(parentKidView,{chores:updated.chores});
   kids=getKids();
@@ -1211,13 +1440,16 @@ function editChorePrompt(kidId,choreId){
   const kd=kids.find(k=>k.id===kidId);
   const chore=(kd.chores||[]).find(c=>c.id===choreId);
   if(!chore)return;
-  const newCoins=prompt(`Edit coins for "${chore.name}":`, chore.coins);
-  if(newCoins===null)return;
-  const parsed=parseInt(newCoins,10);
-  if(isNaN(parsed)||parsed<1){ showToast('Invalid amount','bad'); return; }
   const newName=prompt('Edit chore name:', chore.name);
   if(newName===null)return;
-  const updated=kd.chores.map(c=>c.id===choreId?{...c,name:newName.trim()||c.name,coins:parsed}:c);
+  const newCoins=prompt('Coins (use 0 for bedtime bonus chores):', chore.coins);
+  if(newCoins===null)return;
+  const parsed=parseInt(newCoins,10);
+  if(isNaN(parsed)||parsed<0){ showToast('Invalid amount','bad'); return; }
+  const reqAnswer=prompt('Required? Type yes or no:', chore.required?'yes':'no');
+  if(reqAnswer===null)return;
+  const isRequired=reqAnswer.trim().toLowerCase()==='yes';
+  const updated=kd.chores.map(c=>c.id===choreId?{...c,name:newName.trim()||c.name,coins:parsed,required:isRequired}:c);
   saveKidConfig(kidId,{chores:updated});
   kids=getKids();
   showToast('Chore updated!');
@@ -1332,8 +1564,9 @@ function renderConsequencesTab(){
     <div class="add-form" style="border-color:#fca5a5;background:#fff1f2">
       <div class="form-label" style="color:#b91c1c">⚡ Custom deduction for ${kd.name}</div>
       <input id="custom-con-text" placeholder="Reason (e.g. Broke a rule)" style="margin-bottom:8px">
-      <div class="add-form-row">
-        <input id="custom-con-coins" type="number" placeholder="Coins to deduct" min="1" max="999">
+      <div class="add-form-row" style="margin-bottom:8px">
+        <input id="custom-con-coins" type="number" placeholder="Coins" min="0" max="999">
+        <input id="custom-con-bedtime" type="number" placeholder="Bedtime mins" min="-120" max="0">
         <button class="btn-sm-danger" onclick="applyCustomDeduction()">Deduct</button>
       </div>
     </div>
@@ -1343,7 +1576,7 @@ function renderConsequencesTab(){
       <div style="font-size:20px;margin-right:6px">🙊</div>
       <div class="editor-item-info">
         <div class="editor-item-name">${c.text}</div>
-        <div class="editor-item-sub">-${c.coins} coins</div>
+        <div class="editor-item-sub">${c.coins?`-${c.coins} coins`:''} ${c.bedtimeMinutes?`🌙 ${c.bedtimeMinutes} min`:''}${!c.coins&&!c.bedtimeMinutes?'No penalty set':''}</div>
       </div>
       <div class="editor-actions">
         <button class="btn-sm-danger" onclick="applyConsequence('${c.id}')">Apply</button>
@@ -1356,7 +1589,8 @@ function renderConsequencesTab(){
       <div class="form-label">Add a new preset consequence</div>
       <input id="new-con-text" placeholder="What happened?" style="margin-bottom:8px">
       <div class="add-form-row">
-        <input id="new-con-coins" type="number" placeholder="Coins" min="1" max="999">
+        <input id="new-con-coins" type="number" placeholder="Coins" min="0" max="999">
+        <input id="new-con-bedtime" type="number" placeholder="Bedtime mins (e.g. -10)" min="-120" max="120">
         <button class="btn-sm" onclick="addConsequence()">Save preset</button>
       </div>
     </div>`;
@@ -1365,21 +1599,26 @@ function renderConsequencesTab(){
 
 function applyCustomDeduction(){
   const text=document.getElementById('custom-con-text').value.trim();
-  const coins=parseInt(document.getElementById('custom-con-coins').value,10);
+  const coins=parseInt(document.getElementById('custom-con-coins').value,10)||0;
+  const bedtimeMins=parseInt(document.getElementById('custom-con-bedtime').value,10)||0;
   if(!text){ showToast('Enter a reason','bad'); return; }
-  if(!coins||coins<1){ showToast('Enter coin amount','bad'); return; }
+  if(!coins&&!bedtimeMins){ showToast('Enter coins or bedtime minutes','bad'); return; }
   const s=states[parentKidView];
   const kd=kids.find(k=>k.id===parentKidView);
-  s.coins=Math.max(0,s.coins-coins);
-  s.coinsDeducted=(s.coinsDeducted||0)+coins;
+  if(coins>0){
+    s.coins=Math.max(0,s.coins-coins);
+    s.coinsDeducted=(s.coinsDeducted||0)+coins;
+  }
+  if(bedtimeMins) addBedtimeAdjustment(parentKidView, bedtimeMins, text);
   s.oopsLog=s.oopsLog||[];
-  s.oopsLog.unshift({date:today(),reason:text,coins});
+  s.oopsLog.unshift({date:today(),reason:text,coins,bedtimeMinutes:bedtimeMins});
   if(s.oopsLog.length>50) s.oopsLog=s.oopsLog.slice(0,50);
   s.history=s.history||[];
   s.history.unshift({date:today(),label:`🙊 ${text}`,delta:-coins});
   saveKidState(parentKidView,s);
   if(activeKid&&activeKid.id===parentKidView) renderAll();
-  showToast(`-${coins} coins deducted from ${kd.name}`,'bad');
+  const msg=[coins?`-${coins} coins`:'',bedtimeMins?`${bedtimeMins} min bedtime`:''].filter(Boolean).join(', ');
+  showToast(`${msg} applied to ${kd.name}`,'bad');
   renderParentPortal();
 }
 
@@ -1389,26 +1628,33 @@ function applyConsequence(conId){
   if(!con)return;
   const s=states[parentKidView];
   const kd=kids.find(k=>k.id===parentKidView);
-  s.coins=Math.max(0,s.coins-con.coins);
-  s.coinsDeducted=(s.coinsDeducted||0)+con.coins;
+  if(con.coins>0){
+    s.coins=Math.max(0,s.coins-con.coins);
+    s.coinsDeducted=(s.coinsDeducted||0)+con.coins;
+  }
+  if(con.bedtimeMinutes){
+    addBedtimeAdjustment(parentKidView, con.bedtimeMinutes, con.text);
+  }
   s.oopsLog=s.oopsLog||[];
-  s.oopsLog.unshift({date:today(),reason:con.text,coins:con.coins});
+  s.oopsLog.unshift({date:today(),reason:con.text,coins:con.coins,bedtimeMinutes:con.bedtimeMinutes||0});
   if(s.oopsLog.length>50) s.oopsLog=s.oopsLog.slice(0,50);
   s.history=s.history||[];
   s.history.unshift({date:today(),label:`🙊 ${con.text}`,delta:-con.coins});
   saveKidState(parentKidView,s);
   if(activeKid&&activeKid.id===parentKidView) renderAll();
-  showToast(`-${con.coins} coins applied to ${kd.name}`,'bad');
+  const msg=[con.coins?`-${con.coins} coins`:'',con.bedtimeMinutes?`${con.bedtimeMinutes} min bedtime`:''].filter(Boolean).join(', ');
+  showToast(`${msg} applied to ${kd.name}`,'bad');
   renderParentPortal();
 }
 
 function addConsequence(){
   const text=document.getElementById('new-con-text').value.trim();
-  const coins=parseInt(document.getElementById('new-con-coins').value,10);
+  const coins=parseInt(document.getElementById('new-con-coins').value,10)||0;
+  const bedtimeMinutes=parseInt(document.getElementById('new-con-bedtime').value,10)||0;
   if(!text){ showToast('Enter a reason','bad'); return; }
-  if(!coins||coins<1){ showToast('Enter coin amount','bad'); return; }
+  if(!coins&&!bedtimeMinutes){ showToast('Enter coins or bedtime minutes','bad'); return; }
   const cons=getConsequences();
-  cons.push({id:uid(),text,coins});
+  cons.push({id:uid(),text,coins,bedtimeMinutes});
   globalCfg.consequences=cons;
   saveGlobal(globalCfg);
   showToast('Consequence added!');
@@ -1422,6 +1668,54 @@ function deleteConsequence(conId){
   saveGlobal(globalCfg);
   showToast('Deleted','bad');
   renderParentPortal();
+}
+
+// ==================== EXPORT / IMPORT ====================
+function exportConfig(){
+  const kd=kids.find(k=>k.id===parentKidView);
+  const exportData={
+    version:1,
+    exportDate:today(),
+    kidId:parentKidView,
+    kidName:kd.name,
+    chores: (globalCfg.kidConfigs&&globalCfg.kidConfigs[parentKidView])||{chores:kd.chores},
+    shop: globalCfg.shop||null,
+    consequences: globalCfg.consequences||null,
+    surprises: globalCfg.surprises||null,
+  };
+  const blob=new Blob([JSON.stringify(exportData,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`chore-quest-${parentKidView}-backup-${today()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Exported! Save that file somewhere safe 💾','info');
+}
+
+function importConfig(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.version){ showToast('Invalid backup file','bad'); return; }
+      if(data.chores){ if(!globalCfg.kidConfigs) globalCfg.kidConfigs={}; globalCfg.kidConfigs[data.kidId||parentKidView]=data.chores; }
+      if(data.shop){ globalCfg.shop=data.shop; }
+      if(data.consequences){ globalCfg.consequences=data.consequences; }
+      if(data.surprises){ globalCfg.surprises=data.surprises; }
+      saveGlobal(globalCfg);
+      kids=getKids();
+      if(activeKid) activeKid=kids.find(k=>k.id===activeKid.id)||activeKid;
+      showToast('Customizations restored! ✅');
+      renderParentPortal();
+      if(activeKid) renderAll();
+    }catch(err){
+      showToast('Could not read file','bad');
+    }
+  };
+  reader.readAsText(file);
 }
 
 // ==================== UI HELPERS ====================
@@ -1458,13 +1752,18 @@ function confetti(){
 }
 
 function renderAll(){
-  updateCoinDisplay();
-  renderStreak();
-  renderChores();
-  renderShop();
-  renderHistory();
-  renderOops();
-  updateBadge();
+  if(!activeKid || !states[activeKid.id]) return;
+  try {
+    updateCoinDisplay();
+    renderStreak();
+    renderChores();
+    renderShop();
+    renderHistory();
+    renderOops();
+    updateBadge();
+  } catch(e) {
+    console.error('renderAll error:', e);
+  }
 }
 
 // ==================== EVENTS ====================
@@ -1472,7 +1771,44 @@ document.getElementById('parent-overlay').addEventListener('click',function(e){ 
 document.getElementById('pin-field').addEventListener('keydown',function(e){ if(e.key==='Enter')checkPin(); });
 
 // ==================== INIT ====================
-renderPicker();
+function startApp(){
+  try {
+    const firebaseConfig = {
+      apiKey: "AIzaSyAQzvTk7Fmitm5x_uXAPT60uJfuMPECsMA",
+      authDomain: "chore-quest-eebd8.firebaseapp.com",
+      databaseURL: "https://chore-quest-eebd8-default-rtdb.firebaseio.com",
+      projectId: "chore-quest-eebd8",
+      storageBucket: "chore-quest-eebd8.firebasestorage.app",
+      messagingSenderId: "562725520204",
+      appId: "1:562725520204:web:5b49535744be1e769445e9"
+    };
+    if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    window.db = firebase.database();
+    // Show picker immediately with empty state so screen isn't blank
+    kids = getKids();
+    renderPicker();
+    // Then load real data from Firebase and refresh
+    loadAllFromFirebase().then(()=>{
+      kids = getKids();
+      for(const kid of CONFIG.kids) cleanOldBedtimeAdjustments(kid.id);
+      initialLoadComplete = true;
+      renderPicker(); // refresh with real coin/streak data
+      for(const kid of CONFIG.kids) subscribeToKid(kid.id);
+      subscribeToGlobal();
+    });
+  } catch(e) {
+    console.error('Firebase init failed:', e);
+    kids = getKids();
+    renderPicker();
+  }
+}
+
+// Wait for DOM + scripts to be fully ready
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', startApp);
+} else {
+  startApp();
+}
 </script>
 </body>
 </html>
