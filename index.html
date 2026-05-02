@@ -8,6 +8,9 @@
 <!-- Firebase -->
 <script src="https://cdn.jsdelivr.net/npm/firebase@9.22.2/firebase-app-compat.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/firebase@9.22.2/firebase-database-compat.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 <script>
 const CONFIG = {
@@ -75,7 +78,6 @@ const CONFIG = {
 };
 </script>
 
-
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -87,12 +89,12 @@ const CONFIG = {
   --border:#e9d5ff;--text:#1e1b4b;--text-muted:#7c7a9a;
   --radius:18px;--radius-sm:12px;
 }
-html,body{height:100%;background:var(--surface2);color:var(--text);font-family:'Nunito',sans-serif;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+html,body{height:100%;background:var(--surface2);color:var(--text);font-family:'Nunito',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
 body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height:100dvh}
 
 /* PICKER */
 #profile-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;padding:2rem 1.5rem;gap:1.5rem}
-.picker-title{font-family:'Fredoka One',cursive;font-size:30px;color:var(--text);text-align:center}
+.picker-title{font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:30px;color:var(--text);text-align:center}
 .picker-sub{font-size:15px;font-weight:600;color:var(--text-muted);text-align:center;margin-top:-1rem}
 .picker-cards{display:flex;flex-direction:column;gap:16px;width:100%}
 .picker-card{background:var(--surface);border:3px solid var(--border);border-radius:24px;padding:1.2rem;display:flex;align-items:center;gap:1rem;cursor:pointer;transition:transform .12s;user-select:none}
@@ -100,7 +102,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .picker-avatar-wrap{width:72px;height:72px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .picker-emoji{font-size:52px;text-align:center}
 .picker-info{flex:1}
-.picker-name{font-family:'Fredoka One',cursive;font-size:26px;line-height:1}
+.picker-name{font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:26px;line-height:1}
 .picker-coins{font-size:14px;font-weight:700;color:var(--text-muted);margin-top:3px}
 .picker-arrow{font-size:28px;color:var(--text-muted)}
 
@@ -114,12 +116,12 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .header-back{left:14px}
 .settings-btn{right:14px}
 .badge-wrap{position:relative;display:inline-flex}
-.notif-badge{position:absolute;top:-4px;right:-4px;background:var(--orange);color:white;font-size:10px;font-weight:800;font-family:'Fredoka One',cursive;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:2px solid white}
+.notif-badge{position:absolute;top:-4px;right:-4px;background:var(--orange);color:white;font-size:10px;font-weight:800;font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:2px solid white}
 .header-avatar-wrap{width:64px;height:64px;margin:0 auto 4px;display:flex;align-items:center;justify-content:center}
 .header-emoji{font-size:44px;line-height:1}
-.header-name{font-family:'Fredoka One',cursive;font-size:24px;letter-spacing:.5px}
+.header-name{font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:24px;letter-spacing:.5px}
 .coin-breakdown{display:inline-flex;gap:10px;margin-top:10px;background:rgba(0,0,0,.08);border:1.5px solid rgba(0,0,0,.12);border-radius:14px;padding:8px 16px}
-.cb-row{font-family:'Fredoka One',cursive;font-size:14px;color:inherit;white-space:nowrap}
+.cb-row{font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:14px;color:inherit;white-space:nowrap}
 
 /* STREAK */
 .streak-row{display:flex;align-items:center;justify-content:center;gap:6px;margin:1rem 1.2rem 0;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;flex-wrap:wrap}
@@ -129,14 +131,14 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 
 /* TABS */
 .tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--surface);border-top:1.5px solid var(--border);display:flex;z-index:100}
-.tab-btn{flex:1;background:none;border:none;padding:8px 0 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;color:var(--text-muted);transition:color .15s}
+.tab-btn{flex:1;background:none;border:none;padding:8px 0 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;font-family:'Nunito',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;font-size:10px;font-weight:700;color:var(--text-muted);transition:color .15s}
 .tab-btn.active{color:var(--accent)}
 .tab-icon{font-size:20px}
 
 /* SECTIONS */
 .section{display:none;padding:0 1.2rem 1.5rem}
 .section.active{display:block}
-.sec-label{font-family:'Fredoka One',cursive;font-size:17px;color:var(--accent);margin:1.2rem 0 .6rem}
+.sec-label{font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:17px;color:var(--accent);margin:1.2rem 0 .6rem}
 
 /* CHORE CARDS */
 .chore-list{display:flex;flex-direction:column;gap:10px}
@@ -162,10 +164,10 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 
 /* SURPRISE */
 .surprise-box{background:var(--gold-light);border:2px dashed var(--gold);border-radius:var(--radius);padding:1.2rem;text-align:center;margin-top:1.2rem}
-.surprise-title{font-family:'Fredoka One',cursive;font-size:18px;color:#92400e;margin-bottom:6px}
+.surprise-title{font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:18px;color:#92400e;margin-bottom:6px}
 .surprise-text{font-size:15px;font-weight:700;color:#78350f;min-height:42px;margin-bottom:10px}
 .surprise-coins{font-size:13px;color:#b45309;font-weight:700;margin-bottom:10px}
-.btn-gold{background:var(--gold);color:white;border:none;border-radius:50px;padding:11px 28px;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;transition:transform .1s;display:inline-block}
+.btn-gold{background:var(--gold);color:white;border:none;border-radius:50px;padding:11px 28px;font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:16px;cursor:pointer;transition:transform .1s;display:inline-block}
 .btn-gold:active{transform:scale(.96)}
 .btn-gold:disabled{background:#d1d5db;cursor:default}
 
@@ -192,38 +194,38 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(30,27,74,.6);z-index:200;align-items:flex-end;justify-content:center}
 .modal-overlay.open{display:flex}
 .modal{background:var(--surface);border-radius:24px 24px 0 0;padding:1.5rem 1.4rem 2rem;width:100%;max-width:430px;max-height:88dvh;overflow-y:auto}
-.modal-title{font-family:'Fredoka One',cursive;font-size:20px;color:var(--accent);margin-bottom:1rem;text-align:center}
+.modal-title{font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:20px;color:var(--accent);margin-bottom:1rem;text-align:center}
 
 /* PIN */
 .pin-row{display:flex;gap:8px;margin-bottom:1rem}
-.pin-input{flex:1;font-size:28px;font-family:'Fredoka One',cursive;text-align:center;border:2px solid var(--border);border-radius:var(--radius-sm);padding:10px;color:var(--text);background:var(--surface);letter-spacing:8px;outline:none}
+.pin-input{flex:1;font-size:28px;font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;text-align:center;border:2px solid var(--border);border-radius:var(--radius-sm);padding:10px;color:var(--text);background:var(--surface);letter-spacing:8px;outline:none}
 .pin-input:focus{border-color:var(--accent)}
 .pin-error{font-size:13px;color:var(--red);font-weight:700;text-align:center;margin-top:6px}
 
 /* BUTTONS */
-.btn-purple{background:var(--accent);color:white;border:none;border-radius:50px;padding:12px 28px;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;width:100%;margin-top:8px;transition:opacity .15s}
+.btn-purple{background:var(--accent);color:white;border:none;border-radius:50px;padding:12px 28px;font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:16px;cursor:pointer;width:100%;margin-top:8px;transition:opacity .15s}
 .btn-purple:hover{opacity:.88}
-.btn-danger{background:var(--red);color:white;border:none;border-radius:50px;padding:12px 28px;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;width:100%;margin-top:10px}
-.btn-success{background:var(--green);color:white;border:none;border-radius:50px;padding:12px 28px;font-family:'Fredoka One',cursive;font-size:16px;cursor:pointer;width:100%;margin-top:8px}
-.btn-close{background:var(--surface2);color:var(--text-muted);border:1.5px solid var(--border);border-radius:50px;padding:10px 28px;font-family:'Fredoka One',cursive;font-size:15px;cursor:pointer;width:100%;margin-top:8px}
-.btn-sm{background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-family:'Fredoka One',cursive;font-size:14px;cursor:pointer;white-space:nowrap}
-.btn-sm-danger{background:var(--red);color:white;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-family:'Fredoka One',cursive;font-size:14px;cursor:pointer}
-.btn-sm-success{background:var(--green);color:white;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-family:'Fredoka One',cursive;font-size:14px;cursor:pointer}
+.btn-danger{background:var(--red);color:white;border:none;border-radius:50px;padding:12px 28px;font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:16px;cursor:pointer;width:100%;margin-top:10px}
+.btn-success{background:var(--green);color:white;border:none;border-radius:50px;padding:12px 28px;font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:16px;cursor:pointer;width:100%;margin-top:8px}
+.btn-close{background:var(--surface2);color:var(--text-muted);border:1.5px solid var(--border);border-radius:50px;padding:10px 28px;font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:15px;cursor:pointer;width:100%;margin-top:8px}
+.btn-sm{background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:14px;cursor:pointer;white-space:nowrap}
+.btn-sm-danger{background:var(--red);color:white;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:14px;cursor:pointer}
+.btn-sm-success{background:var(--green);color:white;border:none;border-radius:var(--radius-sm);padding:8px 14px;font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:14px;cursor:pointer}
 
 /* PARENT PANEL INTERNALS */
 .parent-section{display:none}
 .parent-section.unlocked{display:block}
 .kid-tabs{display:flex;gap:8px;margin-bottom:14px}
-.kid-tab{flex:1;padding:8px;border-radius:var(--radius-sm);border:2px solid var(--border);background:var(--surface2);font-family:'Fredoka One',cursive;font-size:15px;cursor:pointer;text-align:center;color:var(--text-muted);transition:all .15s}
+.kid-tab{flex:1;padding:8px;border-radius:var(--radius-sm);border:2px solid var(--border);background:var(--surface2);font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:15px;cursor:pointer;text-align:center;color:var(--text-muted);transition:all .15s}
 .kid-tab.active{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
 .parent-nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.parent-nav-btn{flex:1;min-width:80px;padding:9px 8px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--surface2);font-family:'Fredoka One',cursive;font-size:13px;cursor:pointer;text-align:center;color:var(--text-muted);transition:all .15s;position:relative}
+.parent-nav-btn{flex:1;min-width:80px;padding:9px 8px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--surface2);font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:13px;cursor:pointer;text-align:center;color:var(--text-muted);transition:all .15s;position:relative}
 .parent-nav-btn.active{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
 .parent-nav-badge{position:absolute;top:-6px;right:-6px;background:var(--orange);color:white;font-size:10px;font-weight:800;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:2px solid white}
 .parent-stat{background:var(--surface2);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:10px;font-size:14px;font-weight:700;color:var(--text);display:flex;justify-content:space-between}
 .parent-stat span{color:var(--accent);font-size:16px}
 .add-coins-row{display:flex;gap:8px;margin-bottom:10px}
-.add-coins-row input{flex:1;font-size:16px;font-family:'Nunito',sans-serif;border:2px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;color:var(--text);background:var(--surface);outline:none}
+.add-coins-row input{flex:1;font-size:16px;font-family:'Nunito',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;border:2px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;color:var(--text);background:var(--surface);outline:none}
 .add-coins-row input:focus{border-color:var(--accent)}
 
 /* APPROVAL CARDS */
@@ -241,14 +243,14 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .editor-item-sub{font-size:12px;color:var(--text-muted);font-weight:600;margin-top:1px}
 .editor-actions{display:flex;gap:6px;flex-shrink:0}
 .add-form{background:var(--surface2);border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px}
-.add-form input,.add-form select{width:100%;font-size:14px;font-family:'Nunito',sans-serif;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);background:var(--surface);outline:none;margin-bottom:8px}
+.add-form input,.add-form select{width:100%;font-size:14px;font-family:'Nunito',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);background:var(--surface);outline:none;margin-bottom:8px}
 .add-form input:focus,.add-form select:focus{border-color:var(--accent)}
 .add-form-row{display:flex;gap:8px}
 .add-form-row input{margin-bottom:0}
 .form-label{font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:4px}
 
 /* TOAST */
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--green);color:white;font-family:'Fredoka One',cursive;font-size:16px;padding:11px 24px;border-radius:50px;z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--green);color:white;font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:16px;padding:11px 24px;border-radius:50px;z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 4px 18px rgba(0,0,0,.18)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.bad{background:var(--red)}
 .toast.info{background:var(--accent)}
@@ -264,12 +266,11 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 </head>
 <body>
 <!-- Sync indicator -->
-<div id="sync-indicator" style="display:none;position:fixed;top:0;left:0;right:0;background:rgba(0,0,0,0.6);color:white;font-family:'Fredoka One',cursive;font-size:15px;padding:10px;text-align:center;z-index:9999;align-items:center;justify-content:center;gap:8px">
+<div id="sync-indicator" style="display:none;position:fixed;top:0;left:0;right:0;background:rgba(0,0,0,0.6);color:white;font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:15px;padding:10px;text-align:center;z-index:9999;align-items:center;justify-content:center;gap:8px">
   <div style="width:18px;height:18px;border:3px solid white;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite"></div>
   Loading your data...
 </div>
 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
-
 
 <!-- PROFILE PICKER -->
 <div id="profile-screen">
@@ -591,7 +592,6 @@ function subscribeToGlobal(){
   });
 }
 
-
 // ==================== RUNTIME STATE ====================
 let globalCfg = { shop: null, consequences: null, surprises: null, kidConfigs: null };
 
@@ -678,7 +678,6 @@ function updateBadge(){
   const b=document.getElementById('header-badge');
   if(b){ b.style.display=n?'flex':'none'; b.textContent=n; }
 }
-
 
 // ==================== BEDTIME HELPERS ====================
 function getTonightAdjustment(kidId){
@@ -914,7 +913,7 @@ function renderChores(){
   const adj=getTonightAdjustment(activeKid.id);
   const btColor=adj>0?'#f0fdf4':adj<0?'#fff1f2':'#f0f9ff';
   const btBorder=adj>0?'#86efac':adj<0?'#fca5a5':'#bae6fd';
-  let html=`<div style="background:${btColor};border:1.5px solid ${btBorder};border-radius:12px;padding:10px 14px;margin-bottom:8px;font-family:'Fredoka One',cursive;font-size:15px;color:#1e1b4b">
+  let html=`<div style="background:${btColor};border:1.5px solid ${btBorder};border-radius:12px;padding:10px 14px;margin-bottom:8px;font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:15px;color:#1e1b4b">
     ${bedtimeDisplay(activeKid.id)} tonight
   </div>
   <div class="sec-label">📋 Today's chores</div>
