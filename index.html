@@ -60,6 +60,16 @@ const CONFIG = {
       name: "Declan",
       avatar: "redpanda",
       color: "#c2410c",
+      plan: [
+        { id: "dp1", text: "Wake up and get out of bed",     days: "daily"    },
+        { id: "dp2", text: "Eat breakfast",                   days: "daily"    },
+        { id: "dp3", text: "Get backpack ready",              days: "weekdays" },
+        { id: "dp4", text: "After school snack & relax",      days: "weekdays" },
+        { id: "dp5", text: "Homework time",                   days: "weekdays" },
+        { id: "dp6", text: "Family dinner",                   days: "daily"    },
+        { id: "dp7", text: "Wind down — no screens",          days: "daily"    },
+        { id: "dp8", text: "Get ready for bed",               days: "daily"    },
+      ],
       chores: [
         { id: "k1",  emoji: "🛏️", name: "Make my bed",                            coins: 5,  days: "daily"    },
         { id: "k2a", emoji: "🦷", name: "Brush teeth — morning",                  coins: 5,  days: "daily",   required: true },
@@ -133,7 +143,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--surface);border-top:1.5px solid var(--border);display:flex;z-index:100}
 .tab-btn{flex:1;background:none;border:none;padding:8px 0 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;font-family:'Nunito',-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;font-size:10px;font-weight:700;color:var(--text-muted);transition:color .15s}
 .tab-btn.active{color:var(--accent)}
-.tab-icon{font-size:20px}
+.tab-icon{font-size:18px}
 
 /* SECTIONS */
 .section{display:none;padding:0 1.2rem 1.5rem}
@@ -262,6 +272,99 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 
 /* DRAGON SVG */
 .dragon-svg{width:100%;height:100%}
+
+/* ---- SECRET MISSION ---- */
+.secret-btn {
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:16px;margin-bottom:12px;
+  background:linear-gradient(135deg,#1e1b4b,#312e81);
+  border:none;border-radius:var(--radius);cursor:pointer;
+  font-family:'Fredoka One',cursive;font-size:18px;color:white;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 20px rgba(99,102,241,.5);
+  animation:secretPulse 2s ease-in-out infinite;
+  -webkit-tap-highlight-color:transparent;
+}
+.secret-btn:active{transform:scale(.97)}
+@keyframes secretPulse{
+  0%,100%{box-shadow:0 4px 20px rgba(99,102,241,.5)}
+  50%{box-shadow:0 4px 32px rgba(99,102,241,.9),0 0 0 6px rgba(99,102,241,.15)}
+}
+.secret-btn-shine{
+  position:absolute;top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+  animation:shine 3s ease-in-out infinite;
+}
+@keyframes shine{0%{left:-100%}50%,100%{left:150%}}
+.secret-complete{
+  text-align:center;padding:14px;border-radius:var(--radius);
+  background:#f0fdf4;border:2px solid #86efac;
+  font-family:'Fredoka One',cursive;font-size:16px;color:#166534;
+  margin-bottom:12px;
+}
+.secret-pending{
+  text-align:center;padding:14px;border-radius:var(--radius);
+  background:#fef3c7;border:2px solid #fcd34d;
+  font-family:'Fredoka One',cursive;font-size:15px;color:#92400e;
+  margin-bottom:12px;
+}
+
+/* ---- MISSION OVERLAY ---- */
+.mission-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:1.5rem;opacity:0;transition:opacity .4s ease;
+  pointer-events:none;
+}
+.mission-overlay.open{opacity:1;pointer-events:all;}
+.mission-scroll{
+  background:linear-gradient(160deg,#1e1b4b,#0f0a2e);
+  border:2px solid #6366f1;border-radius:20px;
+  padding:2rem 1.5rem;width:100%;max-width:380px;
+  transform:scale(.8) translateY(40px);
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 0 60px rgba(99,102,241,.4),inset 0 0 30px rgba(99,102,241,.1);
+  text-align:center;
+}
+.mission-overlay.open .mission-scroll{transform:scale(1) translateY(0);}
+.mission-lock{margin-bottom:8px;animation:lockPop .6s .3s both cubic-bezier(.34,1.56,.64,1);display:flex;justify-content:center}
+@keyframes lockPop{from{transform:scale(0) rotate(-20deg)}to{transform:scale(1) rotate(0)}}
+.mission-classified{
+  font-size:11px;letter-spacing:4px;color:#818cf8;font-weight:800;
+  margin-bottom:6px;text-transform:uppercase;
+}
+.mission-title{
+  font-family:'Fredoka One',cursive;font-size:24px;color:white;
+  margin-bottom:16px;line-height:1.2;
+}
+.mission-divider{height:1px;background:linear-gradient(90deg,transparent,#6366f1,transparent);margin:12px 0;}
+.mission-briefing{
+  font-size:14px;color:#c7d2fe;line-height:1.7;font-weight:600;
+  margin-bottom:16px;text-align:left;
+}
+.mission-reward{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(99,102,241,.2);border:1px solid #6366f1;
+  border-radius:50px;padding:6px 16px;
+  font-family:'Fredoka One',cursive;font-size:16px;color:#a5b4fc;
+  margin-bottom:20px;
+}
+.btn-mission-accept{
+  background:linear-gradient(135deg,#6366f1,#4f46e5);
+  color:white;border:none;border-radius:50px;
+  padding:13px 32px;font-family:'Fredoka One',cursive;font-size:17px;
+  cursor:pointer;width:100%;
+  box-shadow:0 4px 20px rgba(99,102,241,.5);
+  transition:transform .1s;
+}
+.btn-mission-accept:active{transform:scale(.97)}
+.btn-mission-close{
+  background:none;border:1px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.5);border-radius:50px;
+  padding:9px 24px;font-family:'Fredoka One',cursive;font-size:14px;
+  cursor:pointer;margin-top:10px;width:100%;
+}
+
 </style>
 </head>
 <body>
@@ -270,7 +373,100 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
   <div style="width:18px;height:18px;border:3px solid white;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite"></div>
   Loading your data...
 </div>
-<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+<style>@keyframes spin{to{transform:rotate(360deg)}}
+/* ---- SECRET MISSION ---- */
+.secret-btn {
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:16px;margin-bottom:12px;
+  background:linear-gradient(135deg,#1e1b4b,#312e81);
+  border:none;border-radius:var(--radius);cursor:pointer;
+  font-family:'Fredoka One',cursive;font-size:18px;color:white;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 20px rgba(99,102,241,.5);
+  animation:secretPulse 2s ease-in-out infinite;
+  -webkit-tap-highlight-color:transparent;
+}
+.secret-btn:active{transform:scale(.97)}
+@keyframes secretPulse{
+  0%,100%{box-shadow:0 4px 20px rgba(99,102,241,.5)}
+  50%{box-shadow:0 4px 32px rgba(99,102,241,.9),0 0 0 6px rgba(99,102,241,.15)}
+}
+.secret-btn-shine{
+  position:absolute;top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+  animation:shine 3s ease-in-out infinite;
+}
+@keyframes shine{0%{left:-100%}50%,100%{left:150%}}
+.secret-complete{
+  text-align:center;padding:14px;border-radius:var(--radius);
+  background:#f0fdf4;border:2px solid #86efac;
+  font-family:'Fredoka One',cursive;font-size:16px;color:#166534;
+  margin-bottom:12px;
+}
+.secret-pending{
+  text-align:center;padding:14px;border-radius:var(--radius);
+  background:#fef3c7;border:2px solid #fcd34d;
+  font-family:'Fredoka One',cursive;font-size:15px;color:#92400e;
+  margin-bottom:12px;
+}
+
+/* ---- MISSION OVERLAY ---- */
+.mission-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:1.5rem;opacity:0;transition:opacity .4s ease;
+  pointer-events:none;
+}
+.mission-overlay.open{opacity:1;pointer-events:all;}
+.mission-scroll{
+  background:linear-gradient(160deg,#1e1b4b,#0f0a2e);
+  border:2px solid #6366f1;border-radius:20px;
+  padding:2rem 1.5rem;width:100%;max-width:380px;
+  transform:scale(.8) translateY(40px);
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 0 60px rgba(99,102,241,.4),inset 0 0 30px rgba(99,102,241,.1);
+  text-align:center;
+}
+.mission-overlay.open .mission-scroll{transform:scale(1) translateY(0);}
+.mission-lock{margin-bottom:8px;animation:lockPop .6s .3s both cubic-bezier(.34,1.56,.64,1);display:flex;justify-content:center}
+@keyframes lockPop{from{transform:scale(0) rotate(-20deg)}to{transform:scale(1) rotate(0)}}
+.mission-classified{
+  font-size:11px;letter-spacing:4px;color:#818cf8;font-weight:800;
+  margin-bottom:6px;text-transform:uppercase;
+}
+.mission-title{
+  font-family:'Fredoka One',cursive;font-size:24px;color:white;
+  margin-bottom:16px;line-height:1.2;
+}
+.mission-divider{height:1px;background:linear-gradient(90deg,transparent,#6366f1,transparent);margin:12px 0;}
+.mission-briefing{
+  font-size:14px;color:#c7d2fe;line-height:1.7;font-weight:600;
+  margin-bottom:16px;text-align:left;
+}
+.mission-reward{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(99,102,241,.2);border:1px solid #6366f1;
+  border-radius:50px;padding:6px 16px;
+  font-family:'Fredoka One',cursive;font-size:16px;color:#a5b4fc;
+  margin-bottom:20px;
+}
+.btn-mission-accept{
+  background:linear-gradient(135deg,#6366f1,#4f46e5);
+  color:white;border:none;border-radius:50px;
+  padding:13px 32px;font-family:'Fredoka One',cursive;font-size:17px;
+  cursor:pointer;width:100%;
+  box-shadow:0 4px 20px rgba(99,102,241,.5);
+  transition:transform .1s;
+}
+.btn-mission-accept:active{transform:scale(.97)}
+.btn-mission-close{
+  background:none;border:1px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.5);border-radius:50px;
+  padding:9px 24px;font-family:'Fredoka One',cursive;font-size:14px;
+  cursor:pointer;margin-top:10px;width:100%;
+}
+
+</style>
 
 <!-- PROFILE PICKER -->
 <div id="profile-screen">
@@ -302,12 +498,14 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
   <div id="tab-shop"    class="section"></div>
   <div id="tab-history" class="section"></div>
   <div id="tab-oops"    class="section"></div>
+  <div id="tab-plan"    class="section"></div>
 
   <nav class="tab-bar">
     <button class="tab-btn active" onclick="switchTab('chores',this)"><span class="tab-icon">📋</span>Chores</button>
     <button class="tab-btn" onclick="switchTab('shop',this)"><span class="tab-icon">🛒</span>Shop</button>
     <button class="tab-btn" onclick="switchTab('history',this)"><span class="tab-icon">📜</span>History</button>
     <button class="tab-btn" id="oops-tab-btn" onclick="switchTab('oops',this)"><span class="tab-icon">🙊</span>Oops!</button>
+    <button class="tab-btn" onclick="switchTab('plan',this)"><span class="tab-icon">📅</span>Plan</button>
   </nav>
 </div>
 
@@ -328,6 +526,23 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
       <div id="parent-content"></div>
       <button class="btn-close" onclick="closeParent()">Close</button>
     </div>
+  </div>
+</div>
+
+
+<!-- SECRET MISSION OVERLAY -->
+<div class="mission-overlay" id="mission-overlay">
+  <div class="mission-scroll">
+    <div class="mission-lock" id="mission-lock-icon"></div>
+    <div class="mission-classified">Epic Quest — Special Assignment</div>
+    <div class="mission-title" id="mission-title-text"></div>
+    <div class="mission-divider"></div>
+    <div class="mission-briefing" id="mission-briefing-text"></div>
+    <div class="mission-reward">🪙 <span id="mission-reward-coins"></span> coins upon completion</div>
+    <button class="btn-mission-accept" id="mission-accept-btn" onclick="acceptMission()">
+      ✅ I accept this quest!
+    </button>
+    <button class="btn-mission-close" onclick="closeMissionOverlay()">Maybe later</button>
   </div>
 </div>
 
@@ -441,6 +656,8 @@ function serializeState(s){
     oopsLog: toArray(s.oopsLog),
     baseBedtime: s.baseBedtime||'19:45',
     bedtimeAdjustments: s.bedtimeAdjustments||{},
+    planChecked: s.planChecked||{},
+    planRemoved: s.planRemoved||{},
   };
 }
 
@@ -452,7 +669,7 @@ function toArray(val){
   return [];
 }
 
-const EMPTY_STATE = () => ({ coins:0, coinsEarned:0, coinsDeducted:0, streak:0, lastActiveDate:null, done:{}, surprise:{}, history:[], pendingChores:[], pendingShop:[], oopsLog:[], baseBedtime:'19:45', bedtimeAdjustments:{} });
+const EMPTY_STATE = () => ({ coins:0, coinsEarned:0, coinsDeducted:0, streak:0, lastActiveDate:null, done:{}, surprise:{}, history:[], pendingChores:[], pendingShop:[], oopsLog:[], baseBedtime:'19:45', bedtimeAdjustments:{}, planChecked:{}, planRemoved:{} });
 
 function deserializeState(raw){
   try {
@@ -585,8 +802,15 @@ function subscribeToGlobal(){
         if(val.consequences) globalCfg.consequences=val.consequences;
         if(val.surprises) globalCfg.surprises=val.surprises;
         if(val.kidConfigs) globalCfg.kidConfigs=val.kidConfigs;
+        if(val.kidPlans) globalCfg.kidPlans=val.kidPlans;
+        if(val.secretMission) globalCfg.secretMission=val.secretMission;
         kids=getKids();
-        if(activeKid) activeKid=kids.find(k=>k.id===activeKid.id)||activeKid;
+        if(activeKid){
+          activeKid=kids.find(k=>k.id===activeKid.id)||activeKid;
+          renderPlan();
+          renderChores();
+        }
+        if(!activeKid) renderPicker();
       }
     } catch(e){ console.warn('subscribeToGlobal error:', e); }
   });
@@ -615,7 +839,14 @@ function loadKidConfig(kid){
 function getKids(){
   return CONFIG.kids.map(kid => {
     const saved = loadKidConfig(kid);
-    return saved ? {...kid, ...saved} : {...kid};
+    if(!saved) return {...kid};
+    // Always keep chores and plan from CONFIG unless explicitly overridden in saved
+    return {
+      ...kid,
+      ...saved,
+      chores: saved.chores || kid.chores,
+      plan: saved.plan || kid.plan || [],
+    };
   });
 }
 
@@ -648,6 +879,8 @@ function state(){
     if(!s.pendingShop) s.pendingShop=[];
     if(!s.oopsLog) s.oopsLog=[];
     if(!s.history) s.history=[];
+    if(!s.planChecked) s.planChecked={};
+    if(!s.planRemoved) s.planRemoved={};
   } catch(e){ console.warn('state() repair error:', e); }
   return s;
 }
@@ -850,6 +1083,9 @@ function selectKid(kidId){
   document.getElementById('tab-chores').classList.add('active');
   document.querySelector('.tab-btn').classList.add('active');
   renderAll();
+  // Re-render after brief delay to catch any globalCfg that loads slightly after
+  setTimeout(()=>{ if(activeKid){ renderChores(); renderPlan(); } }, 300);
+  setTimeout(()=>{ if(activeKid){ renderChores(); renderPlan(); } }, 1200);
 }
 
 function goBack(){
@@ -900,6 +1136,7 @@ function todayDone(){
 function renderChores(){
   const container=document.getElementById('tab-chores');
   const kd=activeKidFull();
+  if(!kd){ container.innerHTML='<div class="empty-msg">Loading...</div>'; return; }
   const allChores=(kd.chores||[]).filter(choreVisible);
   // Required chores always appear first
   const visible=[...allChores.filter(c=>c.required), ...allChores.filter(c=>!c.required)];
@@ -1163,6 +1400,9 @@ function renderParentPortal(){
     {id:'chores',label:'📋 Chores',badge:0},
     {id:'shop',label:'🛒 Shop',badge:0},
     {id:'consequences',label:'🙊 Oops',badge:0},
+    {id:'surprises',label:'🎲 Bonus',badge:0},
+    {id:'plan',label:'📅 Plan',badge:0},
+    {id:'secretmission',label:'⚔️ Quest',badge:0},
   ].map(t=>`<button class="parent-nav-btn ${parentTab===t.id?'active':''}" onclick="switchParentTab('${t.id}')">
     ${t.label}${t.badge?`<div class="parent-nav-badge">${t.badge}</div>`:''}
   </button>`).join('');
@@ -1174,6 +1414,9 @@ function renderParentPortal(){
   else if(parentTab==='chores') content.innerHTML=renderChoresEditorTab();
   else if(parentTab==='shop') content.innerHTML=renderShopEditorTab();
   else if(parentTab==='consequences') content.innerHTML=renderConsequencesTab();
+  else if(parentTab==='plan') content.innerHTML=renderPlanEditorTab();
+  else if(parentTab==='surprises') content.innerHTML=renderSurprisesEditorTab();
+  else if(parentTab==='secretmission') content.innerHTML=renderSecretMissionTab();
 }
 
 function switchParentKid(id){ parentKidView=id; renderParentPortal(); }
@@ -1534,6 +1777,109 @@ function deleteShopItem(itemId){
   renderParentPortal();
 }
 
+
+// ==================== TODAY'S PLAN ====================
+function getPlanItems(){
+  const kd=activeKidFull();
+  // 1. Use saved plan from parent portal if set
+  if(globalCfg.kidPlans&&globalCfg.kidPlans[activeKid.id]&&globalCfg.kidPlans[activeKid.id].length){
+    return globalCfg.kidPlans[activeKid.id];
+  }
+  // 2. Use plan from merged kid config
+  if(kd&&kd.plan&&kd.plan.length) return kd.plan;
+  // 3. Fall back directly to CONFIG (bypasses any merge issues)
+  const configKid=CONFIG.kids.find(k=>k.id===activeKid.id);
+  return (configKid&&configKid.plan)||[];
+}
+
+function planVisible(item){
+  const d=item.days;
+  if(!d||d==='daily') return true;
+  if(d==='weekends') return isWeekend();
+  if(d==='weekdays') return !isWeekend();
+  return true;
+}
+
+function renderPlan(){
+  const container=document.getElementById('tab-plan');
+  if(!container) return;
+  const t=today();
+  const s=state();
+  if(!s){ container.innerHTML='<div class="empty-msg">Loading...</div>'; return; }
+  const checked=new Set(toArray(s.planChecked[t]));
+  const removed=new Set(toArray(s.planRemoved[t]));
+  const items=getPlanItems().filter(i=>planVisible(i)&&!removed.has(i.id));
+  const doneCount=[...checked].filter(id=>getPlanItems().find(i=>i.id===id)).length;
+  const total=items.length;
+  const pct=total?Math.round((doneCount/total)*100):0;
+
+  let html=`<div class="sec-label">📅 Today's Plan</div>
+    <div class="progress-wrap"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="progress-lbl">${doneCount} of ${total} done</div>
+    <div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-top:4px;margin-bottom:8px">
+      ✓ Checks reset each morning &nbsp;·&nbsp; Swipe left on an item to remove it for today
+    </div>
+    <div class="chore-list" style="margin-top:0">`;
+
+  if(!items.length){
+    html+=`<div class="empty-msg">Nothing planned for today! 🎉</div>`;
+  } else {
+    for(const item of items){
+      const isDone=checked.has(item.id);
+      html+=`<div class="chore-card ${isDone?'done':''}" style="position:relative" onclick="togglePlan('${item.id}')">
+        <div class="chore-info" style="padding-right:8px">
+          <div class="chore-name">${item.text}</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+          <button onclick="event.stopPropagation();removePlanItem('${item.id}')"
+            style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--text-muted);padding:4px">✕</button>
+          <div style="width:38px;height:38px;border-radius:50%;border:2.5px solid ${isDone?'#22c55e':'#f97316'};background:${isDone?'#22c55e':'white'};display:flex;align-items:center;justify-content:center;font-size:18px">
+            ${isDone?'✅':''}
+          </div>
+        </div>
+      </div>`;
+    }
+  }
+  html+=`</div>`;
+  container.innerHTML=html;
+}
+
+function togglePlan(id){
+  const t=today();
+  const s=state();
+  if(!s.planChecked) s.planChecked={};
+  if(!s.planChecked[t]) s.planChecked[t]=[];
+  const arr=toArray(s.planChecked[t]);
+  const idx=arr.indexOf(id);
+  if(idx>=0) arr.splice(idx,1);
+  else arr.push(id);
+  s.planChecked[t]=arr;
+  saveKidState(activeKid.id,s);
+  renderPlan();
+}
+
+function removePlanItem(id){
+  const t=today();
+  const s=state();
+  if(!s.planRemoved) s.planRemoved={};
+  if(!s.planRemoved[t]) s.planRemoved[t]=[];
+  const arr=toArray(s.planRemoved[t]);
+  if(!arr.includes(id)) arr.push(id);
+  s.planRemoved[t]=arr;
+  saveKidState(activeKid.id,s);
+  showToast('Removed for today — comes back tomorrow','info');
+  renderPlan();
+}
+
+// Clean old plan data (keep only today)
+function cleanOldPlanData(kidId){
+  const s=states[kidId];
+  if(!s) return;
+  const t=today();
+  if(s.planChecked) s.planChecked={[t]:s.planChecked[t]||[]};
+  if(s.planRemoved) s.planRemoved={[t]:s.planRemoved[t]||[]};
+}
+
 // ==================== OOPS TAB ====================
 function renderOops(){
   const container=document.getElementById('tab-oops');
@@ -1669,6 +2015,220 @@ function deleteConsequence(conId){
   renderParentPortal();
 }
 
+
+
+// ---- SURPRISES EDITOR ----
+function renderSurprisesEditorTab(){
+  const surprises = getSurprises();
+  let html = `<div class="add-form">
+    <div class="form-label">Add a new bonus challenge</div>
+    <input id="new-surp-text" placeholder="e.g. Do 20 jumping jacks!" style="margin-bottom:8px">
+    <div class="add-form-row">
+      <input id="new-surp-coins" type="number" placeholder="Coins" min="1" max="999">
+      <button class="btn-sm" onclick="addSurpriseItem()">Add</button>
+    </div>
+  </div>`;
+  if(!surprises.length){
+    html += `<div class="empty-msg">No bonus challenges yet!</div>`;
+  } else {
+    for(const s of surprises){
+      const sid = s.id || encodeURIComponent(s.text.slice(0,15));
+      html += `<div class="editor-item">
+        <div class="editor-item-info">
+          <div class="editor-item-name">${s.text}</div>
+          <div class="editor-item-sub">🪙 ${s.coins} coins</div>
+        </div>
+        <div class="editor-actions">
+          <button class="btn-sm" onclick="editSurpriseItem(decodeURIComponent('${encodeURIComponent(sid)}'))">Edit</button>
+          <button class="btn-sm-danger" onclick="deleteSurpriseItem(decodeURIComponent('${encodeURIComponent(sid)}'))">✗</button>
+        </div>
+      </div>`;
+    }
+  }
+  return html;
+}
+
+function addSurpriseItem(){
+  const text = document.getElementById('new-surp-text').value.trim();
+  const coins = parseInt(document.getElementById('new-surp-coins').value, 10);
+  if(!text){ showToast('Enter a challenge description','bad'); return; }
+  if(!coins||coins<1){ showToast('Enter coin amount','bad'); return; }
+  const surprises = getSurprises();
+  surprises.push({ id: uid(), text, coins });
+  globalCfg.surprises = surprises;
+  saveGlobal(globalCfg);
+  showToast('Bonus challenge added!');
+  document.getElementById('parent-content').innerHTML = renderSurprisesEditorTab();
+}
+
+function editSurpriseItem(sid){
+  const surprises = getSurprises();
+  const item = surprises.find(s => (s.id||encodeURIComponent(s.text.slice(0,15))) === sid);
+  if(!item) return;
+  const newText = prompt('Edit challenge:', item.text);
+  if(newText === null) return;
+  const newCoins = prompt('Edit coins:', item.coins);
+  if(newCoins === null) return;
+  const parsed = parseInt(newCoins, 10);
+  if(isNaN(parsed)||parsed<1){ showToast('Invalid amount','bad'); return; }
+  const updated = surprises.map(s => (s.id||encodeURIComponent(s.text.slice(0,15))) === sid ? {...s, text: newText.trim()||s.text, coins: parsed} : s);
+  globalCfg.surprises = updated;
+  saveGlobal(globalCfg);
+  showToast('Challenge updated!');
+  document.getElementById('parent-content').innerHTML = renderSurprisesEditorTab();
+}
+
+function deleteSurpriseItem(sid){
+  if(!confirm('Delete this bonus challenge?')) return;
+  const updated = getSurprises().filter(s => (s.id||encodeURIComponent(s.text.slice(0,15))) !== sid);
+  globalCfg.surprises = updated;
+  saveGlobal(globalCfg);
+  showToast('Challenge deleted','bad');
+  document.getElementById('parent-content').innerHTML = renderSurprisesEditorTab();
+}
+
+// ---- PLAN EDITOR ----
+function getKidPlanItems(kidId){
+  const kd=kids.find(k=>k.id===kidId);
+  return (globalCfg.kidPlans&&globalCfg.kidPlans[kidId]) || (kd&&kd.plan) || [];
+}
+
+function renderPlanEditorTab(){
+  const kd=kids.find(k=>k.id===parentKidView);
+  const items=getKidPlanItems(parentKidView);
+  let html=`<div class="add-form">
+    <div class="form-label">Add a plan item for ${kd.name}</div>
+    <input id="new-plan-text" placeholder="e.g. Read before bed" style="margin-bottom:8px">
+    <div class="add-form-row">
+      <select id="new-plan-days">
+        <option value="daily">Every day</option>
+        <option value="weekdays">Weekdays only</option>
+        <option value="weekends">Weekends only</option>
+      </select>
+      <button class="btn-sm" onclick="addPlanItem()">Add</button>
+    </div>
+  </div>`;
+
+  if(!items.length){
+    html+=`<div class="empty-msg">No plan items yet — add one above!</div>`;
+  } else {
+    for(const item of items){
+      const daysLabel={daily:'Daily',weekdays:'Weekdays',weekends:'Weekends'}[item.days||'daily'];
+      html+=`<div class="editor-item">
+        <div class="editor-item-info">
+          <div class="editor-item-name">${item.text}</div>
+          <div class="editor-item-sub">📅 ${daysLabel}</div>
+        </div>
+        <div class="editor-actions">
+          <button class="btn-sm" onclick="editPlanItem('${item.id}')">Edit</button>
+          <button class="btn-sm-danger" onclick="deletePlanItem('${item.id}')">✗</button>
+        </div>
+      </div>`;
+    }
+  }
+  return html;
+}
+
+function addPlanItem(){
+  const text=document.getElementById('new-plan-text').value.trim();
+  const days=document.getElementById('new-plan-days').value;
+  if(!text){ showToast('Enter a plan item','bad'); return; }
+  if(!globalCfg.kidPlans) globalCfg.kidPlans={};
+  const items=getKidPlanItems(parentKidView);
+  items.push({id:uid(),text,days});
+  globalCfg.kidPlans[parentKidView]=items;
+  saveGlobal(globalCfg);
+  kids=getKids();
+  showToast('Plan item added!');
+  renderPlanEditorTab();
+  document.getElementById('parent-content').innerHTML=renderPlanEditorTab();
+}
+
+function editPlanItem(itemId){
+  const items=getKidPlanItems(parentKidView);
+  const item=items.find(i=>i.id===itemId);
+  if(!item) return;
+  const newText=prompt('Edit plan item:', item.text);
+  if(newText===null) return;
+  const newDays=prompt('Days (daily / weekdays / weekends):', item.days||'daily');
+  if(newDays===null) return;
+  const valid=['daily','weekdays','weekends'];
+  const updated=items.map(i=>i.id===itemId?{...i,text:newText.trim()||i.text,days:valid.includes(newDays.trim())?newDays.trim():i.days}:i);
+  if(!globalCfg.kidPlans) globalCfg.kidPlans={};
+  globalCfg.kidPlans[parentKidView]=updated;
+  saveGlobal(globalCfg);
+  kids=getKids();
+  showToast('Plan item updated!');
+  document.getElementById('parent-content').innerHTML=renderPlanEditorTab();
+}
+
+function deletePlanItem(itemId){
+  if(!confirm('Delete this plan item?')) return;
+  const items=getKidPlanItems(parentKidView).filter(i=>i.id!==itemId);
+  if(!globalCfg.kidPlans) globalCfg.kidPlans={};
+  globalCfg.kidPlans[parentKidView]=items;
+  saveGlobal(globalCfg);
+  kids=getKids();
+  showToast('Plan item deleted','bad');
+  document.getElementById('parent-content').innerHTML=renderPlanEditorTab();
+}
+
+
+// ---- SECRET MISSION PARENT EDITOR ----
+function renderSecretMissionTab(){
+  const m=globalCfg.secretMission||{active:false,title:'',description:'',coins:15};
+  return `
+    <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:var(--radius);padding:1.2rem;margin-bottom:14px;color:white;text-align:center">
+      <div style="margin-bottom:6px;display:flex;justify-content:center">${chestSVG(56)}</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:4px">Epic Quest Control</div>
+      <div style="font-size:12px;color:#a5b4fc">Special one-off quests with a dramatic reveal</div>
+    </div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:12px">
+      <div>
+        <div style="font-size:14px;font-weight:800;color:var(--text)">Quest Status</div>
+        <div style="font-size:12px;color:${m.active?'#22c55e':'#7c7a9a'};font-weight:700">${m.active?'🟢 ACTIVE — visible to kids':'⚪ Inactive'}</div>
+      </div>
+      <button class="${m.active?'btn-danger':'btn-purple'}" style="margin:0;width:auto;padding:9px 20px"
+        onclick="toggleSecretMission()">
+        ${m.active?'Turn Off':'Activate'}
+      </button>
+    </div>
+
+    <div class="add-form">
+      <div class="form-label">Quest Title</div>
+      <input id="sm-title" placeholder="e.g. Operation: Clean Sweep" value="${m.title||''}" style="margin-bottom:8px">
+      <div class="form-label">Quest Briefing (what they need to do)</div>
+      <textarea id="sm-desc" placeholder="Describe the quest..." rows="4"
+        style="width:100%;font-size:14px;font-family:'Nunito',sans-serif;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);background:var(--surface);outline:none;resize:none;margin-bottom:8px">${m.description||''}</textarea>
+      <div class="add-form-row">
+        <input id="sm-coins" type="number" placeholder="Coins" value="${m.coins||15}" min="1" max="999">
+        <button class="btn-sm" onclick="saveSecretMission()">Save Quest</button>
+      </div>
+    </div>`;
+}
+
+function toggleSecretMission(){
+  const m=globalCfg.secretMission||{active:false,title:'',description:'',coins:15};
+  m.active=!m.active;
+  globalCfg.secretMission=m;
+  saveGlobal(globalCfg);
+  showToast(m.active?'⚔️ Epic Quest is now active!':'Quest deactivated','info');
+  renderParentPortal();
+}
+
+function saveSecretMission(){
+  const title=document.getElementById('sm-title').value.trim();
+  const desc=document.getElementById('sm-desc').value.trim();
+  const coins=parseInt(document.getElementById('sm-coins').value,10)||15;
+  if(!title||!desc){ showToast('Enter a title and description','bad'); return; }
+  const m=globalCfg.secretMission||{active:false};
+  globalCfg.secretMission={...m,title,description:desc,coins};
+  saveGlobal(globalCfg);
+  showToast('Quest saved!');
+  renderParentPortal();
+}
+
 // ==================== EXPORT / IMPORT ====================
 function exportConfig(){
   const kd=kids.find(k=>k.id===parentKidView);
@@ -1715,6 +2275,126 @@ function importConfig(event){
     }
   };
   reader.readAsText(file);
+}
+
+
+// ==================== SECRET MISSION ====================
+function chestSVG(size){
+  const s = size/200;
+  return `<svg viewBox="0 0 200 180" width="${size}" height="${Math.round(size*0.9)}" xmlns="http://www.w3.org/2000/svg">
+    <rect x="10" y="100" width="180" height="75" rx="6" fill="#92400e" stroke="#78350f" stroke-width="1.5"/>
+    <rect x="18" y="107" width="164" height="62" rx="4" fill="#b45309"/>
+    <line x1="18" y1="122" x2="182" y2="122" stroke="#92400e" stroke-width="1" opacity="0.5"/>
+    <line x1="18" y1="140" x2="182" y2="140" stroke="#92400e" stroke-width="1" opacity="0.5"/>
+    <line x1="18" y1="158" x2="182" y2="158" stroke="#92400e" stroke-width="1" opacity="0.5"/>
+    <rect x="10" y="112" width="180" height="9" rx="2" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+    <rect x="10" y="148" width="180" height="9" rx="2" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+    <rect x="10" y="100" width="16" height="75" rx="3" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+    <rect x="174" y="100" width="16" height="75" rx="3" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+    <rect x="10" y="38" width="180" height="66" rx="6" fill="#92400e" stroke="#78350f" stroke-width="1.5"/>
+    <rect x="18" y="44" width="164" height="54" rx="4" fill="#b45309"/>
+    <ellipse cx="100" cy="44" rx="82" ry="14" fill="#b45309" stroke="#78350f" stroke-width="1.5"/>
+    <ellipse cx="100" cy="44" rx="74" ry="10" fill="#b45309"/>
+    <line x1="18" y1="60" x2="182" y2="60" stroke="#92400e" stroke-width="1" opacity="0.5"/>
+    <line x1="18" y1="76" x2="182" y2="76" stroke="#92400e" stroke-width="1" opacity="0.5"/>
+    <rect x="10" y="88" width="180" height="9" rx="2" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+    <rect x="10" y="98" width="180" height="6" rx="2" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+    <rect x="10" y="38" width="16" height="66" rx="3" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+    <rect x="174" y="38" width="16" height="66" rx="3" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+    <circle cx="50" cy="66" r="7" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.5"/>
+    <circle cx="50" cy="66" r="3.5" fill="#fca5a5" opacity="0.6"/>
+    <polygon points="150,59 154,66 150,73 146,66" fill="#2563eb" stroke="#1e3a8a" stroke-width="1.5"/>
+    <polygon points="150,62 153,66 150,70 147,66" fill="#93c5fd" opacity="0.6"/>
+    <polygon points="100,57 104,64 100,71 96,64" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+    <polygon points="100,60 103,64 100,68 97,64" fill="#86efac" opacity="0.6"/>
+    <rect x="83" y="108" width="34" height="26" rx="4" fill="#d97706" stroke="#92400e" stroke-width="1.5"/>
+    <rect x="88" y="113" width="24" height="16" rx="3" fill="#fbbf24"/>
+    <path d="M89 109 Q89 97 100 97 Q111 97 111 109" fill="none" stroke="#92400e" stroke-width="4" stroke-linecap="round"/>
+    <path d="M89 109 Q89 99 100 99 Q110 99 111 109" fill="none" stroke="#d97706" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="100" cy="119" r="4" fill="#92400e"/>
+    <rect x="97.5" y="120" width="5" height="6" rx="1.5" fill="#92400e"/>
+    <ellipse cx="34" cy="177" rx="12" ry="5" fill="#fbbf24" stroke="#d97706" stroke-width="1"/>
+    <ellipse cx="166" cy="174" rx="12" ry="5" fill="#fbbf24" stroke="#d97706" stroke-width="1"/>
+    <ellipse cx="52" cy="175" rx="10" ry="5" fill="#f59e0b" stroke="#d97706" stroke-width="1"/>
+    <ellipse cx="150" cy="176" rx="10" ry="5" fill="#f59e0b" stroke="#d97706" stroke-width="1"/>
+    <path d="M18 52 L20 47 L22 52 L27 54 L22 56 L20 61 L18 56 L13 54Z" fill="#fef08a" opacity="0.9"/>
+    <path d="M168 44 L170 40 L172 44 L177 46 L172 48 L170 53 L168 48 L163 46Z" fill="#fef08a" opacity="0.8"/>
+    <circle cx="28" cy="35" r="2.5" fill="#fef08a" opacity="0.7"/>
+    <circle cx="174" cy="34" r="2" fill="#fef08a" opacity="0.6"/>
+  </svg>`;
+}
+
+function getSecretMission(){
+  return globalCfg.secretMission || null;
+}
+
+function secretMissionVisible(){
+  const m=getSecretMission();
+  if(!m||!m.active) return false;
+  return true;
+}
+
+function secretMissionStatus(){
+  // Returns: 'none' | 'pending' | 'approved' | 'available'
+  const m=getSecretMission();
+  if(!m||!m.active) return 'none';
+  const t=today();
+  const s=state();
+  const pending=(s.pendingChores||[]).find(p=>p.choreId==='secret-mission');
+  if(pending) return 'pending';
+  const done=(s.done[t]||new Set());
+  if(done.has('secret-mission')) return 'approved';
+  return 'available';
+}
+
+function renderSecretMission(){
+  const status=secretMissionStatus();
+  if(status==='none') return '';
+  const m=getSecretMission();
+  if(status==='approved'){
+    return `<div class="secret-complete">🏆 Epic Quest Complete! Well done, Agent!</div>`;
+  }
+  if(status==='pending'){
+    return `<div class="secret-pending">⏳ Quest submitted — awaiting parent approval!</div>`;
+  }
+  return `<button class="secret-btn" onclick="openMissionOverlay()">
+    <div class="secret-btn-shine"></div>
+    ${chestSVG(32)} EPIC QUEST
+  </button>`;
+}
+
+function openMissionOverlay(){
+  const m=getSecretMission();
+  if(!m) return;
+  const lockEl=document.getElementById('mission-lock-icon');
+  if(lockEl) lockEl.innerHTML=chestSVG(80);
+  document.getElementById('mission-title-text').textContent=m.title||'Epic Quest';
+  document.getElementById('mission-briefing-text').textContent=m.description||'';
+  document.getElementById('mission-reward-coins').textContent=m.coins||15;
+  document.getElementById('mission-overlay').classList.add('open');
+}
+
+function closeMissionOverlay(){
+  document.getElementById('mission-overlay').classList.remove('open');
+}
+
+function acceptMission(){
+  const m=getSecretMission();
+  if(!m) return;
+  const t=today();
+  const s=state();
+  s.pendingChores=[...(s.pendingChores||[]),{
+    id:uid(),choreId:'secret-mission',
+    choreName:'🔐 '+m.title,
+    coins:m.coins||15,
+    bedtimeBonus:0,date:t
+  }];
+  saveKidState(activeKid.id,s);
+  closeMissionOverlay();
+  showToast('Quest accepted! Awaiting parent approval ⚔️','info');
+  confetti();
+  updateBadge();
+  renderChores();
 }
 
 // ==================== UI HELPERS ====================
@@ -1790,10 +2470,15 @@ function startApp(){
     loadAllFromFirebase().then(()=>{
       kids = getKids();
       for(const kid of CONFIG.kids) cleanOldBedtimeAdjustments(kid.id);
+      for(const kid of CONFIG.kids) cleanOldPlanData(kid.id);
       initialLoadComplete = true;
-      renderPicker(); // refresh with real coin/streak data
+      renderPicker();
       for(const kid of CONFIG.kids) subscribeToKid(kid.id);
       subscribeToGlobal();
+      // Force re-render of current kid view after all global config is loaded
+      if(activeKid){
+        setTimeout(()=>{ renderChores(); renderPlan(); }, 200);
+      }
     });
   } catch(e) {
     console.error('Firebase init failed:', e);
