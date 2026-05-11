@@ -2554,16 +2554,18 @@ function confetti(){
 
 function renderAll(){
   if(!activeKid || !states[activeKid.id]) return;
-  try {
-    updateCoinDisplay();
-    renderStreak();
-    renderChores();
-    renderShop();
-    renderHistory();
-    renderOops();
-    updateBadge();
-  } catch(e) {
-    console.error('renderAll error:', e);
+  const fns = [
+    ['updateCoinDisplay', updateCoinDisplay],
+    ['renderChores', renderChores],
+    ['renderShop', renderShop],
+    ['renderHistory', renderHistory],
+    ['renderOops', renderOops],
+    ['renderPlan', renderPlan],
+    ['updateBadge', updateBadge],
+  ];
+  for(const [name, fn] of fns){
+    try{ fn(); }
+    catch(e){ console.error('renderAll: '+name+' failed:', e); }
   }
 }
 
