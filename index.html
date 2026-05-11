@@ -2,6 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ChoreQuest">
+<meta name="theme-color" content="#c2410c">
+<link rel="apple-touch-icon" href="icon-192.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Chore Quest ⭐ — Declan</title>
 <!-- Chore Quest — Declan's copy. Change parentPin and chores in the CONFIG below. -->
@@ -134,10 +141,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .cb-row{font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:14px;color:inherit;white-space:nowrap}
 
 /* STREAK */
-.streak-row{display:flex;align-items:center;justify-content:center;gap:6px;margin:1rem 1.2rem 0;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;flex-wrap:wrap}
-.streak-dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--text-muted);transition:background .3s,border-color .3s}
-.streak-dot.lit{background:var(--accent);border-color:var(--accent);color:var(--header-text,white)}
-.streak-lbl{font-size:13px;font-weight:700;color:var(--text-muted);margin-left:4px;white-space:nowrap}
+/* streak CSS removed */
 
 /* TABS */
 .tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--surface);border-top:1.5px solid var(--border);display:flex;z-index:100}
@@ -146,7 +150,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
 .tab-icon{font-size:18px}
 
 /* SECTIONS */
-.section{display:none;padding:0 1.2rem 1.5rem}
+.section{display:none;padding:0 1.2rem 5rem}
 .section.active{display:block}
 .sec-label{font-family:'Fredoka One','Comic Sans MS',cursive,sans-serif;font-size:17px;color:var(--accent);margin:1.2rem 0 .6rem}
 
@@ -492,7 +496,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
     </div>
   </div>
 
-  <div class="streak-row" id="streak-row"></div>
+  <!-- streak tracked internally, not shown -->
 
   <div id="tab-chores"  class="section active"></div>
   <div id="tab-shop"    class="section"></div>
@@ -1371,7 +1375,7 @@ function closeParent(){
 
 function checkPin(){
   const val=document.getElementById('pin-field').value.trim();
-  if(val===String(CONFIG.parentPin)){
+  if(val===getActivePin()){
     document.getElementById('pin-area').style.display='none';
     document.getElementById('parent-unlocked').classList.add('unlocked');
     renderParentPortal();
@@ -1403,6 +1407,7 @@ function renderParentPortal(){
     {id:'surprises',label:'🎲 Bonus',badge:0},
     {id:'plan',label:'📅 Plan',badge:0},
     {id:'secretmission',label:'⚔️ Quest',badge:0},
+    {id:'account',label:'👤 Account',badge:0},
   ].map(t=>`<button class="parent-nav-btn ${parentTab===t.id?'active':''}" onclick="switchParentTab('${t.id}')">
     ${t.label}${t.badge?`<div class="parent-nav-badge">${t.badge}</div>`:''}
   </button>`).join('');
@@ -1417,6 +1422,7 @@ function renderParentPortal(){
   else if(parentTab==='plan') content.innerHTML=renderPlanEditorTab();
   else if(parentTab==='surprises') content.innerHTML=renderSurprisesEditorTab();
   else if(parentTab==='secretmission') content.innerHTML=renderSecretMissionTab();
+  else if(parentTab==='account') content.innerHTML=renderAccountTab();
 }
 
 function switchParentKid(id){ parentKidView=id; renderParentPortal(); }
@@ -1536,6 +1542,7 @@ function renderStatsTab(){
       <button class="btn-sm" onclick="adjustCoins()">Apply</button>
     </div>
     <button class="btn-danger" onclick="resetKid()" style="margin-top:8px">⚠️ Reset ${kd.name}'s data</button>
+    ${renderResetLog(parentKidView)}
     <hr style="border:none;border-top:1.5px solid var(--border);margin:16px 0">
     <p style="font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:8px">🌙 Bedtime settings for ${kd.name}</p>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
@@ -1593,6 +1600,27 @@ function resetTonightBedtime(){
   renderParentPortal();
 }
 
+
+// ── RESET LOG ──
+function renderResetLog(kidId){
+  try{
+    const logKey=storageKey(kidId)+'_resetlog';
+    const log=JSON.parse(localStorage.getItem(logKey)||'[]');
+    if(!log.length) return '';
+    let html=`<hr style="border:none;border-top:1.5px solid var(--border);margin:14px 0">
+      <p style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:8px">⚠️ Reset history</p>`;
+    for(const entry of log.slice(0,5)){
+      const d=new Date(entry.resetAt);
+      const ds=`${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()} ${d.toLocaleTimeString()}`;
+      html+=`<div style="background:#fff1f2;border:1px solid #fca5a5;border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:12px;font-weight:700;color:var(--red)">
+        🔄 Reset on ${ds}<br>
+        <span style="color:var(--text-muted);font-weight:600">Had ${entry.coinsBefore||0} coins · ${entry.coinsEarnedBefore||0} total earned</span>
+      </div>`;
+    }
+    return html;
+  }catch(e){return '';}
+}
+
 function adjustCoins(){
   const amt=parseInt(document.getElementById('adjust-amount').value,10);
   if(isNaN(amt)){ showToast('Enter a number first','bad'); return; }
@@ -1609,12 +1637,36 @@ function adjustCoins(){
 
 function resetKid(){
   const kd=kids.find(k=>k.id===parentKidView);
-  if(!confirm(`Reset ALL of ${kd.name}'s coins, history, and streak?`))return;
-  states[parentKidView]=deserializeState(null);
-  saveKidState(parentKidView, states[parentKidView]);
+  const kidName=kd?kd.name:'this kid';
+  const entered=prompt(`⚠️ This will permanently erase ALL of ${kidName}'s coins, history, streak and chore data.\n\nThis cannot be undone. Type "${kidName}" to confirm:`);
+  if(!entered||entered.trim().toLowerCase()!==kidName.toLowerCase()){
+    showToast('Reset cancelled — name did not match','info');
+    return;
+  }
+  // Log reset event to Firebase
+  try{
+    const s=states[parentKidView]||{};
+    const logEntry={
+      kidName,kidId:parentKidView,
+      resetAt:new Date().toISOString(),
+      coinsBefore:s.coins||0,
+      coinsEarnedBefore:s.coinsEarned||0,
+      streakBefore:s.streak||0,
+    };
+    if(window.db) window.db.ref('chorequest/resetlog/'+parentKidView).push(logEntry);
+    // Also keep local log
+    const lk='cq_resetlog_'+parentKidView;
+    const existing=JSON.parse(localStorage.getItem(lk)||'[]');
+    existing.unshift(logEntry);
+    localStorage.setItem(lk,JSON.stringify(existing.slice(0,20)));
+  }catch(e){console.warn('Reset log error',e)}
+  // Clear state
+  const empty=EMPTY_STATE();
+  states[parentKidView]=empty;
+  saveState(parentKidView,empty);
   if(activeKid&&activeKid.id===parentKidView) renderAll();
   renderParentPortal();
-  showToast(`${kd.name}'s data reset`,'bad');
+  showToast(`${kidName}'s data has been reset`,'bad');
 }
 
 // ---- CHORES EDITOR ----
@@ -2229,6 +2281,76 @@ function saveSecretMission(){
   renderParentPortal();
 }
 
+
+// ---- ACCOUNT TAB ----
+function renderAccountTab(){
+  return `
+    <div class="add-form">
+      <div class="form-label" style="font-size:14px;color:var(--text);margin-bottom:12px">
+        🔐 Change Parent Portal PIN
+      </div>
+      <div class="form-label">Current PIN</div>
+      <input id="acct-current-pin" type="password" inputmode="numeric" maxlength="4"
+        placeholder="••••" autocomplete="off"
+        style="width:100%;font-size:20px;letter-spacing:8px;border:2px solid var(--border);
+        border-radius:8px;padding:10px 14px;margin-bottom:10px;outline:none;
+        font-family:'Fredoka One',cursive;background:var(--surface);color:var(--text)">
+      <div class="form-label">New PIN</div>
+      <input id="acct-new-pin" type="password" inputmode="numeric" maxlength="4"
+        placeholder="••••" autocomplete="off"
+        style="width:100%;font-size:20px;letter-spacing:8px;border:2px solid var(--border);
+        border-radius:8px;padding:10px 14px;margin-bottom:10px;outline:none;
+        font-family:'Fredoka One',cursive;background:var(--surface);color:var(--text)">
+      <div class="form-label">Confirm New PIN</div>
+      <input id="acct-confirm-pin" type="password" inputmode="numeric" maxlength="4"
+        placeholder="••••" autocomplete="off"
+        style="width:100%;font-size:20px;letter-spacing:8px;border:2px solid var(--border);
+        border-radius:8px;padding:10px 14px;margin-bottom:12px;outline:none;
+        font-family:'Fredoka One',cursive;background:var(--surface);color:var(--text)">
+      <div id="acct-pin-error" style="font-size:13px;color:var(--red);font-weight:700;
+        margin-bottom:8px;display:none"></div>
+      <button class="btn-purple" onclick="changeParentPin()" style="margin-top:0">
+        Update PIN
+      </button>
+    </div>
+  `;
+}
+
+function getActivePin(){
+  return String((globalCfg&&globalCfg.parentPin)||window._savedPin||CONFIG.parentPin);
+}
+
+function changeParentPin(){
+  const current=document.getElementById('acct-current-pin').value.trim();
+  const newPin=document.getElementById('acct-new-pin').value.trim();
+  const confirmPin=document.getElementById('acct-confirm-pin').value.trim();
+  const errEl=document.getElementById('acct-pin-error');
+  errEl.style.display='none';
+  if(current!==getActivePin()){
+    errEl.textContent='Current PIN is incorrect';
+    errEl.style.display='block';
+    return;
+  }
+  if(newPin.length!==4||!/^\d{4}$/.test(newPin)){
+    errEl.textContent='New PIN must be exactly 4 digits';
+    errEl.style.display='block';
+    return;
+  }
+  if(newPin!==confirmPin){
+    errEl.textContent='New PINs do not match';
+    errEl.style.display='block';
+    return;
+  }
+  window._savedPin=newPin;
+  globalCfg.parentPin=newPin;
+  saveGlobal(globalCfg);
+  showToast('PIN updated successfully!','info');
+  document.getElementById('acct-current-pin').value='';
+  document.getElementById('acct-new-pin').value='';
+  document.getElementById('acct-confirm-pin').value='';
+  renderParentPortal();
+}
+
 // ==================== EXPORT / IMPORT ====================
 function exportConfig(){
   const kd=kids.find(k=>k.id===parentKidView);
@@ -2492,6 +2614,16 @@ if(document.readyState === 'loading'){
   document.addEventListener('DOMContentLoaded', startApp);
 } else {
   startApp();
+}
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(r => console.log('SW registered'))
+      .catch(e => console.log('SW failed:', e));
+  });
 }
 </script>
 </body>
