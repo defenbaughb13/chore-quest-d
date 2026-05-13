@@ -492,6 +492,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
     <div class="coin-breakdown">
       <div class="cb-row cb-earned">🟢 <span id="cb-earned">0</span> earned</div>
       <div class="cb-row cb-deducted">🔴 <span id="cb-deducted">0</span> deducted</div>
+      <div class="cb-row cb-spent">🛒 <span id="cb-spent">0</span> spent</div>
       <div class="cb-row cb-available">💰 <span id="cb-available">0</span> available</div>
     </div>
   </div>
@@ -547,6 +548,40 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
       ✅ I accept this quest!
     </button>
     <button class="btn-mission-close" onclick="closeMissionOverlay()">Maybe later</button>
+  </div>
+</div>
+
+
+
+<!-- BONUS CHALLENGE OVERLAY -->
+<div id="surprise-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;align-items:center;justify-content:center;padding:1.5rem">
+  <div id="surprise-card" style="background:linear-gradient(160deg,#451a03,#92400e);border:2px solid #d97706;border-radius:20px;padding:2rem 1.5rem;width:100%;max-width:380px;text-align:center;box-shadow:0 0 60px rgba(217,119,6,.4);transform:scale(.8);transition:transform .5s cubic-bezier(.34,1.56,.64,1)">
+    <div id="surprise-chest-icon" style="display:flex;justify-content:center;margin-bottom:12px;animation:lockPop .6s .2s both cubic-bezier(.34,1.56,.64,1)"></div>
+    <div style="font-size:11px;letter-spacing:4px;color:#fcd34d;font-weight:800;margin-bottom:6px;text-transform:uppercase">🎲 Bonus Challenge</div>
+    <div id="surprise-overlay-text" style="font-family:'Fredoka One',cursive;font-size:20px;color:white;margin-bottom:12px;line-height:1.3"></div>
+    <div style="height:1px;background:linear-gradient(90deg,transparent,#d97706,transparent);margin:12px 0"></div>
+    <div id="surprise-overlay-coins" style="display:inline-flex;align-items:center;gap:6px;background:rgba(217,119,6,.2);border:1px solid #d97706;border-radius:50px;padding:6px 16px;font-family:'Fredoka One',cursive;font-size:16px;color:#fcd34d;margin-bottom:20px"></div>
+    <button id="surprise-accept-btn" onclick="acceptBonusChallenge()" style="background:linear-gradient(135deg,#d97706,#b45309);color:white;border:none;border-radius:50px;padding:13px 32px;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;width:100%;box-shadow:0 4px 20px rgba(217,119,6,.5)">
+      ✅ Add to my chores!
+    </button>
+    <button onclick="closeSurpriseOverlay()" style="background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.5);border-radius:50px;padding:9px 24px;font-family:'Fredoka One',cursive;font-size:14px;cursor:pointer;margin-top:10px;width:100%">
+      Maybe later
+    </button>
+  </div>
+</div>
+
+<!-- SECRET CHORE ANNOUNCEMENT OVERLAY -->
+<div id="secret-chore-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:600;align-items:center;justify-content:center;padding:1.5rem" onclick="closeSecretChoreOverlay()">
+  <div id="secret-chore-card" onclick="event.stopPropagation()" style="background:linear-gradient(160deg,#1c1400,#451a03,#78350f);border:2px solid #d97706;border-radius:20px;padding:2rem 1.5rem;width:100%;max-width:380px;text-align:center;box-shadow:0 0 80px rgba(217,119,6,.6),inset 0 0 30px rgba(217,119,6,.1);transform:scale(.8);transition:transform .5s cubic-bezier(.34,1.56,.64,1)">
+    <div id="sc-chest-icon" style="display:flex;justify-content:center;margin-bottom:4px"></div>
+    <div style="font-size:11px;letter-spacing:4px;color:#fcd34d;font-weight:800;margin-bottom:6px;text-transform:uppercase">⭐ Secret Chore Unlocked!</div>
+    <div id="sc-name" style="font-family:'Fredoka One',cursive;font-size:24px;color:white;margin-bottom:12px;line-height:1.2"></div>
+    <div style="height:1px;background:linear-gradient(90deg,transparent,#d97706,transparent);margin:12px 0"></div>
+    <div id="sc-desc" style="font-size:14px;color:#fde68a;line-height:1.7;font-weight:600;margin-bottom:16px;text-align:left"></div>
+    <div id="sc-coins-display" style="display:inline-flex;align-items:center;gap:6px;background:rgba(217,119,6,.3);border:1.5px solid #d97706;border-radius:50px;padding:8px 20px;font-family:'Fredoka One',cursive;font-size:18px;color:#fef08a;margin-bottom:20px"></div>
+    <button onclick="closeSecretChoreOverlay()" style="background:linear-gradient(135deg,#d97706,#b45309);color:white;border:none;border-radius:50px;padding:13px 32px;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;width:100%;box-shadow:0 4px 20px rgba(217,119,6,.5)">
+      🎉 Amazing! Close
+    </button>
   </div>
 </div>
 
@@ -650,6 +685,7 @@ function serializeState(s){
     coins: s.coins||0,
     coinsEarned: s.coinsEarned||0,
     coinsDeducted: s.coinsDeducted||0,
+    coinsSpent: s.coinsSpent||0,
     streak: s.streak||0,
     lastActiveDate: s.lastActiveDate||null,
     done,
@@ -673,7 +709,7 @@ function toArray(val){
   return [];
 }
 
-const EMPTY_STATE = () => ({ coins:0, coinsEarned:0, coinsDeducted:0, streak:0, lastActiveDate:null, done:{}, surprise:{}, history:[], pendingChores:[], pendingShop:[], oopsLog:[], baseBedtime:'19:45', bedtimeAdjustments:{}, planChecked:{}, planRemoved:{} });
+const EMPTY_STATE = () => ({ coins:0, coinsEarned:0, coinsDeducted:0, coinsSpent:0, streak:0, lastActiveDate:null, done:{}, surprise:{}, history:[], pendingChores:[], pendingShop:[], oopsLog:[], baseBedtime:'19:45', bedtimeAdjustments:{}, planChecked:{}, planRemoved:{} });
 
 function deserializeState(raw){
   try {
@@ -808,6 +844,7 @@ function subscribeToGlobal(){
         if(val.kidConfigs) globalCfg.kidConfigs=val.kidConfigs;
         if(val.kidPlans) globalCfg.kidPlans=val.kidPlans;
         if(val.secretMission) globalCfg.secretMission=val.secretMission;
+        if(val.secretChore) globalCfg.secretChore=val.secretChore;
         kids=getKids();
         if(activeKid){
           activeKid=kids.find(k=>k.id===activeKid.id)||activeKid;
@@ -1087,6 +1124,7 @@ function selectKid(kidId){
   document.getElementById('tab-chores').classList.add('active');
   document.querySelector('.tab-btn').classList.add('active');
   renderAll();
+  checkSecretChoreAnnouncement();
   // Re-render after brief delay to catch any globalCfg that loads slightly after
   setTimeout(()=>{ if(activeKid){ renderChores(); renderPlan(); } }, 300);
   setTimeout(()=>{ if(activeKid){ renderChores(); renderPlan(); } }, 1200);
@@ -1408,6 +1446,7 @@ function renderParentPortal(){
     {id:'plan',label:'📅 Plan',badge:0},
     {id:'secretmission',label:'⚔️ Quest',badge:0},
     {id:'account',label:'👤 Account',badge:0},
+    {id:'secretchore',label:'🔓 Secret',badge:0},
   ].map(t=>`<button class="parent-nav-btn ${parentTab===t.id?'active':''}" onclick="switchParentTab('${t.id}')">
     ${t.label}${t.badge?`<div class="parent-nav-badge">${t.badge}</div>`:''}
   </button>`).join('');
@@ -1423,6 +1462,7 @@ function renderParentPortal(){
   else if(parentTab==='surprises') content.innerHTML=renderSurprisesEditorTab();
   else if(parentTab==='secretmission') content.innerHTML=renderSecretMissionTab();
   else if(parentTab==='account') content.innerHTML=renderAccountTab();
+  else if(parentTab==='secretchore') content.innerHTML=renderSecretChoreTab();
 }
 
 function switchParentKid(id){ parentKidView=id; renderParentPortal(); }
@@ -1932,6 +1972,211 @@ function cleanOldPlanData(kidId){
   if(s.planRemoved) s.planRemoved={[t]:s.planRemoved[t]||[]};
 }
 
+
+// ==================== SECRET CHORE ANNOUNCEMENT ====================
+function getSecretChore(){ return globalCfg.secretChore||null; }
+
+function checkSecretChoreAnnouncement(){
+  const sc=getSecretChore();
+  if(!sc||!sc.active) return;
+  // Only show once per kid per day
+  const key='sc_seen_'+activeKid.id+'_'+(sc.id||sc.name);
+  if(localStorage.getItem(key)) return;
+  setTimeout(()=>openSecretChoreOverlay(), 600);
+}
+
+function openSecretChoreOverlay(){
+  const sc=getSecretChore();
+  if(!sc) return;
+  const chestEl=document.getElementById('sc-chest-icon');
+  if(chestEl) chestEl.innerHTML=openChestSVG(100);
+  document.getElementById('sc-name').textContent=sc.name||'Special Chore';
+  document.getElementById('sc-desc').textContent=sc.description||'';
+  const coins=sc.coins||30;
+  const coinsEl=document.getElementById('sc-coins-display');
+  if(coinsEl) coinsEl.innerHTML='🪙 +'+coins+' coins added!';
+  // Award coins immediately if not already awarded today
+  if(activeKid){
+    const t=today();
+    const s=state();
+    const scId='secret-chore-'+t;
+    const alreadyAwarded=toArray((s.done||{})[t]).includes(scId);
+    if(!alreadyAwarded){
+      if(!s.done) s.done={};
+      if(!s.done[t]) s.done[t]=[];
+      s.done[t]=toArray(s.done[t]);
+      s.done[t].push(scId);
+      s.coins=(s.coins||0)+coins;
+      s.coinsEarned=(s.coinsEarned||0)+coins;
+      s.history=toArray(s.history);
+      s.history.unshift({date:t,label:'⭐ '+sc.name,delta:coins});
+      states[activeKid.id]=s;
+      saveKidState(activeKid.id,s);
+      // Gold confetti!
+      setTimeout(goldConfetti, 400);
+      setTimeout(goldConfetti, 800);
+    }
+  }
+  const overlay=document.getElementById('secret-chore-overlay');
+  overlay.style.display='flex';
+  setTimeout(()=>{ document.getElementById('secret-chore-card').style.transform='scale(1)'; },50);
+}
+
+
+function acceptSecretChore(){ /* coins awarded immediately on open */ }
+
+
+function closeSecretChoreOverlay(){
+  const sc=getSecretChore();
+  if(sc && activeKid){
+    const key='sc_seen_'+activeKid.id+'_'+(sc.id||sc.name);
+    localStorage.setItem(key,'1');
+  }
+  const overlay=document.getElementById('secret-chore-overlay');
+  document.getElementById('secret-chore-card').style.transform='scale(.8)';
+  setTimeout(()=>{ overlay.style.display='none'; },300);
+  // Refresh display with new coins
+  updateCoinDisplay();
+  renderChores();
+}
+
+// Secret Chore button in chores tab
+function renderSecretChoreBtn(){
+  const sc=getSecretChore();
+  if(!sc||!sc.active) return '';
+  const t=today();
+  const s=state();
+  const scId='secret-chore-'+t;
+  const isDone=toArray((s.done||{})[t]).includes(scId);
+  const isPending=!!toArray(s.pendingChores).find(p=>p.choreId===scId);
+  // Show as chore card in the list
+  const coinsAwarded=sc.coins||30;
+  if(isDone){
+    return `<div class="chore-card" style="border-color:#d97706;background:linear-gradient(135deg,#fffbeb,#fef3c7);margin-bottom:0;cursor:pointer" onclick="openSecretChoreOverlay()">
+      <div style="flex-shrink:0">${openChestSVG(48)}</div>
+      <div class="chore-info">
+        <div class="chore-name" style="color:#92400e">⭐ ${sc.name}</div>
+        <div style="font-size:12px;color:#b45309;font-weight:700">✅ +${coinsAwarded} coins awarded! Tap to view again</div>
+      </div>
+      <div style="width:42px;height:42px;border-radius:50%;border:3px solid #d97706;background:#d97706;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">⭐</div>
+    </div>`;
+  }
+  return `<div class="chore-card" style="border-color:#d97706;background:linear-gradient(135deg,#1c1400,#451a03);margin-bottom:0;cursor:pointer;position:relative;overflow:hidden;animation:secretPulse 2s ease-in-out infinite" onclick="openSecretChoreOverlay()">
+    <div style="position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);animation:shine 3s ease-in-out infinite"></div>
+    <div style="flex-shrink:0">${chestSVG(44)}</div>
+    <div class="chore-info">
+      <div class="chore-name" style="color:#fef08a">⭐ Secret Chore Unlocked!</div>
+      <div style="font-size:12px;font-weight:700;color:#fcd34d">Tap the chest to reveal &amp; collect coins</div>
+      <div style="font-size:12px;font-weight:700;color:#fcd34d">🪙 +${coinsAwarded} coins</div>
+    </div>
+    <div style="font-size:28px;animation:shine 2s ease-in-out infinite">✨</div>
+  </div>`;
+}
+
+// Parent portal Secret Chore editor tab
+function renderSecretChoreTab(){
+  const sc=globalCfg.secretChore||{active:false,name:'',description:'',id:''};
+  return `
+    <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:var(--radius);padding:1.2rem;margin-bottom:14px;color:white;text-align:center">
+      <div style="font-size:32px;margin-bottom:6px">🔓</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:4px">Secret Chore Announcements</div>
+      <div style="font-size:12px;color:#a5b4fc">Announce a special unlocked chore to the kids</div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:12px">
+      <div>
+        <div style="font-size:14px;font-weight:800;color:var(--text)">Status</div>
+        <div style="font-size:12px;font-weight:700;color:${sc.active?'#22c55e':'var(--text-muted)'}">${sc.active?'🟢 Active — kids will see this':'⚪ Inactive'}</div>
+      </div>
+      <button onclick="toggleSecretChore()" style="background:${sc.active?'var(--red)':'var(--accent)'};color:white;border:none;border-radius:50px;padding:9px 20px;font-family:'Fredoka One',cursive;font-size:14px;cursor:pointer">
+        ${sc.active?'Turn Off':'Activate'}
+      </button>
+    </div>
+    <div class="add-form">
+      <div class="form-label">Chore Name</div>
+      <input id="sc-name-input" placeholder="e.g. Helped with groceries" value="${sc.name||''}" style="margin-bottom:8px">
+      <div class="form-label">Description (what they did to unlock it)</div>
+      <textarea id="sc-desc-input" rows="3" placeholder="e.g. You helped carry all the groceries inside without being asked!"
+        style="width:100%;font-size:14px;font-family:'Nunito',sans-serif;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);background:var(--surface);outline:none;resize:none;margin-bottom:8px">${sc.description||''}</textarea>
+      <div class="form-label">Coin Reward</div>
+      <input id="sc-coins-input" type="number" placeholder="30" value="${sc.coins||30}" min="1" max="999" style="margin-bottom:8px">
+      <button class="btn-sm" onclick="saveSecretChore()">Save</button>
+    </div>`;
+}
+
+function toggleSecretChore(){
+  const sc=globalCfg.secretChore||{active:false,name:'',description:'',id:''};
+  sc.active=!sc.active;
+  globalCfg.secretChore=sc;
+  saveGlobal(globalCfg);
+  showToast(sc.active?'🔓 Secret chore is now active!':'Secret chore deactivated','info');
+  renderParentPortal();
+}
+
+function saveSecretChore(){
+  const name=document.getElementById('sc-name-input').value.trim();
+  const desc=document.getElementById('sc-desc-input').value.trim();
+  const coins=parseInt(document.getElementById('sc-coins-input').value,10)||30;
+  if(!name||!desc){ showToast('Enter a name and description','bad'); return; }
+  const sc=globalCfg.secretChore||{active:false};
+  globalCfg.secretChore={...sc,name,description:desc,coins,id:Date.now().toString(36)};
+  saveGlobal(globalCfg);
+  showToast('Secret chore saved!');
+  renderParentPortal();
+}
+
+
+// ==================== BONUS CHALLENGE OVERLAY ====================
+function openSurpriseOverlay(){
+  const s=state();
+  const t=today();
+  if(!s.surprise||!s.surprise[t]) return;
+  const surps=getSurprises();
+  const surp=surps[s.surprise[t].idx]||surps[0]||{text:'Do something kind!',coins:5};
+  document.getElementById('surprise-chest-icon').innerHTML=chestSVG(80);
+  document.getElementById('surprise-overlay-text').textContent=surp.text;
+  document.getElementById('surprise-overlay-coins').innerHTML='🪙 +'+surp.coins+' coins upon approval';
+  const bonusId='bonus-challenge-'+t;
+  const already=toArray(s.pendingChores).find(p=>p.choreId===bonusId)||toArray((s.done||{})[t]||[]).includes(bonusId);
+  const acceptBtn=document.getElementById('surprise-accept-btn');
+  if(s.surprise[t].claimed){
+    acceptBtn.textContent='✅ Already completed!';
+    acceptBtn.disabled=true;
+    acceptBtn.style.opacity='0.6';
+  } else if(already){
+    acceptBtn.textContent='⏳ Already added to chores!';
+    acceptBtn.disabled=true;
+    acceptBtn.style.opacity='0.6';
+  } else {
+    acceptBtn.textContent='✅ Add to my chores!';
+    acceptBtn.disabled=false;
+    acceptBtn.style.opacity='1';
+  }
+  const overlay=document.getElementById('surprise-overlay');
+  overlay.style.display='flex';
+  setTimeout(()=>document.getElementById('surprise-card').style.transform='scale(1)',50);
+}
+
+function closeSurpriseOverlay(){
+  document.getElementById('surprise-card').style.transform='scale(.8)';
+  setTimeout(()=>document.getElementById('surprise-overlay').style.display='none',300);
+}
+
+function acceptBonusChallenge(){
+  const s=state();
+  const t=today();
+  const surps=getSurprises();
+  const surp=surps[(s.surprise[t]||{}).idx]||surps[0]||{text:'Bonus challenge',coins:5};
+  const bonusId='bonus-challenge-'+t;
+  s.pendingChores=toArray(s.pendingChores);
+  s.pendingChores.push({id:uid(),choreId:bonusId,choreName:'🎲 '+surp.text,coins:surp.coins,bedtimeBonus:0,date:t});
+  states[activeKid.id]=s;
+  saveKidState(activeKid.id,s);
+  closeSurpriseOverlay();
+  showToast('Bonus challenge added to chores! ⏳','warn');
+  updateBadge();
+  renderChores();
+}
+
 // ==================== OOPS TAB ====================
 function renderOops(){
   const container=document.getElementById('tab-oops');
@@ -2401,6 +2646,60 @@ function importConfig(event){
 
 
 // ==================== SECRET MISSION ====================
+
+// ==================== OPEN CHEST + GOLD CONFETTI ====================
+function openChestSVG(size){
+  const w=size, h=Math.round(size*1.1);
+  return `<svg viewBox="0 0 200 220" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="60" cy="90" rx="14" ry="8" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" opacity="0.9"/>
+    <ellipse cx="100" cy="75" rx="14" ry="8" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" opacity="0.9"/>
+    <ellipse cx="140" cy="88" rx="14" ry="8" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" opacity="0.9"/>
+    <ellipse cx="78" cy="65" rx="12" ry="7" fill="#f59e0b" stroke="#d97706" stroke-width="1.2" opacity="0.85"/>
+    <ellipse cx="122" cy="62" rx="12" ry="7" fill="#f59e0b" stroke="#d97706" stroke-width="1.2" opacity="0.85"/>
+    <ellipse cx="100" cy="52" rx="11" ry="6" fill="#fbbf24" stroke="#d97706" stroke-width="1" opacity="0.8"/>
+    <path d="M50 55 L52 49 L54 55 L60 57 L54 59 L52 65 L50 59 L44 57Z" fill="#fef08a" opacity="0.95"/>
+    <path d="M148 50 L150 45 L152 50 L157 52 L152 54 L150 59 L148 54 L143 52Z" fill="#fef08a" opacity="0.9"/>
+    <circle cx="35" cy="75" r="4" fill="#fef08a" opacity="0.8"/>
+    <circle cx="165" cy="70" r="3.5" fill="#fef08a" opacity="0.75"/>
+    <circle cx="100" cy="38" r="3" fill="#fef08a" opacity="0.8"/>
+    <circle cx="68" cy="42" r="2.5" fill="#fef08a" opacity="0.7"/>
+    <circle cx="132" cy="40" r="2.5" fill="#fef08a" opacity="0.7"/>
+    <rect x="10" y="120" width="180" height="90" rx="6" fill="#92400e" stroke="#78350f" stroke-width="2"/>
+    <rect x="18" y="128" width="164" height="74" rx="4" fill="#b45309"/>
+    <line x1="18" y1="145" x2="182" y2="145" stroke="#92400e" stroke-width="1" opacity="0.5"/>
+    <line x1="18" y1="165" x2="182" y2="165" stroke="#92400e" stroke-width="1" opacity="0.5"/>
+    <rect x="10" y="132" width="180" height="10" rx="2" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+    <rect x="10" y="168" width="180" height="10" rx="2" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+    <rect x="10" y="120" width="18" height="90" rx="4" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+    <rect x="172" y="120" width="18" height="90" rx="4" fill="#d97706" stroke="#b45309" stroke-width="1"/>
+    <rect x="10" y="60" width="180" height="70" rx="8" fill="#92400e" stroke="#78350f" stroke-width="2" transform="rotate(-35 100 120)"/>
+    <rect x="18" y="67" width="164" height="56" rx="5" fill="#b45309" transform="rotate(-35 100 120)"/>
+    <ellipse cx="100" cy="67" rx="82" ry="16" fill="#b45309" stroke="#78350f" stroke-width="2" transform="rotate(-35 100 120)"/>
+    <rect x="10" y="118" width="180" height="10" rx="2" fill="#d97706" transform="rotate(-35 100 120)"/>
+    <rect x="10" y="60" width="18" height="70" rx="4" fill="#d97706" transform="rotate(-35 100 120)"/>
+    <rect x="172" y="60" width="18" height="70" rx="4" fill="#d97706" transform="rotate(-35 100 120)"/>
+    <circle cx="75" cy="52" r="7" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.5" transform="rotate(-35 100 120)"/>
+    <circle cx="75" cy="52" r="3.5" fill="#fca5a5" opacity="0.6" transform="rotate(-35 100 120)"/>
+    <polygon points="130,46 134,52 130,58 126,52" fill="#2563eb" stroke="#1e3a8a" stroke-width="1.5" transform="rotate(-35 100 120)"/>
+  </svg>`;
+}
+
+function goldConfetti(){
+  const colors=['#fbbf24','#f59e0b','#fef08a','#d97706','#fde68a','#fcd34d'];
+  for(let i=0;i<35;i++){
+    const el=document.createElement('div');
+    el.style.cssText='position:fixed;top:40%;left:'+(25+Math.random()*50)+'%;'+
+      'background:'+colors[Math.floor(Math.random()*colors.length)]+';'+
+      'width:'+(8+Math.random()*10)+'px;height:'+(8+Math.random()*10)+'px;'+
+      'border-radius:'+(Math.random()>.5?'50%':'2px')+';'+
+      'animation:fall '+(0.8+Math.random()*1.2)+'s linear '+(Math.random()*.5)+'s forwards;'+
+      'z-index:9999;pointer-events:none;'+
+      'box-shadow:0 0 6px rgba(251,191,36,.9)';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),2800);
+  }
+}
+
 function chestSVG(size){
   const s = size/200;
   return `<svg viewBox="0 0 200 180" width="${size}" height="${Math.round(size*0.9)}" xmlns="http://www.w3.org/2000/svg">
@@ -2519,6 +2818,51 @@ function acceptMission(){
   renderChores();
 }
 
+
+// ==================== AUTO APPROVE ====================
+function checkAutoApprove(){
+  const t=today();
+  for(const kid of kids){
+    const s=states[kid.id];
+    if(!s) continue;
+    const pending=toArray(s.pendingChores);
+    if(!pending.length) continue;
+    // Auto-approve any pending chores from previous days
+    let changed=false;
+    const stillPending=[];
+    for(const p of pending){
+      if(p.date && p.date < t){
+        // Auto approve
+        if(!s.done) s.done={};
+        if(!s.done[p.date]) s.done[p.date]=[];
+        const doneArr=toArray(s.done[p.date]);
+        if(!doneArr.includes(p.choreId)){
+          doneArr.push(p.choreId);
+          s.done[p.date]=doneArr;
+        }
+        if(p.bedtimeBonus){
+          if(!s.bedtimeAdjustments) s.bedtimeAdjustments={};
+          s.bedtimeAdjustments[p.date]=(s.bedtimeAdjustments[p.date]||0)+p.bedtimeBonus;
+        } else {
+          s.coins=(s.coins||0)+p.coins;
+          s.coinsEarned=(s.coinsEarned||0)+p.coins;
+        }
+        s.history=toArray(s.history);
+        s.history.unshift({date:p.date,label:`✅ Auto-approved: ${p.choreName}`,delta:p.coins||0});
+        changed=true;
+      } else {
+        stillPending.push(p);
+      }
+    }
+    if(changed){
+      s.pendingChores=stillPending;
+      states[kid.id]=s;
+      saveKidState(kid.id,s);
+      console.log('Auto-approved pending chores for', kid.name);
+    }
+  }
+}
+
 // ==================== UI HELPERS ====================
 function updateCoinDisplay(){
   const s=state();
@@ -2594,6 +2938,7 @@ function startApp(){
     loadAllFromFirebase().then(()=>{
       kids = getKids();
       for(const kid of CONFIG.kids) cleanOldBedtimeAdjustments(kid.id);
+      checkAutoApprove();
       for(const kid of CONFIG.kids) cleanOldPlanData(kid.id);
       initialLoadComplete = true;
       renderPicker();
