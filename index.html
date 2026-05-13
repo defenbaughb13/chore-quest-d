@@ -491,9 +491,9 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height
     <div class="header-name" id="header-name"></div>
     <div class="coin-breakdown">
       <div class="cb-row cb-earned">🟢 <span id="cb-earned">0</span> earned</div>
-      <div class="cb-row cb-deducted">🔴 <span id="cb-deducted">0</span> deducted</div>
+      <div class="cb-row cb-deducted">🔴 <span id="cb-deducted">0</span> oops</div>
       <div class="cb-row cb-spent">🛒 <span id="cb-spent">0</span> spent</div>
-      <div class="cb-row cb-available">💰 <span id="cb-available">0</span> available</div>
+      <div class="cb-row cb-available">💰 <span id="cb-available">0</span> coins</div>
     </div>
   </div>
 
@@ -845,6 +845,7 @@ function subscribeToGlobal(){
         if(val.kidPlans) globalCfg.kidPlans=val.kidPlans;
         if(val.secretMission) globalCfg.secretMission=val.secretMission;
         if(val.secretChore) globalCfg.secretChore=val.secretChore;
+        if(val.parentPin) globalCfg.parentPin=val.parentPin;
         kids=getKids();
         if(activeKid){
           activeKid=kids.find(k=>k.id===activeKid.id)||activeKid;
@@ -858,7 +859,7 @@ function subscribeToGlobal(){
 }
 
 // ==================== RUNTIME STATE ====================
-let globalCfg = { shop: null, consequences: null, surprises: null, kidConfigs: null };
+let globalCfg = { shop: null, consequences: null, surprises: null, kidConfigs: null, parentPin: null };
 
 // Effective shop/surprises: from localStorage override or CONFIG defaults
 function getShop(){ return globalCfg.shop || JSON.parse(JSON.stringify(CONFIG.shop)); }
@@ -2000,8 +2001,12 @@ function openSecretChoreOverlay(){
     const t=today();
     const s=state();
     const scId='secret-chore-'+t;
-    const alreadyAwarded=toArray((s.done||{})[t]).includes(scId);
+    // Check BOTH in-memory state and localStorage key to prevent double-award
+    const seenKey='sc_awarded_'+activeKid.id+'_'+t;
+    const alreadyAwarded=toArray((s.done||{})[t]).includes(scId)||localStorage.getItem(seenKey);
     if(!alreadyAwarded){
+      // Mark immediately in localStorage so rapid taps can't re-award
+      localStorage.setItem(seenKey,'1');
       if(!s.done) s.done={};
       if(!s.done[t]) s.done[t]=[];
       s.done[t]=toArray(s.done[t]);
