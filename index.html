@@ -670,7 +670,7 @@ function dragonSVG(size){
 }
 
 // ==================== FIREBASE SYNC ====================
-const DB_PREFIX = 'chorequest';
+const DB_PREFIX = 'chorequest-d';
 
 function kidStateRef(kidId){ return window.db.ref(`${DB_PREFIX}/states/${kidId}`); }
 function globalRef(){ return window.db.ref(`${DB_PREFIX}/global`); }
@@ -1165,6 +1165,7 @@ function choreVisible(chore){
   if(!d||d==='daily')return true;
   if(d==='weekends')return isWeekend();
   if(d==='weekdays')return!isWeekend();
+  if(d==='weekly')return!isWeeklyDone(chore.id);
   if(Array.isArray(d))return d.includes(dayName());
   return true;
 }
@@ -1228,7 +1229,7 @@ function renderChores(){
         <div class="chore-emoji">${c.emoji}</div>
         <div class="chore-info">
           <div class="chore-name">${nameLabel}</div>
-          <div class="chore-coins">${c.bedtimeBonus?`🌙 +${c.bedtimeBonus} min bedtime`:`🪙 +${c.coins} coins`}</div>
+          <div class="chore-coins">${c.bedtimeBonus?`🌙 +${c.bedtimeBonus} min bedtime`:`🪙 +${c.coins} coins`}${c.days==='weekly'?' <span style="font-size:11px;color:var(--text-muted);font-weight:700">· 1×/week</span>':''}</div>
           ${statusLine}
         </div>
         <div class="chore-check" style="border:3px solid ${isDone?'#22c55e':isPending?'#f97316':isRequired?'#ef4444':'#eab308'};background:${isDone?'#22c55e':isPending?'#f97316':'white'};border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -1724,6 +1725,7 @@ function renderChoresEditorTab(){
         <option value="daily">Every day</option>
         <option value="weekdays">Weekdays only</option>
         <option value="weekends">Weekends only</option>
+        <option value="weekly">Once a week</option>
       </select>
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
@@ -1738,7 +1740,7 @@ function renderChoresEditorTab(){
   if(!chores.length){ html+=`<div class="empty-msg">No chores yet — add one above!</div>`; }
   else{
     for(const c of chores){
-      const daysLabel={daily:'Daily',weekdays:'Weekdays',weekends:'Weekends'}[c.days||'daily']||c.days;
+      const daysLabel={daily:'Daily',weekdays:'Weekdays',weekends:'Weekends',weekly:'Once/week'}[c.days||'daily']||c.days||'Daily';
       html+=`<div class="editor-item">
         <div style="font-size:24px;margin-right:4px">${c.emoji}</div>
         <div class="editor-item-info">
@@ -1781,10 +1783,14 @@ function editChorePrompt(kidId,choreId){
   if(newCoins===null)return;
   const parsed=parseInt(newCoins,10);
   if(isNaN(parsed)||parsed<0){ showToast('Invalid amount','bad'); return; }
+  const daysAns=prompt('Schedule (daily / weekdays / weekends / weekly):', chore.days||'daily');
+  if(daysAns===null)return;
+  const validDays=['daily','weekdays','weekends','weekly'];
+  const newDays=validDays.includes(daysAns.trim().toLowerCase())?daysAns.trim().toLowerCase():(chore.days||'daily');
   const reqAnswer=prompt('Required? Type yes or no:', chore.required?'yes':'no');
   if(reqAnswer===null)return;
   const isRequired=reqAnswer.trim().toLowerCase()==='yes';
-  const updated=kd.chores.map(c=>c.id===choreId?{...c,name:newName.trim()||c.name,coins:parsed,required:isRequired}:c);
+  const updated=kd.chores.map(c=>c.id===choreId?{...c,name:newName.trim()||c.name,coins:parsed,days:newDays,required:isRequired}:c);
   saveKidConfig(kidId,{chores:updated});
   kids=getKids();
   showToast('Chore updated!');
@@ -2866,6 +2872,32 @@ function checkAutoApprove(){
       console.log('Auto-approved pending chores for', kid.name);
     }
   }
+}
+
+
+// ── WEEKLY CHORE HELPERS ──
+function getWeekStart(dateStr){
+  // Returns the Sunday of the week containing dateStr
+  const d = dateStr ? new Date(dateStr+'T00:00:00') : new Date();
+  const day = d.getDay(); // 0=Sun
+  d.setDate(d.getDate() - day);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+function isWeeklyDone(choreId){
+  // Check if a weekly chore was completed any day this week
+  const s = state();
+  const weekStart = getWeekStart(today());
+  for(const [date, doneArr] of Object.entries(s.done||{})){
+    if(getWeekStart(date) === weekStart){
+      if(toArray(doneArr).includes(choreId)) return true;
+    }
+  }
+  // Also check pending chores this week
+  for(const p of toArray(s.pendingChores)){
+    if(p.choreId === choreId && getWeekStart(p.date) === weekStart) return true;
+  }
+  return false;
 }
 
 // ==================== UI HELPERS ====================
